@@ -24,7 +24,7 @@ Thus, to build the core:
 1. Clone the repository with its dependencies:
 
 ```
-git clone --recurse-submodules https://github.com/denikson/zerorpc-dotnet.git
+git clone --recurse-submodules https://github.com/denikson/COM3D2.MaidFiddler.git
 ```
 
 2. Open the solution in Visual Studio.
