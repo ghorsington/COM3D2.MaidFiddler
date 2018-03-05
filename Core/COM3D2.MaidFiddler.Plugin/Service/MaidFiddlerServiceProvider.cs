@@ -3,25 +3,16 @@ using COM3D2.MaidFiddler.Plugin.Utils;
 
 namespace COM3D2.MaidFiddler.Plugin.Service
 {
-    public class MaidFiddlerServiceProvider
+    public partial class MaidFiddlerServiceProvider
     {
         public MaidFiddlerServiceProvider()
         {
             Debugger.WriteLine(LogLevel.Info, "Created a service provider!");
+
+            InitPlayerStatus();
         }
 
         public static int GameVersion => (int) typeof(Misc).GetField(nameof(Misc.GAME_VERSION)).GetValue(null);
-
-        public void Echo(string str)
-        {
-            Debugger.WriteLine($"MaidFiddler: {str}");
-        }
-
-        public void SetCredits(object credits)
-        {
-            long.TryParse(credits.ToString(), out long cred);
-            GameMain.Instance.CharacterMgr.status.money = cred;
-        }
 
         public string GetInfo()
         {
