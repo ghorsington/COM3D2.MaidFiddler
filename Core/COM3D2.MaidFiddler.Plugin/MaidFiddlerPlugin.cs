@@ -1,4 +1,5 @@
-﻿using AsyncIO;
+﻿using System;
+using AsyncIO;
 using COM3D2.MaidFiddler.Plugin.Service;
 using COM3D2.MaidFiddler.Plugin.Utils;
 using NetMQ;
@@ -23,6 +24,7 @@ namespace COM3D2.MaidFiddler.Plugin
             DontDestroyOnLoad(this);
 
             ForceDotNet.Force();
+            NetMQConfig.Linger = TimeSpan.Zero;
 
             Debugger.WriteLine(LogLevel.Info, $"Starting up Maid Fiddler {VERSION}");
 
@@ -40,6 +42,8 @@ namespace COM3D2.MaidFiddler.Plugin
             Debugger.WriteLine(LogLevel.Info, "Starting server!");
 
             zeroServer.Bind($"tcp://localhost:{PORT}");
+
+            Debugger.WriteLine(LogLevel.Info, "Started server!");
         }
 
         public void OnDestroy()
