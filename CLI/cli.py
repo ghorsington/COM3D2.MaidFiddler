@@ -3,14 +3,17 @@ import rlcompleter
 import readline
 import json
 import pprint
+import os
 
 __version__ = "1.0.0.0"
+
+# Manually set codepage to Japanese Shift-JIS
+os.system("chcp 932")
 
 client = None
 methods = []
 method_set = set()
 pp = pprint.PrettyPrinter(indent=4)
-
 
 def start_info():
     print("#### Maid Fiddler CLI ####")
