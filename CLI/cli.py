@@ -2,12 +2,14 @@ import zerorpc
 import rlcompleter
 import readline
 import json
+import pprint
 
 __version__ = "1.0.0.0"
 
 client = None
 methods = []
 method_set = set()
+pp = pprint.PrettyPrinter(indent=4)
 
 
 def start_info():
@@ -98,6 +100,7 @@ def main_loop():
     print("You can now control Maid Fiddler Core!")
     print("Press TAB to toggle autocomplete!")
     print("Use :h <command> to get help for the command!")
+    print("Use :q to quit!")
 
     while True:
         try:
@@ -110,6 +113,9 @@ def main_loop():
 
         if s.startswith(":h"):
             print_help(s[2:].strip())
+        elif s.startswith(":q"):
+            client.close()
+            return
         else:
             parts = s.split()
             method_name = parts[0]
@@ -117,7 +123,10 @@ def main_loop():
                 parsed_args = json.loads("[%s]" % (",".join(parts[1:])))
                 try:
                     r = client.__call__(method_name, *parsed_args)
-                    print(r)
+                    if isinstance(r, str):
+                        print(r)
+                    else:
+                        pp.pprint(r)
                 except zerorpc.RemoteError as e:
                     print("Error %s: %s. \nStack trace:\n%s" % (e.name, e.msg, e.traceback))
             else:
