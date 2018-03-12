@@ -8,7 +8,7 @@ using ZeroRpc.Net.ServiceProviders;
 
 namespace COM3D2.MaidFiddler.Plugin.Service
 {
-    public partial class MaidFiddlerServiceProvider
+    public partial class Service
     {
         private Dictionary<string, MethodInfo> playerSetters;
         private Dictionary<string, MethodInfo> playerGetters;

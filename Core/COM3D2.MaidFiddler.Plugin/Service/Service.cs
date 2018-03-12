@@ -3,13 +3,14 @@ using COM3D2.MaidFiddler.Plugin.Utils;
 
 namespace COM3D2.MaidFiddler.Plugin.Service
 {
-    public partial class MaidFiddlerServiceProvider
+    public partial class Service
     {
-        public MaidFiddlerServiceProvider()
+        public Service()
         {
             Debugger.WriteLine(LogLevel.Info, "Created a service provider!");
 
             InitPlayerStatus();
+            InitMaidStatus();
         }
 
         public static int GameVersion => (int) typeof(Misc).GetField(nameof(Misc.GAME_VERSION)).GetValue(null);

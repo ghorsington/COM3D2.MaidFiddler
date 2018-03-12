@@ -7,6 +7,7 @@ using UnityInjector;
 using UnityInjector.Attributes;
 using ZeroRpc.Net;
 using ZeroRpc.Net.ServiceProviders;
+using MFService = COM3D2.MaidFiddler.Plugin.Service.Service;
 
 namespace COM3D2.MaidFiddler.Plugin
 {
@@ -28,11 +29,11 @@ namespace COM3D2.MaidFiddler.Plugin
 
             Debugger.WriteLine(LogLevel.Info, $"Starting up Maid Fiddler {VERSION}");
 
-            MaidFiddlerServiceProvider service = new MaidFiddlerServiceProvider();
+            MFService service = new MFService();
 
             Debugger.WriteLine(LogLevel.Info, $"Creating a ZeroService at tcp://localhost:{PORT}");
 
-            zeroServer = new Server(new SimpleWrapperService<MaidFiddlerServiceProvider>(service));
+            zeroServer = new Server(new SimpleWrapperService<MFService>(service));
 
             zeroServer.Error += (sender, args) =>
             {
@@ -50,7 +51,9 @@ namespace COM3D2.MaidFiddler.Plugin
         {
             Debugger.WriteLine(LogLevel.Info, "Stopping ZeroService");
             zeroServer.Dispose();
+            Debugger.WriteLine(LogLevel.Info, "Doing cleanup!");
             NetMQConfig.Cleanup(false);
+            Debugger.WriteLine(LogLevel.Info, "Cleanup started!");
         }
     }
 }
