@@ -1,16 +1,35 @@
 ﻿using System.Text;
 using COM3D2.MaidFiddler.Plugin.Utils;
+using ZeroRpc.Net;
 
 namespace COM3D2.MaidFiddler.Plugin.Service
 {
     public partial class Service
     {
+        private Client client;
+
         public Service()
         {
             Debugger.WriteLine(LogLevel.Info, "Created a service provider!");
 
             InitPlayerStatus();
             InitMaidStatus();
+        }
+
+        public void SubscribeToEventHandler(string address)
+        {
+            Unsubscribe();
+
+            client = new Client();
+            client.Connect(address);
+        }
+
+        public void Unsubscribe()
+        {
+            if (client == null)
+                return;
+            client.Dispose();
+            client = null;
         }
 
         public static int GameVersion => (int) typeof(Misc).GetField(nameof(Misc.GAME_VERSION)).GetValue(null);

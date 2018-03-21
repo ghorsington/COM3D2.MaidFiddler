@@ -19,6 +19,7 @@ namespace COM3D2.MaidFiddler.Plugin
         public const string VERSION = "Alpha 0.1";
 
         private Server zeroServer;
+        private MFService service;
 
         public void Awake()
         {
@@ -29,7 +30,7 @@ namespace COM3D2.MaidFiddler.Plugin
 
             Debugger.WriteLine(LogLevel.Info, $"Starting up Maid Fiddler {VERSION}");
 
-            MFService service = new MFService();
+            service = new MFService();
 
             Debugger.WriteLine(LogLevel.Info, $"Creating a ZeroService at tcp://localhost:{PORT}");
 
@@ -50,6 +51,7 @@ namespace COM3D2.MaidFiddler.Plugin
         public void OnDestroy()
         {
             Debugger.WriteLine(LogLevel.Info, "Stopping ZeroService");
+            service.Unsubscribe();
             zeroServer.Dispose();
             Debugger.WriteLine(LogLevel.Info, "Doing cleanup!");
             NetMQConfig.Cleanup(false);

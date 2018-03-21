@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Channels;
+using COM3D2.MaidFiddler.Hooks;
 using MaidStatus;
+using ZeroRpc.Net;
 
 namespace COM3D2.MaidFiddler.Plugin.Service
 {
@@ -68,6 +71,13 @@ namespace COM3D2.MaidFiddler.Plugin.Service
             setter.Invoke(maids[0].status, new[] {val});
         }
 
+        private void OnPropertyChange(object sender, MaidStatusChangeEventArgs args)
+        {
+            object value = maidGetters[args.PropertyName].Invoke(args.Status, new object[0]);
+
+            client?.InvokeAsync("event_maid_prop_changed", args.Status.guid, args.PropertyName, value);
+        }
+
         private void InitMaidStatus()
         {
             maidSetters = new Dictionary<string, MethodInfo>();
@@ -86,6 +96,8 @@ namespace COM3D2.MaidFiddler.Plugin.Service
                 if (set != null)
                     maidSetters.Add(propertyInfo.Name, set);
             }
+
+            MaidStatusHooks.PropertyChanged += OnPropertyChange;
         }
     }
 }

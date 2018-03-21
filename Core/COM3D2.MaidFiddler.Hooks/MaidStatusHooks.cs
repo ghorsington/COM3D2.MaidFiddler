@@ -5,8 +5,15 @@ using System.Text;
 
 namespace COM3D2.MaidFiddler.Hooks
 {
+    public class MaidStatusChangeEventArgs : EventArgs
+    {
+        public MaidStatus.Status Status { get; internal set; }
+        public string PropertyName { get; internal set; }
+    }
+
     public static class MaidStatusHooks
     {
+        public static event EventHandler<MaidStatusChangeEventArgs> PropertyChanged;
 
         public static bool OnPropertySetPrefix(string propName, MaidStatus.Status status)
         {
@@ -15,7 +22,13 @@ namespace COM3D2.MaidFiddler.Hooks
 
         public static void OnPropertySetPostfix(string propName, MaidStatus.Status status)
         {
+            MaidStatusChangeEventArgs args = new MaidStatusChangeEventArgs
+            {
+               Status = status,
+               PropertyName = propName
+            };
 
+            PropertyChanged?.Invoke(null, args);
         }
 
         public static void OnFeatureAdd(MaidStatus.Status status, MaidStatus.Feature.Data data)
