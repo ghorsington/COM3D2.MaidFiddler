@@ -1,28 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Text;
 using Mono.Cecil;
-using Mono.Cecil.Cil;
 using Mono.Cecil.Inject;
+using ReiPatcher;
+using ReiPatcher.Patch;
 
-namespace COM3D2.MaidFiddler.Patcher
+namespace COM3D2.MaidFiddler.ReiPatch
 {
-    public class Patcher
+    public class MaidFiddlerPatch : PatchBase
     {
-        public static readonly string[] TargetAssemblyNames = {"Assembly-CSharp.dll"};
-
+        public const string TAG = "MAIDFIDDLER_PATCHED";
         private const string HOOK_NAME = "COM3D2.MaidFiddler.Hooks";
 
-        private static AssemblyDefinition HookDefinition;
+        public override string Name => "Maid Fiddler Patcher";
 
-        public static void Patch(AssemblyDefinition ass)
+        private static AssemblyDefinition HookDefinition { get; set; }
+
+        public override bool CanPatch(PatcherArguments args) => args.Assembly.Name.Name == "Assembly-CSharp"
+                                                                && !HasAttribute(args.Assembly, TAG);
+
+        private bool HasAttribute(AssemblyDefinition assembly, string tag)
         {
-            string assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            return GetPatchedAttributes(assembly).Any(ass => ass.Info == tag);
+        }
 
-            HookDefinition = AssemblyLoader.LoadAssembly(Path.Combine(assemblyDir, $"{HOOK_NAME}.dll"));
+        public override void Patch(PatcherArguments args)
+        {
+            PatchMaidStatus(args.Assembly);
+        }
 
-            PatchMaidStatus(ass);
+        public override void PrePatch()
+        {
+            RPConfig.RequestAssembly($"Assembly-CSharp.dll");
+            HookDefinition = AssemblyLoader.LoadAssembly(Path.Combine(AssembliesDir, $"{HOOK_NAME}.dll"));
         }
 
         private static void PatchMaidStatus(AssemblyDefinition ass)

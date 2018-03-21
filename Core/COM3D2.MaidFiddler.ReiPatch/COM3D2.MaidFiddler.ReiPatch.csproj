@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7C3C0E80-0200-4160-BCDD-9F1FF89F1378}</ProjectGuid>
+    <ProjectGuid>{35C10AEB-E5E9-443A-9B89-B97B49D92843}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>COM3D2.MaidFiddler.Patcher</RootNamespace>
-    <AssemblyName>COM3D2.MaidFiddler.Patcher</AssemblyName>
+    <RootNamespace>COM3D2.MaidFiddler.ReiPatch</RootNamespace>
+    <AssemblyName>COM3D2.MaidFiddler.ReiPatch</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -36,6 +36,9 @@
     <Reference Include="Mono.Cecil.Inject">
       <HintPath>..\Libs\Mono.Cecil.Inject.dll</HintPath>
     </Reference>
+    <Reference Include="ReiPatcher">
+      <HintPath>..\Libs\ReiPatcher.exe</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Patcher.cs" />
+    <Compile Include="MaidFiddlerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
