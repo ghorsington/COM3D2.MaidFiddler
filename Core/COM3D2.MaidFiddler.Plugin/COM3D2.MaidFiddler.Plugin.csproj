@@ -69,10 +69,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Harmony\Harmony\Harmony.csproj">
-      <Project>{69aee16a-b6e7-4642-8081-3928b32455df}</Project>
-      <Name>Harmony</Name>
-    </ProjectReference>
     <ProjectReference Include="..\zerorpc-dotnet\ZeroRpc.Net\ZeroRpc.Net.csproj">
       <Project>{22fbbcce-72db-4ee5-a808-d0ebb934a08e}</Project>
       <Name>ZeroRpc.Net</Name>

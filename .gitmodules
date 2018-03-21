@@ -1,6 +1,3 @@
 [submodule "Core/zerorpc-dotnet"]
 	path = Core/zerorpc-dotnet
 	url = https://github.com/denikson/zerorpc-dotnet.git
-[submodule "Core/Harmony"]
-	path = Core/Harmony
-	url = https://github.com/pardeike/Harmony.git
