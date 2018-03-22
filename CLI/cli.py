@@ -4,6 +4,9 @@ import readline
 import json
 import pprint
 import os
+import threading
+import atexit
+import gevent
 
 __version__ = "1.0.0.0"
 
@@ -11,9 +14,32 @@ __version__ = "1.0.0.0"
 os.system("chcp 932")
 
 client = None
+server = None
+ge_server = None
+eventCapturer = None
 methods = []
 method_set = set()
 pp = pprint.PrettyPrinter(indent=4)
+
+class EventCaptureService(object):
+    def emit(self, event_name, args):
+        print("Got event %s: " % event_name)
+        print(pp.pprint(args))
+
+class EventCaptureWorker(threading.Thread):
+    def __init__(self, port):
+        threading.Thread.__init__(self)
+        self.port = port
+
+    def run(self):
+        global server, ge_server
+        server = zerorpc.Server(EventCaptureService())
+        addr = "tcp://127.0.0.1:%s" % self.port
+        print("Creating server at: %s" % addr)
+        server.bind(addr)
+        ge_server = gevent.spawn(server.run)
+        ge_server.join()
+
 
 def start_info():
     print("#### Maid Fiddler CLI ####")
@@ -97,12 +123,20 @@ def print_help(command):
     print("Documentation for %s:" % command)
     print(doc_string)
 
+def init_event_handler(port):
+    global eventCapturer
+    eventCapturer = EventCaptureWorker(port)
+    eventCapturer.start()
+    client.SubscribeToEventHandler("tcp://127.0.0.1:%s" % port)
+    print("Connected to event emitter!")
+
 
 def main_loop():
     init_completer()
     print("You can now control Maid Fiddler Core!")
     print("Press TAB to toggle autocomplete!")
     print("Use :h <command> to get help for the command!")
+    print("Use :capture_events <port> to start capturing events!")
     print("Use :q to quit!")
 
     while True:
@@ -118,7 +152,13 @@ def main_loop():
             print_help(s[2:].strip())
         elif s.startswith(":q"):
             client.close()
+            if server is not None:
+                server.close()
+                eventCapturer.join()
             return
+        elif s.startswith(":capture_events"):
+            port = s[len(":capture_events"):].strip()
+            init_event_handler(port)
         else:
             parts = s.split()
             method_name = parts[0]
@@ -135,10 +175,19 @@ def main_loop():
             else:
                 print("No such command: %s" % method_name)
 
+def cleanup():
+    if eventCapturer is not None:
+        gevent.kill(ge_server)
+        eventCapturer.join()
+    if client is not None:
+        client.close()
 
 def main():
-    start_info()
-    main_loop()
+    try:
+        start_info()
+        main_loop()
+    finally:
+        cleanup()
 
 
 if __name__ == '__main__':

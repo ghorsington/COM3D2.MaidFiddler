@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Channels;
 using COM3D2.MaidFiddler.Hooks;
 using MaidStatus;
-using ZeroRpc.Net;
+using Dict = System.Collections.Generic.Dictionary<string, object>;
 
 namespace COM3D2.MaidFiddler.Plugin.Service
 {
@@ -17,7 +16,8 @@ namespace COM3D2.MaidFiddler.Plugin.Service
 
         public Dictionary<string, string> GetMaidList()
         {
-            return GameMain.Instance.CharacterMgr.GetStockMaidList().ToDictionary(m => m.status.guid, m => m.status.fullNameEnStyle);
+            return GameMain.Instance.CharacterMgr.GetStockMaidList()
+                           .ToDictionary(m => m.status.guid, m => m.status.fullNameEnStyle);
         }
 
         public string[] GetMaidParameterList() => maidSetters.Keys.ToArray();
@@ -29,8 +29,9 @@ namespace COM3D2.MaidFiddler.Plugin.Service
 
             string id = maidId.ToLower(CultureInfo.InvariantCulture);
 
-            Maid[] maids = GameMain.Instance.CharacterMgr.GetStockMaidList().Where(m => m.status.guid.ToLower(CultureInfo.InvariantCulture).StartsWith(id))
-                                .ToArray();
+            Maid[] maids = GameMain.Instance.CharacterMgr.GetStockMaidList()
+                                   .Where(m => m.status.guid.ToLower(CultureInfo.InvariantCulture).StartsWith(id))
+                                   .ToArray();
 
             if (maids.Length == 0)
                 throw new ArgumentException($"No such maid with ID: {maidId}", nameof(maidId));
@@ -59,8 +60,9 @@ namespace COM3D2.MaidFiddler.Plugin.Service
 
             string id = maidId.ToLower(CultureInfo.InvariantCulture);
 
-            Maid[] maids = GameMain.Instance.CharacterMgr.GetStockMaidList().Where(m => m.status.guid.ToLower(CultureInfo.InvariantCulture).StartsWith(id))
-                                .ToArray();
+            Maid[] maids = GameMain.Instance.CharacterMgr.GetStockMaidList()
+                                   .Where(m => m.status.guid.ToLower(CultureInfo.InvariantCulture).StartsWith(id))
+                                   .ToArray();
 
             if (maids.Length == 0)
                 throw new ArgumentException($"No such maid with ID: {maidId}", nameof(maidId));
@@ -75,7 +77,13 @@ namespace COM3D2.MaidFiddler.Plugin.Service
         {
             object value = maidGetters[args.PropertyName].Invoke(args.Status, new object[0]);
 
-            client?.InvokeAsync("event_maid_prop_changed", args.Status.guid, args.PropertyName, value);
+            Emit("maid_prop_changed",
+                 new Dict
+                 {
+                         ["guid"] = args.Status.guid,
+                         ["property_name"] = args.PropertyName,
+                         ["value"] = value
+                 });
         }
 
         private void InitMaidStatus()

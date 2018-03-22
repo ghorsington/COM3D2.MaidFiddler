@@ -17,7 +17,7 @@ namespace COM3D2.MaidFiddler.Hooks
 
         public static bool OnPropertySetPrefix(string propName, MaidStatus.Status status)
         {
-            return true;
+            return false;
         }
 
         public static void OnPropertySetPostfix(string propName, MaidStatus.Status status)
