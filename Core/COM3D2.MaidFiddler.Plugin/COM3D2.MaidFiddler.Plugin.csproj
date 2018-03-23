@@ -74,7 +74,7 @@
       <Project>{49c28faa-4bbf-44f5-9310-cd3a163c1397}</Project>
       <Name>COM3D2.MaidFiddler.Hooks</Name>
     </ProjectReference>
-    <ProjectReference Include="..\zerorpc-dotnet\ZeroRpc.Net\ZeroRpc.Net.csproj">
+    <ProjectReference Include="..\Libs\zerorpc-dotnet\ZeroRpc.Net\ZeroRpc.Net.csproj">
       <Project>{22fbbcce-72db-4ee5-a808-d0ebb934a08e}</Project>
       <Name>ZeroRpc.Net</Name>
     </ProjectReference>
