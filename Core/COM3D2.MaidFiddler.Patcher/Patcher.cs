@@ -35,6 +35,10 @@ namespace COM3D2.MaidFiddler.Patcher
 
             TypeDefinition maidStatus = ass.MainModule.GetType("MaidStatus.Status");
 
+            FieldDefinition bonusStatus = maidStatus.GetField("bonusStatus");
+            bonusStatus.IsPublic = true;
+            bonusStatus.IsPrivate = false;
+
             foreach (MethodDefinition setter in maidStatus.Methods.Where(m => m.Name.StartsWith("set_") && m.IsPublic))
             {
                 string tag = setter.Name.Substring("set_".Length);

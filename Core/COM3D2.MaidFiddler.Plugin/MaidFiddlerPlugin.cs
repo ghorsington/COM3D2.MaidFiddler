@@ -1,6 +1,5 @@
 ﻿using System;
 using AsyncIO;
-using COM3D2.MaidFiddler.Plugin.Service;
 using COM3D2.MaidFiddler.Plugin.Utils;
 using NetMQ;
 using UnityInjector;
@@ -17,9 +16,9 @@ namespace COM3D2.MaidFiddler.Plugin
     {
         public const int PORT = 8899;
         public const string VERSION = "Alpha 0.1";
+        private MFService service;
 
         private Server zeroServer;
-        private MFService service;
 
         public void Awake()
         {
@@ -51,7 +50,16 @@ namespace COM3D2.MaidFiddler.Plugin
         public void OnDestroy()
         {
             Debugger.WriteLine(LogLevel.Info, "Stopping ZeroService");
-            service.Unsubscribe();
+
+            try
+            {
+                service.Unsubscribe();
+            }
+            catch (Exception)
+            {
+                //
+            }
+
             zeroServer.Dispose();
             Debugger.WriteLine(LogLevel.Info, "Doing cleanup!");
             NetMQConfig.Cleanup(false);

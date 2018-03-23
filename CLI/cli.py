@@ -5,7 +5,6 @@ import json
 import pprint
 import os
 import threading
-import atexit
 import gevent
 
 __version__ = "1.0.0.0"
