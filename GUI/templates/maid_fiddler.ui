@@ -56,23 +56,32 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <widget class="QListView" name="listView">
+       <widget class="QListWidget" name="maid_list">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+        <property name="iconSize">
          <size>
-          <width>0</width>
-          <height>0</height>
+          <width>90</width>
+          <height>90</height>
          </size>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QTabWidget" name="tabWidget">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -83,9 +92,12 @@
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab_maid_info">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -791,7 +803,7 @@
               <item>
                <widget class="QGroupBox" name="groupBox_3">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -861,7 +873,7 @@
               <item>
                <widget class="QGroupBox" name="groupBox_4">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -935,73 +947,511 @@
          <attribute name="title">
           <string>Maid work</string>
          </attribute>
-        </widget>
-        <widget class="QWidget" name="tab_yotogi_skills">
-         <attribute name="title">
-          <string>Yotogi skills</string>
-         </attribute>
-        </widget>
-        <widget class="QWidget" name="tab_player_info">
-         <attribute name="title">
-          <string>Player Info</string>
-         </attribute>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QVBoxLayout" name="verticalLayout_14">
           <property name="leftMargin">
-           <number>2</number>
+           <number>0</number>
           </property>
           <property name="topMargin">
            <number>0</number>
           </property>
           <property name="rightMargin">
-           <number>2</number>
+           <number>0</number>
           </property>
           <property name="bottomMargin">
-           <number>2</number>
+           <number>0</number>
           </property>
-          <property name="horizontalSpacing">
-           <number>6</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QTableWidget" name="tableWidget">
-            <property name="verticalScrollBarPolicy">
-             <enum>Qt::ScrollBarAsNeeded</enum>
-            </property>
-            <property name="horizontalScrollBarPolicy">
-             <enum>Qt::ScrollBarAlwaysOff</enum>
-            </property>
-            <property name="rowCount">
-             <number>0</number>
-            </property>
-            <property name="columnCount">
-             <number>3</number>
-            </property>
-            <attribute name="horizontalHeaderCascadingSectionResizes">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="horizontalHeaderMinimumSectionSize">
-             <number>69</number>
-            </attribute>
-            <attribute name="horizontalHeaderStretchLastSection">
+          <item>
+           <widget class="QScrollArea" name="scrollArea_3">
+            <property name="widgetResizable">
              <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>684</width>
+               <height>679</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_15">
+              <item>
+               <widget class="QGroupBox" name="groupBox_5">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="title">
+                 <string>Last known work</string>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <item>
+                  <widget class="QLabel" name="label">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Day</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="cur_noon_work_combo"/>
+                 </item>
+                 <item>
+                  <widget class="Line" name="line">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_2">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Night</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="cur_night_work_combo"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_6">
+                <property name="title">
+                 <string>Work data</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_16">
+                 <item>
+                  <widget class="QTableWidget" name="noon_work_table">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="sizeAdjustPolicy">
+                    <enum>QAbstractScrollArea::AdjustToContents</enum>
+                   </property>
+                   <property name="editTriggers">
+                    <set>QAbstractItemView::NoEditTriggers</set>
+                   </property>
+                   <property name="alternatingRowColors">
+                    <bool>true</bool>
+                   </property>
+                   <property name="selectionMode">
+                    <enum>QAbstractItemView::NoSelection</enum>
+                   </property>
+                   <attribute name="horizontalHeaderMinimumSectionSize">
+                    <number>24</number>
+                   </attribute>
+                   <attribute name="verticalHeaderVisible">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="verticalHeaderDefaultSectionSize">
+                    <number>24</number>
+                   </attribute>
+                   <attribute name="verticalHeaderMinimumSectionSize">
+                    <number>24</number>
+                   </attribute>
+                   <column>
+                    <property name="text">
+                     <string>Has</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Work Name</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Level</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Play count</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_7">
+                <property name="title">
+                 <string>Yotogi work data</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_17">
+                 <item>
+                  <widget class="QTableWidget" name="yotogi_work_table">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="sizeAdjustPolicy">
+                    <enum>QAbstractScrollArea::AdjustToContents</enum>
+                   </property>
+                   <property name="editTriggers">
+                    <set>QAbstractItemView::NoEditTriggers</set>
+                   </property>
+                   <property name="alternatingRowColors">
+                    <bool>true</bool>
+                   </property>
+                   <property name="selectionMode">
+                    <enum>QAbstractItemView::NoSelection</enum>
+                   </property>
+                   <attribute name="horizontalHeaderMinimumSectionSize">
+                    <number>24</number>
+                   </attribute>
+                   <attribute name="verticalHeaderVisible">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="verticalHeaderDefaultSectionSize">
+                    <number>24</number>
+                   </attribute>
+                   <attribute name="verticalHeaderMinimumSectionSize">
+                    <number>24</number>
+                   </attribute>
+                   <column>
+                    <property name="text">
+                     <string>Has</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Work Name</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Level</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Play count</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_yotogi_skills">
+         <attribute name="title">
+          <string>Yotogi skills</string>
+         </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_13">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QTableWidget" name="yotogi_skills_table">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="sizeAdjustPolicy">
+             <enum>QAbstractScrollArea::AdjustIgnored</enum>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::NoSelection</enum>
+            </property>
+            <attribute name="horizontalHeaderMinimumSectionSize">
+             <number>24</number>
             </attribute>
             <attribute name="verticalHeaderVisible">
              <bool>false</bool>
             </attribute>
+            <attribute name="verticalHeaderDefaultSectionSize">
+             <number>24</number>
+            </attribute>
+            <attribute name="verticalHeaderMinimumSectionSize">
+             <number>24</number>
+            </attribute>
             <column>
              <property name="text">
-              <string>Property</string>
+              <string>Has</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Value</string>
+              <string>Skill</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Lock</string>
+              <string>Level</string>
              </property>
             </column>
+            <column>
+             <property name="text">
+              <string>Exp</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Play count</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_player_info">
+         <attribute name="title">
+          <string>Player Info</string>
+         </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_21">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QScrollArea" name="scrollArea_4">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents_4">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>684</width>
+               <height>679</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_18">
+              <item>
+               <widget class="QGroupBox" name="groupBox_8">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="title">
+                 <string>Parameters</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_19">
+                 <property name="leftMargin">
+                  <number>6</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>6</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>6</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>6</number>
+                 </property>
+                 <item>
+                  <widget class="QTableWidget" name="player_params_table">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="sizeAdjustPolicy">
+                    <enum>QAbstractScrollArea::AdjustToContents</enum>
+                   </property>
+                   <property name="editTriggers">
+                    <set>QAbstractItemView::NoEditTriggers</set>
+                   </property>
+                   <property name="alternatingRowColors">
+                    <bool>true</bool>
+                   </property>
+                   <property name="selectionMode">
+                    <enum>QAbstractItemView::NoSelection</enum>
+                   </property>
+                   <attribute name="horizontalHeaderMinimumSectionSize">
+                    <number>24</number>
+                   </attribute>
+                   <attribute name="verticalHeaderVisible">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="verticalHeaderDefaultSectionSize">
+                    <number>24</number>
+                   </attribute>
+                   <attribute name="verticalHeaderMinimumSectionSize">
+                    <number>24</number>
+                   </attribute>
+                   <column>
+                    <property name="text">
+                     <string>Parameter</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Value</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Lock</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_9">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="title">
+                 <string>Flags</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_20">
+                 <property name="leftMargin">
+                  <number>6</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>6</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>6</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>6</number>
+                 </property>
+                 <item>
+                  <widget class="QTableWidget" name="player_flags_table">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="sizeAdjustPolicy">
+                    <enum>QAbstractScrollArea::AdjustToContents</enum>
+                   </property>
+                   <property name="editTriggers">
+                    <set>QAbstractItemView::DoubleClicked</set>
+                   </property>
+                   <property name="alternatingRowColors">
+                    <bool>true</bool>
+                   </property>
+                   <attribute name="horizontalHeaderMinimumSectionSize">
+                    <number>24</number>
+                   </attribute>
+                   <attribute name="verticalHeaderVisible">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="verticalHeaderDefaultSectionSize">
+                    <number>24</number>
+                   </attribute>
+                   <attribute name="verticalHeaderMinimumSectionSize">
+                    <number>24</number>
+                   </attribute>
+                   <column>
+                    <property name="text">
+                     <string>Name</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Value</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widget_2" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_2">
+                    <item>
+                     <widget class="QPushButton" name="player_flags_add_button">
+                      <property name="text">
+                       <string>Add flag</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="player_flags_remove_button">
+                      <property name="text">
+                       <string>Remove selected</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </widget>
           </item>
          </layout>

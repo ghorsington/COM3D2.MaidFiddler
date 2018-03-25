@@ -97,16 +97,22 @@ namespace COM3D2.MaidFiddler.Plugin.Service
             Dict props = new Dict();
             result["set_properties"] = props;
 
+            Dict enumProps = new Dict();
+            result["enum_props"] = enumProps;
+
             foreach (KeyValuePair<string, MethodInfo> getter in maidGetters)
                 if (maidSetters.ContainsKey(getter.Key))
-                    props[getter.Key] = getter.Value.Invoke(maid.status, new object[0]);
+                    if(getter.Value.ReturnType.IsEnum)
+                        enumProps[getter.Key] = (int) getter.Value.Invoke(maid.status, new object[0]);
+                    else
+                        props[getter.Key] = getter.Value.Invoke(maid.status, new object[0]);
 
             Dict basicInfo = new Dict();
             result["basic_properties"] = basicInfo;
 
-            basicInfo["cur_seikeiken"] = maid.status.seikeiken;
-            basicInfo["init_seikeiken"] = maid.status.initSeikeiken;
-            basicInfo["contract"] = maid.status.contract;
+            basicInfo["cur_seikeiken"] = (int) maid.status.seikeiken;
+            basicInfo["init_seikeiken"] = (int) maid.status.initSeikeiken;
+            basicInfo["contract"] = (int) maid.status.contract;
             basicInfo["personal"] = maid.status.personal.id;
             basicInfo["current_job_class_id"] = maid.status.selectedJobClass.data.id;
             basicInfo["current_yotogi_class_id"] = maid.status.selectedYotogiClass.data.id;
