@@ -17,6 +17,7 @@ namespace COM3D2.MaidFiddler.Plugin.Service
 
             client = new Client();
             client.Connect(address);
+            Console.WriteLine($"Subscribed to event handler on {address}");
         }
 
         internal void Unsubscribe()

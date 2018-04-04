@@ -20,7 +20,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>MaidFiddler COM3D2</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QComboBox {

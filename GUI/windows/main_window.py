@@ -1,3 +1,4 @@
+from util.eventpoller import EventPoller
 import util.util as util
 import base64
 import PyQt5.uic as uic
@@ -6,11 +7,15 @@ from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QCheckBox, QSpinBox, QWidget, QHBoxLayout, QListWidgetItem
 
 class MainWindow:
-    def __init__(self, core):
+    def __init__(self, core, group):
         self.ui = uic.loadUi(open(util.get_resource_path("templates/maid_fiddler.ui")))
         self.core = core
-
+        self.event_poller = EventPoller(8890)
+        self.event_poller.start(self.core, group)
         self.load_ui()
+
+    def close(self):
+        self.event_poller.stop()
 
     def __init_maid_info(self):
         """ Init maid info"""
@@ -256,7 +261,9 @@ class MainWindow:
         self.__init_work_tab()
         self.__init_player_tab()
 
-        """ # Maid list test
+        # Maid list test
+
+        self.event_poller.on("maid_prop_changed", lambda args: print(str(args)))
 
         maid_data = self.core.GetMaidData("3ac")
 
@@ -266,4 +273,4 @@ class MainWindow:
         thumb.loadFromData(thumb_image)
 
         self.ui.maid_list.addItem(QListWidgetItem(QIcon(thumb), "%s %s" % (
-            maid_data["set_properties"]["firstName"], maid_data["set_properties"]["lastName"]))) """
+            maid_data["set_properties"]["firstName"], maid_data["set_properties"]["lastName"])))

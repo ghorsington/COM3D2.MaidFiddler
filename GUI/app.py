@@ -2,8 +2,10 @@ import sys
 import zerorpc
 import windows.main_window as main_window
 from PyQt5.QtWidgets import QApplication, QStyleFactory
+import gevent
 
 client = None
+group = gevent.pool.Group()
 
 def connect():
     global client
@@ -17,17 +19,26 @@ def connect():
         print("Failed to connect because " + str(ex))
     print("Connected!")
 
+def event_loop(app):
+    def loop(app):
+        app.processEvents()
+    while True:
+        looper = group.spawn(loop, app)
+        looper.join()
 
 def main():
+    global group
     print("Starting MF")
     connect()
     app = QApplication(sys.argv)
     app.setStyle(QStyleFactory.create("Fusion"))
 
-    window = main_window.MainWindow(client)
+    window = main_window.MainWindow(client, group)
     
     window.ui.show()
-    sys.exit(app.exec_())
+    group.spawn(event_loop, app)
+    group.join()
+    sys.exit(0)
 
 
 if __name__ == "__main__":
