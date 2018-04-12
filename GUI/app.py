@@ -19,12 +19,16 @@ def connect():
         print("Failed to connect because " + str(ex))
     print("Connected!")
 
+APP_RUNNING = True
+
 def event_loop(app):
-    def loop(app):
+    while APP_RUNNING:
         app.processEvents()
-    while True:
-        looper = group.spawn(loop, app)
-        looper.join()
+        gevent.sleep(0)     # Let other events (RPC, event emitter) do some work
+
+def close():
+    global APP_RUNNING
+    APP_RUNNING = False
 
 def main():
     global group
@@ -33,9 +37,9 @@ def main():
     app = QApplication(sys.argv)
     app.setStyle(QStyleFactory.create("Fusion"))
 
-    window = main_window.MainWindow(client, group)
+    window = main_window.MainWindow(client, group, close)
     
-    window.ui.show()
+    window.show()
     group.spawn(event_loop, app)
     group.join()
     sys.exit(0)
