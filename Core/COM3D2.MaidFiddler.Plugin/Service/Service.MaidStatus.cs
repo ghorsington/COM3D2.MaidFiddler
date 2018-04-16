@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using COM3D2.MaidFiddler.Hooks;
 using MaidStatus;
+using UnityEngine;
 using Dict = System.Collections.Generic.Dictionary<string, object>;
 
 namespace COM3D2.MaidFiddler.Plugin.Service
@@ -170,13 +171,20 @@ namespace COM3D2.MaidFiddler.Plugin.Service
 
             result["feature_ids"] = maid.status.features.GetValueArray().Select(f => f.id).ToArray();
             result["propensity_ids"] = maid.status.propensitys.GetValueArray().Select(f => f.id).ToArray();
-            result["maid_thumbnail"] = Convert.ToBase64String(maid.GetThumIcon().EncodeToPNG());
+
+            Texture2D thum = maid.GetThumIcon();
+            result["maid_thumbnail"] = thum != null ? thum.EncodeToPNG() : null;
+
+            result["guid"] = maid.status.guid;
 
             return result;
         }
 
         private void OnPropertyChange(object sender, MaidStatusChangeEventArgs args)
         {
+            if (IsDeserializing)
+                return;
+
             object value = maidGetters[args.PropertyName].Invoke(args.Status, new object[0]);
 
             Emit("maid_prop_changed",
@@ -209,6 +217,19 @@ namespace COM3D2.MaidFiddler.Plugin.Service
             }
 
             MaidStatusHooks.PropertyChanged += OnPropertyChange;
+
+            MaidStatusHooks.ThumbnailChanged += (sender, args) =>
+            {
+                if (IsDeserializing)
+                    return;
+
+                Emit("maid_thumbnail_changed",
+                     new Dict
+                     {
+                             ["guid"] = args.Maid.status.guid,
+                             ["thumb"] = args.Maid.GetThumIcon().EncodeToPNG()
+                     });
+            };
         }
     }
 }

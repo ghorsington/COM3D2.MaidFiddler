@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using COM3D2.MaidFiddler.Hooks;
 using MaidStatus;
 using Schedule;
 using Yotogis;
@@ -12,6 +13,26 @@ namespace COM3D2.MaidFiddler.Plugin.Service
 {
     public partial class Service
     {
+        private bool IsDeserializing { get; set; }
+
+        private void InitGameMain()
+        {
+            GameMainHooks.DeserializeStarting += (sender, args) =>
+            {
+                IsDeserializing = true;
+                Emit("deserialize_start", new Dict());
+            };
+
+            GameMainHooks.DeserializeEnded += (sender, args) =>
+            {
+                IsDeserializing = false;
+                Emit("deserialize_done", new Dict
+                {
+                    ["success"] = args.Success
+                });
+            };
+        }
+
         public Dict GetGameInfo()
         {
             Dict result = new Dict

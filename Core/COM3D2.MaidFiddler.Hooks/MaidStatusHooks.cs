@@ -11,9 +11,15 @@ namespace COM3D2.MaidFiddler.Hooks
         public string PropertyName { get; internal set; }
     }
 
+    public class MaidEventArgs : EventArgs
+    {
+        public Maid Maid { get; internal set; }
+    }
+
     public static class MaidStatusHooks
     {
         public static event EventHandler<MaidStatusChangeEventArgs> PropertyChanged;
+        public static event EventHandler<MaidEventArgs> ThumbnailChanged;
 
         public static bool OnPropertySetPrefix(string propName, MaidStatus.Status status)
         {
@@ -29,6 +35,14 @@ namespace COM3D2.MaidFiddler.Hooks
             };
 
             PropertyChanged?.Invoke(null, args);
+        }
+
+        public static void OnThumShot(Maid maid)
+        {
+            ThumbnailChanged?.Invoke(null, new MaidEventArgs
+            {
+                Maid = maid
+            });
         }
 
         public static void OnFeatureAdd(MaidStatus.Status status, MaidStatus.Feature.Data data)

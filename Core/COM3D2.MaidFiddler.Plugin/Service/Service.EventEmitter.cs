@@ -11,6 +11,8 @@ namespace COM3D2.MaidFiddler.Plugin.Service
     {
         private Client client;
 
+        private bool HasEventHandler => client != null;
+
         public void SubscribeToEventHandler(string address)
         {
             Unsubscribe();

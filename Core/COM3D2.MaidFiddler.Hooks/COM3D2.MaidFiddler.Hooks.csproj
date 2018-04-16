@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CharacterMgrHooks.cs" />
+    <Compile Include="GameMainHooks.cs" />
     <Compile Include="MaidStatusHooks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

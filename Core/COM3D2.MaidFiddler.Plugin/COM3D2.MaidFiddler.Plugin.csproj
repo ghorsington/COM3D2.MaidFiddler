@@ -61,7 +61,8 @@
     <Compile Include="MaidFiddlerPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\Service.EventEmitter.cs" />
-    <Compile Include="Service\Service.GameInfo.cs" />
+    <Compile Include="Service\Service.GameMain.cs" />
+    <Compile Include="Service\Service.MaidMgr.cs" />
     <Compile Include="Service\Service.PlayerStatus.cs" />
     <Compile Include="Service\Service.cs" />
     <Compile Include="Service\Service.MaidStatus.cs" />

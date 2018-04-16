@@ -12,7 +12,9 @@ namespace COM3D2.MaidFiddler.Plugin.Service
             Debugger.WriteLine(LogLevel.Info, "Created a service provider!");
 
             InitPlayerStatus();
+            InitMaidMgr();
             InitMaidStatus();
+            InitGameMain();
         }
 
         public static int GameVersion => (int) typeof(Misc).GetField(nameof(Misc.GAME_VERSION)).GetValue(null);
