@@ -1,3 +1,8 @@
+> ⚠️ **Work in progress** ⚠️
+> 
+> This tool is not ready!  
+> If you are developer, feel free to contribute/fork though.
+
 # Maid Fiddler COM3D2 Edition
 *Now with 5% more horses*
 
