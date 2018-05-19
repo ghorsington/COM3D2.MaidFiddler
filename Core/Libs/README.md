@@ -2,12 +2,11 @@
 
 ## Needed external assemblies
 
-* Assembly-CSharp.dll (found in `<CM3D2 Root Directory>\CM3D2(x86/x64)_Data\Managed`)
+* Assembly-CSharp.dll (found in `<COM3D2 Root Directory>\COM3D2x64_Data\Managed`)
 * Assembly-CSharp-firstpass.dll (found in `<CM3D2 Root Directory>\CM3D2(x86/x64)_Data\Managed`)
-* UnityEngine.dll (found in `<CM3D2 Root Directory>\CM3D2(x86/x64)_Data\Managed`)
-* JsonFx.Json.dll (found in `<CM3D2 Root Directory>\CM3D2(x86/x64)_Data\Managed`)
-* ExIni.dll (found in ReiPatcher's installation directory)
-* UnityInjector.dll (found in `<CM3D2 Root Directory>\CM3D2(x86/x64)_Data\Managed`)
-* Mono.Cecil.dll (found in ReiPatcher's installation directory)
-* Mono.Cecil.Inject.dll (either compiled from [source](https://github.com/denikson/Mono.Cecil.Inject) or [downloaded from HongFire](http://www.hongfire.com/forum/showthread.php/444581-Cecil-Inject-An-extension-to-Mono-Cecil-1-1))
-* ReiPatcher.exe (found in ReiPatcher's installation directory)
+* UnityEngine.dll (found in `<COM3D2 Root Directory>\COM3D2x64_Data\Managed`)
+* BepInEx.dll (from [BepInEx](https://github.com/bbepis/BepInEx))
+* Mono.Cecil.dll version 0.9.6 (from [NuGet](https://www.nuget.org/packages/Mono.Cecil/0.9.6.4))
+* Mono.Cecil.Inject.dll (from [GitHub](https://github.com/denikson/Mono.Cecil.Inject/releases))
+
+Other assemblies are loaded during build time

@@ -1,18 +1,15 @@
 ﻿using System;
-using AsyncIO;
+using BepInEx;
 using COM3D2.MaidFiddler.Plugin.Utils;
 using NetMQ;
-using UnityInjector;
-using UnityInjector.Attributes;
 using ZeroRpc.Net;
 using ZeroRpc.Net.ServiceProviders;
 using MFService = COM3D2.MaidFiddler.Plugin.Service.Service;
 
 namespace COM3D2.MaidFiddler.Plugin
 {
-    [PluginName("COM3D2.MaidFiddler")]
-    [PluginVersion(VERSION)]
-    public class MaidFiddlerPlugin : PluginBase
+    [BepInPlugin("horse.coder.com3d2.maidfiddler", "Maid Fiddler for COM3D2", VERSION)]
+    public class MaidFiddlerPlugin : BaseUnityPlugin
     {
         public const int PORT = 8899;
         public const string VERSION = "Alpha 0.1";
@@ -24,7 +21,7 @@ namespace COM3D2.MaidFiddler.Plugin
         {
             DontDestroyOnLoad(this);
 
-            ForceDotNet.Force();
+            AsyncIO.ForceDotNet.Force();
             NetMQConfig.Linger = TimeSpan.Zero;
 
             Debugger.WriteLine(LogLevel.Info, $"Starting up Maid Fiddler {VERSION}");
@@ -35,10 +32,7 @@ namespace COM3D2.MaidFiddler.Plugin
 
             zeroServer = new Server(new SimpleWrapperService<MFService>(service));
 
-            zeroServer.Error += (sender, args) =>
-            {
-                Debugger.WriteLine(LogLevel.Error, $"ZeroService error: {args.Info.ToString()}");
-            };
+            zeroServer.Error += (sender, args) => { Debugger.WriteLine(LogLevel.Error, $"ZeroService error: {args.Info.ToString()}"); };
 
             Debugger.WriteLine(LogLevel.Info, "Starting server!");
 

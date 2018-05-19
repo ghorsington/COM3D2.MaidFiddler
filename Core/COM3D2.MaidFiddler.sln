@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.MaidFiddler.Patcher"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.MaidFiddler.Hooks", "COM3D2.MaidFiddler.Hooks\COM3D2.MaidFiddler.Hooks.csproj", "{49C28FAA-4BBF-44F5-9310-CD3A163C1397}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.MaidFiddler.ReiPatch", "COM3D2.MaidFiddler.ReiPatch\COM3D2.MaidFiddler.ReiPatch.csproj", "{35C10AEB-E5E9-443A-9B89-B97B49D92843}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroRpc.Net", "Libs\zerorpc-dotnet\ZeroRpc.Net\ZeroRpc.Net.csproj", "{22FBBCCE-72DB-4EE5-A808-D0EBB934A08E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsgPack.Unity.Full", "Libs\msgpack-cli\src\MsgPack.Unity.Full\MsgPack.Unity.Full.csproj", "{30581B4A-BCA5-4446-B5E7-4F890A3E9514}"
@@ -49,14 +47,6 @@ Global
 		{49C28FAA-4BBF-44F5-9310-CD3A163C1397}.Instrument|Any CPU.Build.0 = Release|Any CPU
 		{49C28FAA-4BBF-44F5-9310-CD3A163C1397}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49C28FAA-4BBF-44F5-9310-CD3A163C1397}.Release|Any CPU.Build.0 = Release|Any CPU
-		{35C10AEB-E5E9-443A-9B89-B97B49D92843}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
-		{35C10AEB-E5E9-443A-9B89-B97B49D92843}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
-		{35C10AEB-E5E9-443A-9B89-B97B49D92843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{35C10AEB-E5E9-443A-9B89-B97B49D92843}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{35C10AEB-E5E9-443A-9B89-B97B49D92843}.Instrument|Any CPU.ActiveCfg = Release|Any CPU
-		{35C10AEB-E5E9-443A-9B89-B97B49D92843}.Instrument|Any CPU.Build.0 = Release|Any CPU
-		{35C10AEB-E5E9-443A-9B89-B97B49D92843}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{35C10AEB-E5E9-443A-9B89-B97B49D92843}.Release|Any CPU.Build.0 = Release|Any CPU
 		{22FBBCCE-72DB-4EE5-A808-D0EBB934A08E}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
 		{22FBBCCE-72DB-4EE5-A808-D0EBB934A08E}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
 		{22FBBCCE-72DB-4EE5-A808-D0EBB934A08E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
