@@ -1,6 +1,5 @@
 from util.eventpoller import EventPoller
 import util.util as util
-import base64
 import PyQt5.uic as uic
 from PyQt5.QtCore import Qt, QObject
 from PyQt5.QtGui import QPixmap, QIcon
@@ -225,8 +224,7 @@ class YotogiTab(UiTab):
 class WorkTab(UiTab):
 
     def update_ui(self):
-        noon_work = [data for data in self.game_data["work_data"]
-                     if data["work_type"] != "Yotogi"]
+        noon_work = [data for data in self.game_data["work_data"] if data["work_type"] != "Yotogi"]
 
         self.ui.noon_work_table.setRowCount(len(noon_work))
 
@@ -262,8 +260,7 @@ class WorkTab(UiTab):
 
         # Yotogi work
 
-        yotogi_work = [data for data in self.game_data["work_data"]
-                       if data["work_type"] == "Yotogi"]
+        yotogi_work = [data for data in self.game_data["work_data"] if data["work_type"] == "Yotogi"]
 
         self.ui.yotogi_work_table.setRowCount(len(yotogi_work))
 

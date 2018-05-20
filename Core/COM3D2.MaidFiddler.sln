@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.MaidFiddler.Plugin", "COM3D2.MaidFiddler.Plugin\COM3D2.MaidFiddler.Plugin.csproj", "{CFD04517-9577-4758-91DF-8E6F1A63F2E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.MaidFiddler.Core", "COM3D2.MaidFiddler.Plugin\COM3D2.MaidFiddler.Core.csproj", "{CFD04517-9577-4758-91DF-8E6F1A63F2E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{CC41ED5A-AD34-4CBB-97F1-1B4F46EC4F1A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.MaidFiddler.Patcher", "COM3D2.MaidFiddler.Patcher\COM3D2.MaidFiddler.Patcher.csproj", "{7C3C0E80-0200-4160-BCDD-9F1FF89F1378}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.MaidFiddler.Hooks", "COM3D2.MaidFiddler.Hooks\COM3D2.MaidFiddler.Hooks.csproj", "{49C28FAA-4BBF-44F5-9310-CD3A163C1397}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroRpc.Net", "Libs\zerorpc-dotnet\ZeroRpc.Net\ZeroRpc.Net.csproj", "{22FBBCCE-72DB-4EE5-A808-D0EBB934A08E}"
 EndProject
@@ -39,14 +37,6 @@ Global
 		{7C3C0E80-0200-4160-BCDD-9F1FF89F1378}.Instrument|Any CPU.Build.0 = Release|Any CPU
 		{7C3C0E80-0200-4160-BCDD-9F1FF89F1378}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C3C0E80-0200-4160-BCDD-9F1FF89F1378}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49C28FAA-4BBF-44F5-9310-CD3A163C1397}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
-		{49C28FAA-4BBF-44F5-9310-CD3A163C1397}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
-		{49C28FAA-4BBF-44F5-9310-CD3A163C1397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49C28FAA-4BBF-44F5-9310-CD3A163C1397}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49C28FAA-4BBF-44F5-9310-CD3A163C1397}.Instrument|Any CPU.ActiveCfg = Release|Any CPU
-		{49C28FAA-4BBF-44F5-9310-CD3A163C1397}.Instrument|Any CPU.Build.0 = Release|Any CPU
-		{49C28FAA-4BBF-44F5-9310-CD3A163C1397}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49C28FAA-4BBF-44F5-9310-CD3A163C1397}.Release|Any CPU.Build.0 = Release|Any CPU
 		{22FBBCCE-72DB-4EE5-A808-D0EBB934A08E}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
 		{22FBBCCE-72DB-4EE5-A808-D0EBB934A08E}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
 		{22FBBCCE-72DB-4EE5-A808-D0EBB934A08E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

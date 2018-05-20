@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace COM3D2.MaidFiddler.Hooks
+namespace COM3D2.MaidFiddler.Core.Hooks
 {
     public class MaidStatusChangeEventArgs : EventArgs
     {

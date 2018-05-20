@@ -1,14 +1,14 @@
 ﻿using System;
 using BepInEx;
-using COM3D2.MaidFiddler.Plugin.Utils;
+using COM3D2.MaidFiddler.Core.Utils;
 using NetMQ;
 using ZeroRpc.Net;
 using ZeroRpc.Net.ServiceProviders;
-using MFService = COM3D2.MaidFiddler.Plugin.Service.Service;
+using MFService = COM3D2.MaidFiddler.Core.Service.Service;
 
-namespace COM3D2.MaidFiddler.Plugin
+namespace COM3D2.MaidFiddler.Core
 {
-    [BepInPlugin("horse.coder.com3d2.maidfiddler", "Maid Fiddler for COM3D2", VERSION)]
+    [BepInPlugin("horse.coder.com3d2.maidfiddler", "Maid Fiddler for COM3D2", "0.0.1")]
     public class MaidFiddlerPlugin : BaseUnityPlugin
     {
         public const int PORT = 8899;

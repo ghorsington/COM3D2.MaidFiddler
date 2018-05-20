@@ -7,8 +7,8 @@
     <ProjectGuid>{CFD04517-9577-4758-91DF-8E6F1A63F2E8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>COM3D2.MaidFiddler.Plugin</RootNamespace>
-    <AssemblyName>COM3D2.MaidFiddler.Plugin</AssemblyName>
+    <RootNamespace>COM3D2.MaidFiddler.Core</RootNamespace>
+    <AssemblyName>COM3D2.MaidFiddler.Core</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -57,6 +57,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Hooks\CharacterMgrHooks.cs" />
+    <Compile Include="Hooks\GameMainHooks.cs" />
+    <Compile Include="Hooks\MaidStatusHooks.cs" />
     <Compile Include="MaidFiddlerPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\Service.EventEmitter.cs" />
@@ -71,10 +74,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\COM3D2.MaidFiddler.Hooks\COM3D2.MaidFiddler.Hooks.csproj">
-      <Project>{49c28faa-4bbf-44f5-9310-cd3a163c1397}</Project>
-      <Name>COM3D2.MaidFiddler.Hooks</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Libs\zerorpc-dotnet\ZeroRpc.Net\ZeroRpc.Net.csproj">
       <Project>{22fbbcce-72db-4ee5-a808-d0ebb934a08e}</Project>
       <Name>ZeroRpc.Net</Name>

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ZeroRpc.Net;
 using Dict = System.Collections.Generic.Dictionary<string, object>;
 
-namespace COM3D2.MaidFiddler.Plugin.Service
+namespace COM3D2.MaidFiddler.Core.Service
 {
     public partial class Service
     {

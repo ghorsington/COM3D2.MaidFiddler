@@ -6,7 +6,7 @@ using PlayerStatus;
 using wf;
 using ZeroRpc.Net.ServiceProviders;
 
-namespace COM3D2.MaidFiddler.Plugin.Service
+namespace COM3D2.MaidFiddler.Core.Service
 {
     public partial class Service
     {

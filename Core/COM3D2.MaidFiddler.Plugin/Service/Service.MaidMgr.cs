@@ -1,9 +1,8 @@
-﻿using System;
-using COM3D2.MaidFiddler.Hooks;
-using COM3D2.MaidFiddler.Plugin.Utils;
+﻿using COM3D2.MaidFiddler.Core.Hooks;
+using COM3D2.MaidFiddler.Core.Utils;
 using Dict = System.Collections.Generic.Dictionary<string, object>;
 
-namespace COM3D2.MaidFiddler.Plugin.Service
+namespace COM3D2.MaidFiddler.Core.Service
 {
     public partial class Service
     {

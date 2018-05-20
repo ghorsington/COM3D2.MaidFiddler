@@ -1,8 +1,7 @@
 ﻿using System.Text;
-using COM3D2.MaidFiddler.Plugin.Utils;
-using ZeroRpc.Net;
+using COM3D2.MaidFiddler.Core.Utils;
 
-namespace COM3D2.MaidFiddler.Plugin.Service
+namespace COM3D2.MaidFiddler.Core.Service
 {
     public partial class Service
     {

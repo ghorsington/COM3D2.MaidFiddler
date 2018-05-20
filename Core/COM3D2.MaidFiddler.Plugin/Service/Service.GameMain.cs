@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using COM3D2.MaidFiddler.Hooks;
+using COM3D2.MaidFiddler.Core.Hooks;
 using MaidStatus;
 using Schedule;
 using Yotogis;
 using Dict = System.Collections.Generic.Dictionary<string, object>;
 using List = System.Collections.Generic.List<object>;
 
-namespace COM3D2.MaidFiddler.Plugin.Service
+namespace COM3D2.MaidFiddler.Core.Service
 {
     public partial class Service
     {
