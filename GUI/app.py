@@ -23,12 +23,13 @@ def connect():
 APP_RUNNING = True
 
 def event_loop(app):
+    timer = 0
     while APP_RUNNING:
         app.processEvents()
-
-def empty_loop():
-    while APP_RUNNING:
-        gevent.sleep()
+        timer = timer + 1
+        if timer % 800 == 0:
+            timer = 0
+            gevent.sleep()
 
 def close():
     global APP_RUNNING
@@ -45,7 +46,6 @@ def main():
     window = main_window.MainWindow(client, group, close)
     
     window.show()
-    threading._start_new_thread(event_loop, (app,))
     group.spawn(event_loop, app)
     group.join()
 

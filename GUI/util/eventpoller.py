@@ -1,5 +1,4 @@
 import zerorpc
-import threading
 import gevent
 
 class EventPoller(object):
@@ -11,9 +10,9 @@ class EventPoller(object):
 
     def start(self, client, group):
         self.server = zerorpc.Server(self)
-        self.server.bind("tcp://127.0.0.1:%s" % self.port)
+        self.server.bind(f"tcp://127.0.0.1:{self.port}")
         self.ge_server = group.spawn(self.server.run)
-        client.SubscribeToEventHandler("tcp://127.0.0.1:%s" % self.port)
+        client.SubscribeToEventHandler(f"tcp://127.0.0.1:{self.port}")
     
     def stop(self):
         gevent.kill(self.ge_server)

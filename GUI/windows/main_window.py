@@ -1,6 +1,7 @@
 from util.eventpoller import EventPoller
 import util.util as util
 import PyQt5.uic as uic
+import base64
 from PyQt5.QtCore import Qt, QObject
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QCheckBox, QSpinBox, QWidget, QHBoxLayout, QListWidgetItem
@@ -25,6 +26,28 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.player_tab = PlayerTab(self, self.event_poller)
 
         self.load_ui()
+        self.init_events()
+
+    def init_events(self):
+        self.maid_info_tab.init_events()
+        self.maid_stats_tab.init_events()
+        self.feature_propensity_tab.init_events()
+        self.yotogi_tab.init_events()
+        self.work_tab.init_events()
+        self.player_tab.init_events()
+
+        self.event_poller.on("maid_added", self.on_maid_added)
+        self.event_poller.on("maid_removed", lambda args: print("REMOVE: " + str(args)))
+        #self.event_poller.on("maid_prop_changed", lambda args: print(str(args)))
+        
+    def on_maid_added(self, args):
+        maid_data = args["maid"]
+        # thumb_image = base64.b64decode(maid_data["maid_thumbnail"])
+
+        thumb = QPixmap()
+        # thumb.loadFromData(thumb_image)
+
+        self.maid_list.addItem(QListWidgetItem(QIcon(thumb), f"{maid_data['set_properties']['firstName']} {maid_data['set_properties']['lastName']}"))
 
     def closeEvent(self, event):
         self.event_poller.stop()
@@ -47,17 +70,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
         # Maid list test
 
-        self.event_poller.on("maid_prop_changed", lambda args: print(str(args)))
-
-        """ maid_data = self.core.GetMaidData("3ac")
-
-        thumb_image = base64.b64decode(maid_data["maid_thumbnail"])
-
-        thumb = QPixmap()
-        thumb.loadFromData(thumb_image) """
-
-        """ self.ui.maid_list.addItem(QListWidgetItem(QIcon(thumb), "%s %s" % (
-            maid_data["set_properties"]["firstName"], maid_data["set_properties"]["lastName"]))) """
+        # self.event_poller.on("maid_prop_changed", lambda args: print(str(args)))
 
 class UiTab(QObject):
     def __init__(self, ui, event_poller):
@@ -74,6 +87,9 @@ class UiTab(QObject):
     def game_data(self, value):
         self._game_data = value
         self.update_ui()
+
+    def init_events(self):
+        pass
 
     def update_ui(self):
         raise NotImplementedError()
