@@ -1,12 +1,13 @@
 from util.eventpoller import EventPoller
 import util.util as util
 import PyQt5.uic as uic
-import base64
 from PyQt5.QtCore import Qt, QObject
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QCheckBox, QSpinBox, QWidget, QHBoxLayout, QListWidgetItem
 
-UI_MainWindow = uic.loadUiType(open(util.get_resource_path("templates/maid_fiddler.ui")))
+UI_MainWindow = uic.loadUiType(
+    open(util.get_resource_path("templates/maid_fiddler.ui")))
+NO_THUMBNAIL = util.open_bytes("templates/no_thumbnail.png")
 
 class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
     def __init__(self, core, group, close_func):
@@ -20,7 +21,8 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
         self.maid_info_tab = MaidInfoTab(self, self.event_poller)
         self.maid_stats_tab = MaidStatsTab(self, self.event_poller)
-        self.feature_propensity_tab = FeaturePropensityTab(self, self.event_poller)
+        self.feature_propensity_tab = FeaturePropensityTab(
+            self, self.event_poller)
         self.yotogi_tab = YotogiTab(self, self.event_poller)
         self.work_tab = WorkTab(self, self.event_poller)
         self.player_tab = PlayerTab(self, self.event_poller)
@@ -37,22 +39,26 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.player_tab.init_events()
 
         self.event_poller.on("maid_added", self.on_maid_added)
-        self.event_poller.on("maid_removed", lambda args: print("REMOVE: " + str(args)))
+        self.event_poller.on(
+            "maid_removed", lambda args: print("REMOVE: " + str(args)))
         #self.event_poller.on("maid_prop_changed", lambda args: print(str(args)))
-        
+
     def on_maid_added(self, args):
         maid_data = args["maid"]
-        # thumb_image = base64.b64decode(maid_data["maid_thumbnail"])
+        if "maid_thumbnail" in maid_data and maid_data["maid_thumbnail"] is not None:
+            thumb_image = maid_data["maid_thumbnail"]
+        else:
+            thumb_image = NO_THUMBNAIL
 
         thumb = QPixmap()
-        # thumb.loadFromData(thumb_image)
+        thumb.loadFromData(thumb_image)
 
         self.maid_list.addItem(QListWidgetItem(QIcon(thumb), f"{maid_data['set_properties']['firstName']} {maid_data['set_properties']['lastName']}"))
 
     def closeEvent(self, event):
         self.event_poller.stop()
         self.close_func()
-    
+
     def close(self):
         self.event_poller.stop()
 
@@ -68,9 +74,13 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.work_tab.game_data = self.game_data
         self.player_tab.game_data = self.game_data
 
-        # Maid list test
+        """ maid_data = self.core.GetMaidData("3eb")
+        thumb = QPixmap()
+        result = thumb.loadFromData(maid_data["maid_thumbnail"])
 
-        # self.event_poller.on("maid_prop_changed", lambda args: print(str(args)))
+        self.maid_list.addItem(QListWidgetItem(QIcon(thumb), "%s %s" % (
+            maid_data["set_properties"]["firstName"], maid_data["set_properties"]["lastName"]))) """
+
 
 class UiTab(QObject):
     def __init__(self, ui, event_poller):
@@ -93,6 +103,7 @@ class UiTab(QObject):
 
     def update_ui(self):
         raise NotImplementedError()
+
 
 class MaidInfoTab(UiTab):
     def update_ui(self):
@@ -118,17 +129,17 @@ class MaidInfoTab(UiTab):
 
         self.ui.yotogi_class_combo.view().setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
 
-    
+
 class MaidStatsTab(UiTab):
     def update_ui(self):
         self.ui.maid_params_lockable_table      \
             .horizontalHeader()                 \
             .setSectionResizeMode(0, QHeaderView.Stretch)
-        
+
         self.ui.maid_params_lockable_table      \
             .horizontalHeader()                 \
             .setSectionResizeMode(1, QHeaderView.ResizeToContents)
-        
+
         self.ui.maid_params_lockable_table      \
             .horizontalHeader()                 \
             .setSectionResizeMode(2, QHeaderView.ResizeToContents)
@@ -201,6 +212,7 @@ class FeaturePropensityTab(UiTab):
             item.setCheckState(Qt.Unchecked)
             self.ui.propensity_list.addItem(item)
 
+
 class YotogiTab(UiTab):
     def update_ui(self):
         self.ui.yotogi_skills_table.setRowCount(
@@ -208,11 +220,15 @@ class YotogiTab(UiTab):
 
         yotogi_skills_header = self.ui.yotogi_skills_table.horizontalHeader()
 
-        yotogi_skills_header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        yotogi_skills_header.setSectionResizeMode(
+            0, QHeaderView.ResizeToContents)
         yotogi_skills_header.setSectionResizeMode(1, QHeaderView.Stretch)
-        yotogi_skills_header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
-        yotogi_skills_header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
-        yotogi_skills_header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
+        yotogi_skills_header.setSectionResizeMode(
+            2, QHeaderView.ResizeToContents)
+        yotogi_skills_header.setSectionResizeMode(
+            3, QHeaderView.ResizeToContents)
+        yotogi_skills_header.setSectionResizeMode(
+            4, QHeaderView.ResizeToContents)
 
         for (i, skill) in enumerate(self.game_data["yotogi_skills"]):
             name = QTableWidgetItem(skill["name"])
@@ -237,10 +253,12 @@ class YotogiTab(UiTab):
             self.ui.yotogi_skills_table.setCellWidget(i, 3, line_exp)
             self.ui.yotogi_skills_table.setCellWidget(i, 4, line_play_count)
 
+
 class WorkTab(UiTab):
 
     def update_ui(self):
-        noon_work = [data for data in self.game_data["work_data"] if data["work_type"] != "Yotogi"]
+        noon_work = [data for data in self.game_data["work_data"]
+                     if data["work_type"] != "Yotogi"]
 
         self.ui.noon_work_table.setRowCount(len(noon_work))
 
@@ -276,16 +294,20 @@ class WorkTab(UiTab):
 
         # Yotogi work
 
-        yotogi_work = [data for data in self.game_data["work_data"] if data["work_type"] == "Yotogi"]
+        yotogi_work = [data for data in self.game_data["work_data"]
+                       if data["work_type"] == "Yotogi"]
 
         self.ui.yotogi_work_table.setRowCount(len(yotogi_work))
 
         yotogi_work_header = self.ui.yotogi_work_table.horizontalHeader()
 
-        yotogi_work_header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        yotogi_work_header.setSectionResizeMode(
+            0, QHeaderView.ResizeToContents)
         yotogi_work_header.setSectionResizeMode(1, QHeaderView.Stretch)
-        yotogi_work_header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
-        yotogi_work_header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        yotogi_work_header.setSectionResizeMode(
+            2, QHeaderView.ResizeToContents)
+        yotogi_work_header.setSectionResizeMode(
+            3, QHeaderView.ResizeToContents)
 
         for (i, work_data) in enumerate(yotogi_work):
             self.ui.cur_night_work_combo.addItem(
@@ -310,8 +332,9 @@ class WorkTab(UiTab):
             self.ui.yotogi_work_table.setCellWidget(i, 2, line_level)
             self.ui.yotogi_work_table.setCellWidget(i, 3, line_play_count)
 
+
 class PlayerTab(UiTab):
-    
+
     def update_ui(self):
         self.ui.player_params_table.setRowCount(
             len(self.game_data["club_status_settable"]))
@@ -319,8 +342,10 @@ class PlayerTab(UiTab):
         player_params_header = self.ui.player_params_table.horizontalHeader()
 
         player_params_header.setSectionResizeMode(0, QHeaderView.Stretch)
-        player_params_header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
-        player_params_header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        player_params_header.setSectionResizeMode(
+            2, QHeaderView.ResizeToContents)
+        player_params_header.setSectionResizeMode(
+            3, QHeaderView.ResizeToContents)
 
         for (i, param) in enumerate(self.game_data["club_status_settable"]):
             name = QTableWidgetItem(param)
@@ -344,4 +369,5 @@ class PlayerTab(UiTab):
         player_flags_header = self.ui.player_flags_table.horizontalHeader()
 
         player_flags_header.setSectionResizeMode(0, QHeaderView.Stretch)
-        player_flags_header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
+        player_flags_header.setSectionResizeMode(
+            1, QHeaderView.ResizeToContents)

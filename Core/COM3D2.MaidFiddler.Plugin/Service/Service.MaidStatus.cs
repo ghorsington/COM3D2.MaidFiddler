@@ -185,6 +185,9 @@ namespace COM3D2.MaidFiddler.Core.Service
             if (IsDeserializing)
                 return;
 
+            if (args.Status.guid != selectedMaidGuid)
+                return;
+
             object value = maidGetters[args.PropertyName].Invoke(args.Status, new object[0]);
 
             Emit("maid_prop_changed",

@@ -14,7 +14,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             Unsubscribe();
 
-            client = new Client();
+            client = new Client(TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(30));
             client.Connect(address);
             Console.WriteLine($"Subscribed to event handler on {address}");
         }

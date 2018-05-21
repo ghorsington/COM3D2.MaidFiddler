@@ -4,6 +4,7 @@ import windows.main_window as main_window
 from PyQt5.QtWidgets import QApplication, QStyleFactory
 import gevent
 import threading
+import util.util as util
 
 client = None
 group = gevent.pool.Group()
@@ -20,11 +21,9 @@ def connect():
         print("Failed to connect because " + str(ex))
     print("Connected!")
 
-APP_RUNNING = True
-
 def event_loop(app):
     timer = 0
-    while APP_RUNNING:
+    while util.APP_RUNNING:
         app.processEvents()
         timer = timer + 1
         if timer % 800 == 0:
@@ -32,8 +31,7 @@ def event_loop(app):
             gevent.sleep()
 
 def close():
-    global APP_RUNNING
-    APP_RUNNING = False
+    util.APP_RUNNING = False
 
 def main():
     global group
