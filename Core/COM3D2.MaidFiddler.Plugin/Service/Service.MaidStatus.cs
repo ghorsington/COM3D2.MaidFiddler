@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using BepInEx.Common;
 using COM3D2.MaidFiddler.Core.Hooks;
 using MaidStatus;
 using UnityEngine;
@@ -185,7 +186,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             if (IsDeserializing)
                 return;
 
-            if (args.Status.guid != selectedMaidGuid)
+            if (string.IsNullOrEmpty(args.Status.guid) || stockMaids == null || !stockMaids.ContainsKey(args.Status.guid))
                 return;
 
             object value = maidGetters[args.PropertyName].Invoke(args.Status, new object[0]);

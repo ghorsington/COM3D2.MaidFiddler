@@ -34,6 +34,7 @@ class EventPoller(object):
             self.event_handlers[event_name] = []
         self.event_handlers[event_name].append(handler)
 
-    def emit(self, event_name, args):
-        if event_name in self.event_handlers:
-            self.job_stack.append((event_name, args))
+    def emit(self, events):
+        for event in events:
+            if event["event_name"] in self.event_handlers:
+                self.job_stack.append((event["event_name"], event["args"]))

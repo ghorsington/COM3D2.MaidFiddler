@@ -26,7 +26,7 @@ namespace COM3D2.MaidFiddler.Core
 
             Debugger.WriteLine(LogLevel.Info, $"Starting up Maid Fiddler {VERSION}");
 
-            service = new MFService();
+            service = new MFService(this);
 
             Debugger.WriteLine(LogLevel.Info, $"Creating a ZeroService at tcp://localhost:{PORT}");
 

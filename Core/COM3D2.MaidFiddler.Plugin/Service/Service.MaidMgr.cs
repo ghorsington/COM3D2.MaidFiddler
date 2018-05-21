@@ -28,6 +28,8 @@ namespace COM3D2.MaidFiddler.Core.Service
             {
                 ["maid_id"] = e.Maid.status.guid
             });
+
+            AddMaid(e.Maid);
         }
 
         private void OnMaidAdded(object sender, MaidChangeEventArgs e)
@@ -41,6 +43,8 @@ namespace COM3D2.MaidFiddler.Core.Service
             {
                 ["maid"] = ReadMaidData(e.Maid)
             });
+
+            RemoveMaid(e.Maid);
         }
     }
 }

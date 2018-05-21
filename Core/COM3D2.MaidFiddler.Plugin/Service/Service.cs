@@ -1,13 +1,16 @@
 ﻿using System.Text;
 using COM3D2.MaidFiddler.Core.Utils;
+using UnityEngine;
 
 namespace COM3D2.MaidFiddler.Core.Service
 {
     public partial class Service
     {
+        private MonoBehaviour parent;
 
-        public Service()
+        public Service(MonoBehaviour parent)
         {
+            this.parent = parent;
             Debugger.WriteLine(LogLevel.Info, "Created a service provider!");
 
             InitPlayerStatus();

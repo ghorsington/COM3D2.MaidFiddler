@@ -14,6 +14,8 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         super(MainWindow, self).__init__()
         self.setupUi(self)
 
+        self.maid_list_widgets = {}
+
         self.close_func = close_func
         self.core = core
         self.event_poller = EventPoller(8890)
@@ -39,9 +41,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.player_tab.init_events()
 
         self.event_poller.on("maid_added", self.on_maid_added)
-        self.event_poller.on(
-            "maid_removed", lambda args: print("REMOVE: " + str(args)))
-        #self.event_poller.on("maid_prop_changed", lambda args: print(str(args)))
+        self.event_poller.on("maid_thumbnail_changed", self.on_thumb_changed)
 
     def on_maid_added(self, args):
         maid_data = args["maid"]
@@ -53,7 +53,18 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         thumb = QPixmap()
         thumb.loadFromData(thumb_image)
 
-        self.maid_list.addItem(QListWidgetItem(QIcon(thumb), f"{maid_data['set_properties']['firstName']} {maid_data['set_properties']['lastName']}"))
+        self.maid_list_widgets[maid_data["guid"]] = QListWidgetItem(QIcon(thumb), f"{maid_data['set_properties']['firstName']} {maid_data['set_properties']['lastName']}")
+
+        self.maid_list.addItem(self.maid_list_widgets[maid_data["guid"]])
+
+    def on_thumb_changed(self, args):
+        if args["thumb"] is None or args["guid"] not in self.maid_list_widgets:
+            return
+
+        pixmap = QPixmap()
+        pixmap.loadFromData(args["thumb"])
+
+        self.maid_list_widgets[args["guid"]].setIcon(QIcon(pixmap))
 
     def closeEvent(self, event):
         self.event_poller.stop()

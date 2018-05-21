@@ -30,6 +30,8 @@ namespace COM3D2.MaidFiddler.Core.Service
                 {
                     ["success"] = args.Success
                 });
+                if (args.Success)
+                    InitMaidList();
             };
         }
 
