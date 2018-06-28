@@ -25,16 +25,20 @@ def event_loop(app):
     timer = 0
     while util.APP_RUNNING:
         app.processEvents()
-        timer = timer + 1
+        gevent.sleep()
+
+        """ timer += 1
         if timer % 800 == 0:
             timer = 0
-            gevent.sleep()
+            gevent.sleep() """
 
 def close():
     util.APP_RUNNING = False
 
 def main():
     global group
+    gevent.setswitchinterval(0.1)
+
     print("Starting MF")
     connect()
 

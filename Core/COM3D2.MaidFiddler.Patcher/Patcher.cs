@@ -9,7 +9,7 @@ using Mono.Cecil.Inject;
 
 namespace COM3D2.MaidFiddler.Patcher
 {
-    public class Patcher
+    public static class Patcher
     {
         private static readonly string PatchesDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         private static readonly string RootDir = Path.Combine(PatchesDir, "..");
@@ -39,7 +39,7 @@ namespace COM3D2.MaidFiddler.Patcher
 
             deserialize.InjectWith(gameMainHooks.GetMethod("OnPreDeserialize"));
 
-            MethodReference onPostDeserialize = ass.MainModule.Import(gameMainHooks.GetMethod("OnPostDeserialize"));
+            MethodReference onPostDeserialize = ass.MainModule.ImportReference(gameMainHooks.GetMethod("OnPostDeserialize"));
 
             ILProcessor il = deserialize.Body.GetILProcessor();
 
