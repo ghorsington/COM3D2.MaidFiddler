@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using BepInEx.Common;
 using COM3D2.MaidFiddler.Core.Hooks;
 using MaidStatus;
 using UnityEngine;
@@ -20,6 +19,11 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             return GameMain.Instance.CharacterMgr.GetStockMaidList()
                            .ToDictionary(m => m.status.guid, m => m.status.fullNameEnStyle);
+        }
+
+        public List<Dict> GetAllStockMaids()
+        {
+            return GameMain.Instance.CharacterMgr.GetStockMaidList().Select(ReadMaidData).ToList();
         }
 
         public string[] GetMaidParameterList() => maidSetters.Keys.ToArray();

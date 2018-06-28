@@ -40,8 +40,34 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.work_tab.init_events()
         self.player_tab.init_events()
 
+        self.event_poller.on("deserialize_start", self.on_deserialize_start)
+        self.event_poller.on("deserialize_done", self.on_deserialize_end)
         self.event_poller.on("maid_added", self.on_maid_added)
         self.event_poller.on("maid_thumbnail_changed", self.on_thumb_changed)
+
+    def on_deserialize_end(self, args):
+        if not args["success"]:
+            return
+        # TODO: Save all maid data
+        maids = self.core.GetAllStockMaids()
+
+        for maid_data in maids:
+            if "maid_thumbnail" in maid_data and maid_data["maid_thumbnail"] is not None:
+                thumb_image = maid_data["maid_thumbnail"]
+            else:
+                thumb_image = NO_THUMBNAIL
+
+            thumb = QPixmap()
+            thumb.loadFromData(thumb_image)
+
+            self.maid_list_widgets[maid_data["guid"]] = QListWidgetItem(QIcon(thumb), f"{maid_data['set_properties']['firstName']} {maid_data['set_properties']['lastName']}")
+
+            self.maid_list.addItem(self.maid_list_widgets[maid_data["guid"]])
+
+
+    def on_deserialize_start(self, args):
+        self.maid_list.clear()
+        self.maid_list_widgets.clear()
 
     def on_maid_added(self, args):
         maid_data = args["maid"]
