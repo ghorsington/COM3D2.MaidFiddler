@@ -47,14 +47,14 @@ namespace COM3D2.MaidFiddler.Core
 
             try
             {
-                service.Unsubscribe();
+                service.StopEventEmitter();
+                zeroServer.Dispose();
             }
             catch (Exception)
             {
                 //
             }
 
-            zeroServer.Dispose();
             Debugger.WriteLine(LogLevel.Info, "Doing cleanup!");
             NetMQConfig.Cleanup(false);
             Debugger.WriteLine(LogLevel.Info, "Cleanup started!");

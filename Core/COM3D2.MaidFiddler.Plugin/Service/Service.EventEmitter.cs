@@ -32,6 +32,11 @@ namespace COM3D2.MaidFiddler.Core.Service
             Console.WriteLine($"Subscribed to event handler on {address}");
         }
 
+        public void DisconnectEventHander()
+        {
+            Unsubscribe();
+        }
+
         internal IEnumerator EmitLoop()
         {
             while (true)
@@ -46,6 +51,15 @@ namespace COM3D2.MaidFiddler.Core.Service
                     eventCaches[cache].Clear();
                 }
             }
+        }
+
+        internal void StopEventEmitter()
+        {
+            if (client == null)
+                return;
+
+            client.InvokeAsync("dispose_handler");
+            Unsubscribe();
         }
 
         internal void Unsubscribe()

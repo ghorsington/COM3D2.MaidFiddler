@@ -9,6 +9,7 @@ UI_MainWindow = uic.loadUiType(
     open(util.get_resource_path("templates/maid_fiddler.ui")))
 NO_THUMBNAIL = util.open_bytes("templates/no_thumbnail.png")
 
+
 class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
     def __init__(self, core, group, close_func):
         super(MainWindow, self).__init__()
@@ -31,6 +32,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
         self.load_ui()
         self.init_events()
+        self.reload_maids()
 
     def init_events(self):
         self.maid_info_tab.init_events()
@@ -49,21 +51,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         if not args["success"]:
             return
         # TODO: Save all maid data
-        maids = self.core.GetAllStockMaids()
-
-        for maid_data in maids:
-            if "maid_thumbnail" in maid_data and maid_data["maid_thumbnail"] is not None:
-                thumb_image = maid_data["maid_thumbnail"]
-            else:
-                thumb_image = NO_THUMBNAIL
-
-            thumb = QPixmap()
-            thumb.loadFromData(thumb_image)
-
-            self.maid_list_widgets[maid_data["guid"]] = QListWidgetItem(QIcon(thumb), f"{maid_data['set_properties']['firstName']} {maid_data['set_properties']['lastName']}")
-
-            self.maid_list.addItem(self.maid_list_widgets[maid_data["guid"]])
-
+        self.reload_maids()
 
     def on_deserialize_start(self, args):
         self.maid_list.clear()
@@ -79,7 +67,8 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         thumb = QPixmap()
         thumb.loadFromData(thumb_image)
 
-        self.maid_list_widgets[maid_data["guid"]] = QListWidgetItem(QIcon(thumb), f"{maid_data['set_properties']['firstName']} {maid_data['set_properties']['lastName']}")
+        self.maid_list_widgets[maid_data["guid"]] = QListWidgetItem(QIcon(
+            thumb), f"{maid_data['set_properties']['firstName']} {maid_data['set_properties']['lastName']}")
 
         self.maid_list.addItem(self.maid_list_widgets[maid_data["guid"]])
 
@@ -93,11 +82,29 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.maid_list_widgets[args["guid"]].setIcon(QIcon(pixmap))
 
     def closeEvent(self, event):
+        self.core.DisconnectEventHander()
         self.event_poller.stop()
         self.close_func()
 
     def close(self):
         self.event_poller.stop()
+
+    def reload_maids(self):
+        maids = self.core.GetAllStockMaids()
+
+        for maid_data in maids:
+            if "maid_thumbnail" in maid_data and maid_data["maid_thumbnail"] is not None:
+                thumb_image = maid_data["maid_thumbnail"]
+            else:
+                thumb_image = NO_THUMBNAIL
+
+            thumb = QPixmap()
+            thumb.loadFromData(thumb_image)
+
+            self.maid_list_widgets[maid_data["guid"]] = QListWidgetItem(QIcon(
+                thumb), f"{maid_data['set_properties']['firstName']} {maid_data['set_properties']['lastName']}")
+
+            self.maid_list.addItem(self.maid_list_widgets[maid_data["guid"]])
 
     def load_ui(self):
         print("Getting game information!")

@@ -26,8 +26,17 @@ class EventPoller(object):
         group.spawn(self.event_loop)
         client.SubscribeToEventHandler(f"tcp://127.0.0.1:{self.port}")
     
+    def dispose_handler(self):
+        # TODO: When called from COM, add disconnected message
+        self.stop()
+
     def stop(self):
-        gevent.kill(self.ge_server)
+        try:
+            gevent.kill(self.ge_server)
+        except Exception:
+            print("Closed gevent!")
+        finally:
+            self.server.close()
 
     def on(self, event_name, handler):
         if event_name not in self.event_handlers:
