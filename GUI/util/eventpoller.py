@@ -1,5 +1,5 @@
-import zerorpc
 import gevent
+import zerorpc
 import util.util as util
 
 class EventPoller(object):
@@ -20,11 +20,12 @@ class EventPoller(object):
             gevent.sleep(0.1)
 
     def start(self, client, group):
+        print("Initializing event poller")
         self.server = zerorpc.Server(self)
-        self.server.bind(f"tcp://127.0.0.1:{self.port}")
+        self.server.bind("tcp://127.0.0.1:{}".format(self.port))
         self.ge_server = group.spawn(self.server.run)
         group.spawn(self.event_loop)
-        client.SubscribeToEventHandler(f"tcp://127.0.0.1:{self.port}")
+        client.SubscribeToEventHandler("tcp://127.0.0.1:{}".format(self.port))
     
     def dispose_handler(self):
         # TODO: When called from COM, add disconnected message

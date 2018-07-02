@@ -12,6 +12,7 @@ NO_THUMBNAIL = util.open_bytes("templates/no_thumbnail.png")
 
 class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
     def __init__(self, core, group, close_func):
+        print("Initializing UI")
         super(MainWindow, self).__init__()
         self.setupUi(self)
 
@@ -68,7 +69,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         thumb.loadFromData(thumb_image)
 
         self.maid_list_widgets[maid_data["guid"]] = QListWidgetItem(QIcon(
-            thumb), f"{maid_data['set_properties']['firstName']} {maid_data['set_properties']['lastName']}")
+            thumb), "{} {}".format(maid_data['set_properties']['firstName'], maid_data['set_properties']['lastName']))
 
         self.maid_list.addItem(self.maid_list_widgets[maid_data["guid"]])
 
@@ -102,7 +103,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
             thumb.loadFromData(thumb_image)
 
             self.maid_list_widgets[maid_data["guid"]] = QListWidgetItem(QIcon(
-                thumb), f"{maid_data['set_properties']['firstName']} {maid_data['set_properties']['lastName']}")
+                thumb), "{} {}".format(maid_data['set_properties']['firstName'], maid_data['set_properties']['lastName']))
 
             self.maid_list.addItem(self.maid_list_widgets[maid_data["guid"]])
 

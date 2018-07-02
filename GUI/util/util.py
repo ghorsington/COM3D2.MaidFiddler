@@ -9,5 +9,5 @@ def get_resource_path(rel_path):
     return rel_path
 
 def open_bytes(path):
-    with open(path, "rb") as file:
+    with open(get_resource_path(path), "rb") as file:
         return file.read()

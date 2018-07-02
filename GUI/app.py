@@ -1,8 +1,8 @@
 import sys
+import gevent
 import zerorpc
 import windows.main_window as main_window
 from PyQt5.QtWidgets import QApplication, QStyleFactory
-import gevent
 import util.util as util
 
 def connect():
@@ -27,7 +27,7 @@ def close():
     util.APP_RUNNING = False
 
 def main():
-    gevent.setswitchinterval(1.0/60)
+    sys.setswitchinterval(1.0/60)
     group = gevent.pool.Group()
 
     print("Starting MF")
