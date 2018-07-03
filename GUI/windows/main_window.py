@@ -25,8 +25,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
         self.maid_info_tab = MaidInfoTab(self, self.event_poller)
         self.maid_stats_tab = MaidStatsTab(self, self.event_poller)
-        self.feature_propensity_tab = FeaturePropensityTab(
-            self, self.event_poller)
+        self.feature_propensity_tab = FeaturePropensityTab(self, self.event_poller)
         self.yotogi_tab = YotogiTab(self, self.event_poller)
         self.work_tab = WorkTab(self, self.event_poller)
         self.player_tab = PlayerTab(self, self.event_poller)
@@ -34,6 +33,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.load_ui()
         self.init_events()
         self.reload_maids()
+        print("UI initialized!")
 
     def init_events(self):
         self.maid_info_tab.init_events()
@@ -302,8 +302,7 @@ class YotogiTab(UiTab):
 class WorkTab(UiTab):
 
     def update_ui(self):
-        noon_work = [data for data in self.game_data["work_data"]
-                     if data["work_type"] != "Yotogi"]
+        noon_work = [data for data in self.game_data["work_data"] if data["work_type"] != "Yotogi"]
 
         self.ui.noon_work_table.setRowCount(len(noon_work))
 
@@ -339,8 +338,7 @@ class WorkTab(UiTab):
 
         # Yotogi work
 
-        yotogi_work = [data for data in self.game_data["work_data"]
-                       if data["work_type"] == "Yotogi"]
+        yotogi_work = [data for data in self.game_data["work_data"] if data["work_type"] == "Yotogi"]
 
         self.ui.yotogi_work_table.setRowCount(len(yotogi_work))
 
@@ -388,9 +386,9 @@ class PlayerTab(UiTab):
 
         player_params_header.setSectionResizeMode(0, QHeaderView.Stretch)
         player_params_header.setSectionResizeMode(
-            2, QHeaderView.ResizeToContents)
+            1, QHeaderView.ResizeToContents)
         player_params_header.setSectionResizeMode(
-            3, QHeaderView.ResizeToContents)
+            2, QHeaderView.ResizeToContents)
 
         for (i, param) in enumerate(self.game_data["club_status_settable"]):
             name = QTableWidgetItem(param)

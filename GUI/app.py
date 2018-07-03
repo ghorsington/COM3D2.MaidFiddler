@@ -6,9 +6,9 @@ from PyQt5.QtWidgets import QApplication, QStyleFactory
 import util.util as util
 
 def connect():
-    print("Connecting to tcp://127.0.0.1:8899")
+    print(f"Connecting to tcp://{util.GAME_ADDRESS}:8899")
     client = zerorpc.Client()
-    client.connect("tcp://127.0.0.1:8899")
+    client.connect(f"tcp://{util.GAME_ADDRESS}:8899")
     try:
         client._zerorpc_ping()
         return client

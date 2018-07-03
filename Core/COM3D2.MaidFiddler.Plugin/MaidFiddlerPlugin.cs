@@ -12,6 +12,7 @@ namespace COM3D2.MaidFiddler.Core
     public class MaidFiddlerPlugin : BaseUnityPlugin
     {
         public const int PORT = 8899;
+        public const string IP = "127.0.0.1";
         public const string VERSION = "Alpha 0.1";
         private MFService service;
 
@@ -28,7 +29,7 @@ namespace COM3D2.MaidFiddler.Core
 
             service = new MFService(this);
 
-            Debugger.WriteLine(LogLevel.Info, $"Creating a ZeroService at tcp://localhost:{PORT}");
+            Debugger.WriteLine(LogLevel.Info, $"Creating a ZeroService at tcp://{IP}:{PORT}");
 
             zeroServer = new Server(new SimpleWrapperService<MFService>(service), TimeSpan.FromSeconds(15));
 
@@ -36,7 +37,7 @@ namespace COM3D2.MaidFiddler.Core
 
             Debugger.WriteLine(LogLevel.Info, "Starting server!");
 
-            zeroServer.Bind($"tcp://localhost:{PORT}");
+            zeroServer.Bind($"tcp://{IP}:{PORT}");
 
             Debugger.WriteLine(LogLevel.Info, "Started server!");
         }
