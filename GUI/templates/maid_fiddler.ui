@@ -57,6 +57,9 @@
       </property>
       <item>
        <widget class="QListWidget" name="maid_list">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -78,7 +81,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QTabWidget" name="tabWidget">
+       <widget class="QTabWidget" name="ui_tabs">
         <property name="enabled">
          <bool>true</bool>
         </property>

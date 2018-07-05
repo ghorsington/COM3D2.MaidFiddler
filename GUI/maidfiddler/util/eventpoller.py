@@ -1,6 +1,6 @@
 import gevent
 import zerorpc
-import util.util as util
+import maidfiddler.util.util as util
 
 class EventPoller(object):
     def __init__(self, port):

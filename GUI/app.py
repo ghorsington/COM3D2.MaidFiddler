@@ -1,9 +1,10 @@
 import sys
 import gevent
 import zerorpc
-import windows.main_window as main_window
 from PyQt5.QtWidgets import QApplication, QStyleFactory
-import util.util as util
+import maidfiddler.util.util as util
+from maidfiddler.ui.main_window import MainWindow
+
 
 def connect():
     print(f"Connecting to tcp://{util.GAME_ADDRESS}:8899")
@@ -18,15 +19,27 @@ def connect():
         return None
     print("Connected!")
 
+
 def event_loop(app):
     while util.APP_RUNNING:
         app.processEvents()
         gevent.sleep()
 
+
 def close():
     util.APP_RUNNING = False
 
+
 def main():
+    # We set switch interval to change how often gevent switches 
+    # between event polling and GUI.
+    # This is **very** important, because Qt and ZeroRPC have to share 
+    # the same thread.
+    #
+    # If switch interval is too low (0.005 by default), the UI doesn't have the time
+    # to update, which causes laggy UI.
+    # If it's too high, ZeroRPC will hog most of the processing time.
+    # 60 Hz is an empirical value, but you might be able to get it lower.
     sys.setswitchinterval(1.0/60)
     group = gevent.pool.Group()
 
@@ -39,8 +52,8 @@ def main():
     app = QApplication(sys.argv)
     app.setStyle(QStyleFactory.create("Fusion"))
 
-    window = main_window.MainWindow(client, group, close)
-    
+    window = MainWindow(client, group, close)
+
     window.show()
     group.spawn(event_loop, app)
     group.join()
