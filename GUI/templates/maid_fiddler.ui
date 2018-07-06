@@ -423,7 +423,10 @@
               <number>6</number>
              </property>
              <item>
-              <widget class="QPlainTextEdit" name="plainTextEdit">
+              <widget class="QPlainTextEdit" name="maid_description_edit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                  <horstretch>0</horstretch>

@@ -1,9 +1,7 @@
 from PyQt5.QtCore import QObject
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QListWidgetItem
-from maidfiddler.ui.resources import NO_THUMBNAIL
-
-MAID_GUID = 33
+from maidfiddler.ui.resources import NO_THUMBNAIL, MAID_GUID_SLOT
 
 class MaidsList(QObject):
     def __init__(self, ui, core, maid_mgr):
@@ -23,9 +21,24 @@ class MaidsList(QObject):
         self.maid_list.currentItemChanged.connect(self.maid_selected)
 
     def maid_selected(self, n, p):
-        self.ui.ui_tabs.setEnabled(n is not None)
-        next_data = n.data(MAID_GUID) if n else ""
-        print(f"Selected maid: {next_data}")
+        if n is None:
+            print("No maid selected!")
+            self.ui.ui_tabs.setEnabled(False)
+            self.maid_mgr.selected_maid = None
+            return
+        
+        self.ui.ui_tabs.setEnabled(True)
+
+        guid = n.data(MAID_GUID_SLOT)
+
+        # Force reload all data because it might be out of sync
+        print(f"Reloading maid {guid}")
+        # TODO: Replace with SelectActiveMaid
+        maid = self.core.GetMaidData(guid)
+        print("Maid data reloaded!")
+        self.maid_mgr.maid_data[guid] = maid
+
+        self.maid_mgr.selected_maid = self.maid_mgr.maid_data[guid] if n is not None else None
 
     def clear_list(self, аrgs=None):
         self.ui.ui_tabs.setEnabled(False)
@@ -50,7 +63,7 @@ class MaidsList(QObject):
         thumb.loadFromData(thumb_image)
 
         item = QListWidgetItem(QIcon(thumb), f"{maid['set_properties']['firstName']} {maid['set_properties']['lastName']}")
-        item.setData(MAID_GUID, maid["guid"])
+        item.setData(MAID_GUID_SLOT, maid["guid"])
 
         self.maid_list_widgets[maid["guid"]] = item
         self.maid_list.addItem(self.maid_list_widgets[maid["guid"]])

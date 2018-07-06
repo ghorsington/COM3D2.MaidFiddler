@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace COM3D2.MaidFiddler.Core.Service
 {
@@ -28,6 +26,12 @@ namespace COM3D2.MaidFiddler.Core.Service
         internal void RemoveMaid(Maid maid)
         {
             stockMaids?.Remove(maid.status.guid);
+        }
+
+        public Dictionary<string, object> SelectActiveMaid(string guid)
+        {
+            // TODO: Set selected maid for event emitting and provide fresh maid data
+            return null;
         }
     }
 }

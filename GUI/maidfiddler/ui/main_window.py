@@ -15,6 +15,7 @@ UI_MainWindow = uic.loadUiType(
 class MaidManager:
     def __init__(self):
         self.maid_data = {}
+        self.selected_maid = None
 
     def clear(self):
         self.maid_data.clear()
