@@ -26,6 +26,11 @@ namespace COM3D2.MaidFiddler.Core.Service
             return GameMain.Instance.CharacterMgr.GetStockMaidList().Select(ReadMaidData).ToList();
         }
 
+        public List<Dict> GetAllStockMaidsBasic()
+        {
+            return GameMain.Instance.CharacterMgr.GetStockMaidList().Select(ReadBasicMaidData).ToList();
+        }
+
         public string[] GetMaidParameterList() => maidSetters.Keys.ToArray();
 
         public object GetMaidProperty(string maidId, string propertyName)
@@ -96,8 +101,27 @@ namespace COM3D2.MaidFiddler.Core.Service
             return ReadMaidData(maids[0]);
         }
 
+        private Dict ReadBasicMaidData(Maid maid)
+        {
+            if (maid == null)
+                return null;
+
+            Dict result = new Dict
+            {
+                    ["guid"] = maid.status.guid,
+                    ["firstName"] = maid.status.firstName,
+                    ["lastName"] = maid.status.lastName,
+                    ["thumbnail"] = maid.GetThumIcon()?.EncodeToPNG()
+            };
+
+            return result;
+        }
+
         private Dict ReadMaidData(Maid maid)
         {
+            if (maid == null)
+                return null;
+
             Dict result = new Dict();
 
             Dict props = new Dict();
@@ -178,7 +202,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             result["propensity_ids"] = maid.status.propensitys.GetValueArray().Select(f => f.id).ToArray();
 
             Texture2D thum = maid.GetThumIcon();
-            result["maid_thumbnail"] = thum != null ? thum.EncodeToPNG() : null;
+            result["maid_thumbnail"] = thum?.EncodeToPNG();
 
             result["guid"] = maid.status.guid;
 
@@ -190,7 +214,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             if (IsDeserializing)
                 return;
 
-            if (string.IsNullOrEmpty(args.Status.guid) || stockMaids == null || !stockMaids.ContainsKey(args.Status.guid))
+            if (string.IsNullOrEmpty(args.Status.guid) || !args.Status.guid.Equals(selectedMaidGuid, StringComparison.CurrentCultureIgnoreCase))
                 return;
 
             object value = maidGetters[args.PropertyName].Invoke(args.Status, new object[0]);

@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
 from .ui_tab import UiTab
-from maidfiddler.ui.resources import MAID_GUID_SLOT
+from maidfiddler.ui.qt_elements import TextElement, ComboElement, NumberElement, PlainTextElement
 
 class MaidInfoTab(UiTab):
     def __init__(self, ui, core, maid_mgr):
@@ -11,6 +11,21 @@ class MaidInfoTab(UiTab):
         self.seikeiken = {}
         self.job_classes = {}
         self.yotogi_classes = {}
+
+        self.properties = {
+            "firstName": TextElement(self.ui.first_name_edit),
+            "lastName": TextElement(self.ui.last_name_edit),
+            "personal": ComboElement(self.ui.personality_combo, self.personalities),
+            "contract": ComboElement(self.ui.contract_combo, self.contracts),
+            "relation": ComboElement(self.ui.relation_combo, self.relations),
+            "cur_seikeiken": ComboElement(self.ui.current_combo, self.seikeiken),
+            "init_seikeiken": ComboElement(self.ui.initial_combo, self.seikeiken),
+            "current_job_class_id": ComboElement(self.ui.job_class_combo, self.job_classes),
+            "current_yotogi_class_id": ComboElement(self.ui.yotogi_class_combo, self.yotogi_classes),
+            "employmentDay": NumberElement(self.ui.employment_day_box),
+            "profile_comment": PlainTextElement(self.ui.maid_description_edit),
+            "freeComment": PlainTextElement(self.ui.user_comment_text)
+        };
 
     def update_ui(self):
         self.personalities.clear()
@@ -52,24 +67,30 @@ class MaidInfoTab(UiTab):
 
     def init_events(self, event_poller):
         self.ui.maid_list.currentItemChanged.connect(self.maid_selected)
+        event_poller.on("maid_prop_changed", self.prop_changed)
+
+    def prop_changed(self, args):
+        if args["property_name"] not in self.properties:
+            return
+
+        self.properties[args["property_name"]].set_value(args["value"])
 
     def maid_selected(self, n, p):
         if self.maid_mgr.selected_maid is None:
             return
 
         maid = self.maid_mgr.selected_maid
-        print(f"MaidInfoTab: selected {maid['set_properties']['firstName']} {maid['set_properties']['lastName']}")
+        #print(f"MaidInfoTab: selected {maid['set_properties']['firstName']} {maid['set_properties']['lastName']}")
+        
         self.ui.first_name_edit.setText(maid["set_properties"]["firstName"])
         self.ui.last_name_edit.setText(maid["set_properties"]["lastName"])
         self.ui.personality_combo.setCurrentIndex(self.personalities[maid["basic_properties"]["personal"]])
         self.ui.contract_combo.setCurrentIndex(self.contracts[maid["basic_properties"]["contract"]])
         self.ui.relation_combo.setCurrentIndex(self.relations[maid["enum_props"]["relation"]])
         self.ui.current_combo.setCurrentIndex(self.seikeiken[maid["basic_properties"]["cur_seikeiken"]])
-        self.ui.initial_combo.setCurrentIndex(self.seikeiken[maid["basic_properties"]["cur_seikeiken"]])
+        self.ui.initial_combo.setCurrentIndex(self.seikeiken[maid["basic_properties"]["init_seikeiken"]])
         self.ui.job_class_combo.setCurrentIndex(self.job_classes[maid["basic_properties"]["current_job_class_id"]])
         self.ui.yotogi_class_combo.setCurrentIndex(self.yotogi_classes[maid["basic_properties"]["current_yotogi_class_id"]])
         self.ui.employment_day_box.setValue(maid["set_properties"]["employmentDay"])
         self.ui.maid_description_edit.setPlainText(maid["basic_properties"]["profile_comment"])
         self.ui.user_comment_text.setPlainText(maid["set_properties"]["freeComment"])
-
-

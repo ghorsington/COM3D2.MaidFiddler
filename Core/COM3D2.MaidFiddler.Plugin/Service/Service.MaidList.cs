@@ -7,6 +7,8 @@ namespace COM3D2.MaidFiddler.Core.Service
     {
         private Dictionary<string, bool> stockMaids; // TODO: Add lock list
 
+        private string selectedMaidGuid = null;
+
         internal void InitMaidList()
         {
             stockMaids = new Dictionary<string, bool>();
@@ -30,8 +32,9 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         public Dictionary<string, object> SelectActiveMaid(string guid)
         {
-            // TODO: Set selected maid for event emitting and provide fresh maid data
-            return null;
+            selectedMaidGuid = guid;
+
+            return guid != null ? ReadMaidData(GameMain.Instance.CharacterMgr.GetStockMaid(guid)) : null;
         }
     }
 }

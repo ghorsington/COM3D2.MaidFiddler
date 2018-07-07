@@ -21,6 +21,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             GameMainHooks.DeserializeStarting += (sender, args) =>
             {
                 IsDeserializing = true;
+                SelectActiveMaid(null);
                 Debugger.WriteLine(LogLevel.Info, "Deserialize start!");
                 Emit("deserialize_start", new Dict());
             };

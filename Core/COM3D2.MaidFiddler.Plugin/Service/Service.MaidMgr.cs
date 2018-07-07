@@ -12,13 +12,6 @@ namespace COM3D2.MaidFiddler.Core.Service
             CharacterMgrHooks.MaidBanished += OnMaidBanished;
         }
 
-        private string selectedMaidGuid = null;
-
-        public void SetSelectedMaid(string guid)
-        {
-            selectedMaidGuid = guid;
-        }
-
         private void OnMaidBanished(object sender, MaidChangeEventArgs e)
         {
             if (!HasEventHandler || IsDeserializing)
@@ -41,7 +34,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             Emit("maid_added", new Dict
             {
-                ["maid"] = ReadMaidData(e.Maid)
+                ["maid"] = ReadBasicMaidData(e.Maid)
             });
 
             RemoveMaid(e.Maid);
