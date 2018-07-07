@@ -6,6 +6,8 @@ namespace COM3D2.MaidFiddler.Core.Hooks
     {
         public MaidStatus.Status Status { get; internal set; }
         public string PropertyName { get; internal set; }
+        public bool HasValue { get; internal set; } = false;
+        public object Value { get; internal set; } = null;
     }
 
     public class MaidEventArgs : EventArgs
@@ -64,22 +66,46 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 
         public static void OnJobClassChange(MaidStatus.Status status, MaidStatus.JobClass.Data data)
         {
-
+            PropertyChanged?.Invoke(null, new MaidStatusChangeEventArgs
+            {
+                    Status = status,
+                    PropertyName = "current_job_class_id",
+                    HasValue = true,
+                    Value = status.selectedJobClass.data.id
+            });
         }
 
         public static void OnYotogiClassChange(MaidStatus.Status status, MaidStatus.YotogiClass.Data data)
         {
-
+            PropertyChanged?.Invoke(null, new MaidStatusChangeEventArgs
+            {
+                    Status = status,
+                    PropertyName = "current_yotogi_class_id",
+                    HasValue = true,
+                    Value = status.selectedYotogiClass.data.id
+            });
         }
 
         public static void OnPersonalSet(MaidStatus.Status status, MaidStatus.Personal.Data data)
         {
-
+            PropertyChanged?.Invoke(null, new MaidStatusChangeEventArgs
+            {
+                    Status = status,
+                    PropertyName = "personal",
+                    HasValue = true,
+                    Value = status.personal.id
+            });
         }
 
         public static void OnSetSeikeiken(string type, MaidStatus.Status status, bool value)
         {
-
+            PropertyChanged?.Invoke(null, new MaidStatusChangeEventArgs
+            {
+                    Status = status,
+                    PropertyName = "cur_seikeiken",
+                    HasValue = true,
+                    Value = (int) status.seikeiken
+            });
         }
 
         public static void OnWorkDataUpdate(MaidStatus.Status status, int id)

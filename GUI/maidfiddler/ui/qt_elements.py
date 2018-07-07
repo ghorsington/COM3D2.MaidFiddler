@@ -27,7 +27,9 @@ class NumberElement(UiElement):
         return self.qt_element.value()
 
     def set_value(self, val):
+        self.qt_element.blockSignals(True)
         self.qt_element.setValue(val)
+        self.qt_element.blockSignals(False)
 
 class ComboElement(UiElement):
     def __init__(self, qt_element, value_to_index_map):
@@ -38,4 +40,6 @@ class ComboElement(UiElement):
         return self.qt_element.currentData()
 
     def set_value(self, val):
+        self.qt_element.blockSignals(True)
         self.qt_element.setCurrentIndex(self.value_to_index_map[val])
+        self.qt_element.blockSignals(False)

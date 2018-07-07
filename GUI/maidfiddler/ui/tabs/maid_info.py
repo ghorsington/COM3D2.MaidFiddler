@@ -1,6 +1,8 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QObject
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import TextElement, ComboElement, NumberElement, PlainTextElement
+from zerorpc import RemoteError
+
 
 class MaidInfoTab(UiTab):
     def __init__(self, ui, core, maid_mgr):
@@ -25,7 +27,7 @@ class MaidInfoTab(UiTab):
             "employmentDay": NumberElement(self.ui.employment_day_box),
             "profile_comment": PlainTextElement(self.ui.maid_description_edit),
             "freeComment": PlainTextElement(self.ui.user_comment_text)
-        };
+        }
 
     def update_ui(self):
         self.personalities.clear()
@@ -60,16 +62,62 @@ class MaidInfoTab(UiTab):
             self.job_classes[job_class["id"]] = i
 
         for i, yotogi_class in enumerate(self._game_data["yotogi_class_list"]):
-            self.ui.yotogi_class_combo.addItem(yotogi_class["name"], yotogi_class["id"])
+            self.ui.yotogi_class_combo.addItem(
+                yotogi_class["name"], yotogi_class["id"])
             self.yotogi_classes[yotogi_class["id"]] = i
 
         self.ui.yotogi_class_combo.view().setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
 
     def init_events(self, event_poller):
         self.ui.maid_list.currentItemChanged.connect(self.maid_selected)
+
+        self.ui.first_name_edit.editingFinished.connect(
+            self.commit_prop_changes("firstName"))
+
+        self.ui.last_name_edit.editingFinished.connect(
+            self.commit_prop_changes("lastName"))
+
+        self.ui.relation_combo.currentIndexChanged.connect(
+            self.commit_prop_changes("relation"))
+
+        self.ui.employment_day_box.valueChanged.connect(
+            self.commit_prop_changes("employmentDay"))
+
+        # self.ui.user_comment_text.currentIndexChanged.connect(
+        #     self.commit_prop_changes("freeComment"))
+
+        self.ui.personality_combo.currentIndexChanged.connect(lambda: self.core.SetPersonal(
+            self.maid_mgr.selected_maid["guid"], self.properties["personal"].value()))
+
+        self.ui.contract_combo.currentIndexChanged.connect(lambda: self.core.SetContract(
+            self.maid_mgr.selected_maid["guid"], self.properties["contract"].value()))
+
+        self.ui.current_combo.currentIndexChanged.connect(lambda: self.core.SetCurSeikeiken(
+            self.maid_mgr.selected_maid["guid"], self.properties["cur_seikeiken"].value()))
+
+        self.ui.initial_combo.currentIndexChanged.connect(lambda: self.core.SetInitSeikeiken(
+            self.maid_mgr.selected_maid["guid"], self.properties["init_seikeiken"].value()))
+
+        self.ui.job_class_combo.currentIndexChanged.connect(lambda: self.core.SetCurrentJobClass(
+            self.maid_mgr.selected_maid["guid"], self.properties["current_job_class_id"].value()))
+
+        self.ui.yotogi_class_combo.currentIndexChanged.connect(lambda: self.core.SetCurrentYotogiClass(
+            self.maid_mgr.selected_maid["guid"], self.properties["current_yotogi_class_id"].value()))
+
         event_poller.on("maid_prop_changed", self.prop_changed)
 
+    def commit_prop_changes(self, prop):
+        def handler():
+            print(f"Commiting changes for {prop}")
+            try:
+                self.core.SetMaidProperty(
+                    self.maid_mgr.selected_maid["guid"], prop, self.properties[prop].value())
+            except Exception as e:
+                print(f"{e}")
+        return handler
+
     def prop_changed(self, args):
+        print(f"Property changed: {args['property_name']}")
         if args["property_name"] not in self.properties:
             return
 
@@ -80,17 +128,6 @@ class MaidInfoTab(UiTab):
             return
 
         maid = self.maid_mgr.selected_maid
-        #print(f"MaidInfoTab: selected {maid['set_properties']['firstName']} {maid['set_properties']['lastName']}")
-        
-        self.ui.first_name_edit.setText(maid["set_properties"]["firstName"])
-        self.ui.last_name_edit.setText(maid["set_properties"]["lastName"])
-        self.ui.personality_combo.setCurrentIndex(self.personalities[maid["basic_properties"]["personal"]])
-        self.ui.contract_combo.setCurrentIndex(self.contracts[maid["basic_properties"]["contract"]])
-        self.ui.relation_combo.setCurrentIndex(self.relations[maid["enum_props"]["relation"]])
-        self.ui.current_combo.setCurrentIndex(self.seikeiken[maid["basic_properties"]["cur_seikeiken"]])
-        self.ui.initial_combo.setCurrentIndex(self.seikeiken[maid["basic_properties"]["init_seikeiken"]])
-        self.ui.job_class_combo.setCurrentIndex(self.job_classes[maid["basic_properties"]["current_job_class_id"]])
-        self.ui.yotogi_class_combo.setCurrentIndex(self.yotogi_classes[maid["basic_properties"]["current_yotogi_class_id"]])
-        self.ui.employment_day_box.setValue(maid["set_properties"]["employmentDay"])
-        self.ui.maid_description_edit.setPlainText(maid["basic_properties"]["profile_comment"])
-        self.ui.user_comment_text.setPlainText(maid["set_properties"]["freeComment"])
+
+        for name, element in self.properties.items():
+            element.set_value(maid["properties"][name])

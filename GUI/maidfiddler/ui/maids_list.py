@@ -52,8 +52,8 @@ class MaidsList(QObject):
             return
 
         print("Maid data reloaded!")
-        self.maid_mgr.maid_data[guid]["firstName"] = maid["set_properties"]["firstName"]
-        self.maid_mgr.maid_data[guid]["lastName"] = maid["set_properties"]["lastName"]
+        self.maid_mgr.maid_data[guid]["firstName"] = maid["properties"]["firstName"]
+        self.maid_mgr.maid_data[guid]["lastName"] = maid["properties"]["lastName"]
         self.maid_mgr.maid_data[guid]["thumbnail"] = maid["maid_thumbnail"]
         self.maid_mgr.selected_maid = maid
 
