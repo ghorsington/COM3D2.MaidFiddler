@@ -1485,6 +1485,7 @@
     <addaction name="actionUnlock_all_stock_items"/>
     <addaction name="actionMaximum_credits"/>
     <addaction name="actionMaximum_club_grade_and_evaluation"/>
+    <addaction name="actionSort_maids_by_guid"/>
    </widget>
    <widget class="QMenu" name="menuAll_maids">
     <property name="title">
@@ -1531,6 +1532,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionSort_maids_by_guid">
+   <property name="text">
+    <string>Sort maids by guid</string>
    </property>
   </action>
  </widget>

@@ -20,6 +20,10 @@ class MaidsList(QObject):
         event_poller.on("maid_prop_changed", self.prop_changed)
 
         self.maid_list.currentItemChanged.connect(self.maid_selected)
+        self.ui.actionSort_maids_by_guid.triggered.connect(self.sort_test)
+
+    def sort_test(self):
+        self.maid_list.sortItems()
 
     def prop_changed(self, args):
         if args["guid"] not in self.maid_list_widgets:
@@ -42,19 +46,17 @@ class MaidsList(QObject):
         
         self.ui.ui_tabs.setEnabled(True)
 
-        guid = n.data(MAID_GUID_SLOT)
-
-        print(f"Reloading maid {guid}")
+        print(f"Reloading maid {n.guid}")
         
-        maid = self.core.SelectActiveMaid(guid)
+        maid = self.core.SelectActiveMaid(n.guid)
         
         if maid is None:
             return
 
         print("Maid data reloaded!")
-        self.maid_mgr.maid_data[guid]["firstName"] = maid["properties"]["firstName"]
-        self.maid_mgr.maid_data[guid]["lastName"] = maid["properties"]["lastName"]
-        self.maid_mgr.maid_data[guid]["thumbnail"] = maid["maid_thumbnail"]
+        self.maid_mgr.maid_data[n.guid]["firstName"] = maid["properties"]["firstName"]
+        self.maid_mgr.maid_data[n.guid]["lastName"] = maid["properties"]["lastName"]
+        self.maid_mgr.maid_data[n.guid]["thumbnail"] = maid["maid_thumbnail"]
         self.maid_mgr.selected_maid = maid
 
     def clear_list(self, аrgs=None):
@@ -79,8 +81,7 @@ class MaidsList(QObject):
         thumb = QPixmap()
         thumb.loadFromData(thumb_image)
 
-        item = QListWidgetItem(QIcon(thumb), f"{maid['firstName']} {maid['lastName']}")
-        item.setData(MAID_GUID_SLOT, maid["guid"])
+        item = MaidListItem(QIcon(thumb), f"{maid['firstName']} {maid['lastName']}", maid["guid"])
 
         self.maid_list_widgets[maid["guid"]] = item
         self.maid_list.addItem(self.maid_list_widgets[maid["guid"]])
@@ -99,3 +100,13 @@ class MaidsList(QObject):
         pixmap.loadFromData(args["thumb"])
 
         self.maid_list_widgets[args["guid"]].setIcon(QIcon(pixmap))
+
+
+class MaidListItem(QListWidgetItem):
+    def __init__(self, icon, text, guid):
+        QListWidgetItem.__init__(self, icon, text)
+        self.text = text
+        self.guid = guid
+    
+    def __lt__(self, other):
+        return self.text.lower() < other.text.lower()
