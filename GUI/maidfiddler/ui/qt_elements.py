@@ -8,6 +8,9 @@ class UiElement(object):
     def set_value(self, val):
         raise NotImplementedError()
 
+    def connect(self, edit_func):
+        pass
+
 class TextElement(UiElement):
     def value(self):
         return self.qt_element.text()
@@ -22,7 +25,15 @@ class PlainTextElement(UiElement):
     def set_value(self, val):
         self.qt_element.setPlainText(val)
 
+    def connect(self, edit_func):
+        self.qt_element.editingFinished.connect(edit_func)
+
 class NumberElement(UiElement):
+    def __init__(self, qt_element):
+        UiElement.__init__(self, qt_element)
+
+        self.qt_element.setMaximum(2**31 - 1)
+
     def value(self):
         return self.qt_element.value()
 
@@ -30,6 +41,9 @@ class NumberElement(UiElement):
         self.qt_element.blockSignals(True)
         self.qt_element.setValue(val)
         self.qt_element.blockSignals(False)
+
+    def connect(self, edit_func):
+        self.qt_element.valueChanged.connect(edit_func)
 
 class ComboElement(UiElement):
     def __init__(self, qt_element, value_to_index_map):

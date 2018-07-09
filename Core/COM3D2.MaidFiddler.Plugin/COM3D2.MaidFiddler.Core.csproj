@@ -70,6 +70,7 @@
     <Compile Include="Service\Service.cs" />
     <Compile Include="Service\Service.MaidStatus.cs" />
     <Compile Include="Utils\Debug.cs" />
+    <Compile Include="Utils\Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

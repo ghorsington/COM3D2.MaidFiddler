@@ -1,10 +1,33 @@
-from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QCheckBox, QWidget, QHBoxLayout
+from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QDoubleSpinBox , QSpinBox , QCheckBox, QWidget, QHBoxLayout
 from PyQt5.QtCore import Qt, QObject
 from .ui_tab import UiTab
-
+from maidfiddler.ui.qt_elements import NumberElement, TextElement
 
 class MaidStatsTab(UiTab):
+    def __init__(self, ui, core, maid_mgr):
+        UiTab.__init__(self, ui, core, maid_mgr)
+
+        self.properties = {}
+        self.bonus_properties = {}
+        self.type_generators = {
+            "int" : self.make_int,
+            "double": self.make_double,
+            "string": self.make_text
+        }
+
+    def make_int(self):
+        return NumberElement(QSpinBox())
+    
+    def make_double(self):
+        return NumberElement(QDoubleSpinBox())
+
+    def make_text(self):
+        return TextElement(QLineEdit())
+
     def update_ui(self):
+        self.properties.clear()
+        self.bonus_properties.clear()
+
         self.ui.maid_params_lockable_table      \
             .horizontalHeader()                 \
             .setSectionResizeMode(0, QHeaderView.Stretch)
@@ -21,9 +44,10 @@ class MaidStatsTab(UiTab):
             len(self.game_data["maid_status_settable"]))
 
         for (i, maid_prop) in enumerate(self.game_data["maid_status_settable"]):
+            prop_type = self.game_data["maid_status_settable"][maid_prop]
             name = QTableWidgetItem(maid_prop)
-            line = QLineEdit()
-            line.setStyleSheet("width: 15em;")
+            line = self.type_generators[prop_type]()
+            line.qt_element.setStyleSheet("width: 15em;")
 
             checkbox = QCheckBox()
             widget = QWidget()
@@ -34,8 +58,12 @@ class MaidStatsTab(UiTab):
             widget.setLayout(hbox)
 
             self.ui.maid_params_lockable_table.setItem(i, 0, name)
-            self.ui.maid_params_lockable_table.setCellWidget(i, 1, line)
+            self.ui.maid_params_lockable_table.setCellWidget(i, 1, line.qt_element)
             self.ui.maid_params_lockable_table.setCellWidget(i, 2, widget)
+
+            line.qt_element.setProperty("prop_name", maid_prop)
+            checkbox.setProperty("prop_name", maid_prop)
+            self.properties[maid_prop] = (line, checkbox)
 
         # Maid bonus stats table
 
@@ -51,14 +79,48 @@ class MaidStatsTab(UiTab):
 
         for (i, maid_prop) in enumerate(self.game_data["maid_bonus_status"]):
             name = QTableWidgetItem(maid_prop)
-            line = QLineEdit()
-            line.setProperty("prop_name", maid_prop)
-            line.textChanged.connect(self.handle_line_edit)
+            line = QSpinBox()
             line.setStyleSheet("width: 15em;")
 
             self.ui.maid_params_bonus_table.setItem(i, 0, name)
             self.ui.maid_params_bonus_table.setCellWidget(i, 1, line)
 
-    def handle_line_edit(self, text):
-        obj = QObject.sender(self)
-        print("New text: %s from %s" % (text, obj.property("prop_name")))
+            line.setProperty("prop_name", maid_prop)
+            self.bonus_properties[maid_prop] = line
+
+    def init_events(self, event_poller):
+        self.ui.maid_list.currentItemChanged.connect(self.maid_selected)
+
+        for prop, widgets in self.properties.items():
+            widgets[0].connect(self.commit_property)
+            widgets[1].stateChanged.connect(self.commit_lock)
+
+    def commit_property(self):
+        element = self.sender()
+        prop = element.property("prop_name")
+        print(f"Setting {prop} to {element.text()}")
+
+    def commit_bonus(self):
+        element = self.sender()
+        prop = element.property("prop_name")
+        print(f"Setting bonus {prop} to {element.text()}")
+
+    def commit_lock(self, state):
+        element = self.sender()
+        prop = element.property("prop_name")
+        print(f"Lock state for {prop}: {state}")
+
+    def maid_selected(self):
+        if self.maid_mgr.selected_maid is None:
+            return
+
+        maid = self.maid_mgr.selected_maid
+
+        print("Loading base properties")
+        for name, widgets in self.properties.items():
+            widgets[0].set_value(maid["properties"][name])
+            # TODO: Add lock
+
+        for name, widget in self.bonus_properties.items():
+            widget.setValue(maid["bonus_properties"][name])
+

@@ -9,6 +9,7 @@ using Schedule;
 using Yotogis;
 using Dict = System.Collections.Generic.Dictionary<string, object>;
 using List = System.Collections.Generic.List<object>;
+using Status = PlayerStatus.Status;
 
 namespace COM3D2.MaidFiddler.Core.Service
 {
@@ -16,32 +17,9 @@ namespace COM3D2.MaidFiddler.Core.Service
     {
         private bool IsDeserializing { get; set; }
 
-        private void InitGameMain()
-        {
-            GameMainHooks.DeserializeStarting += (sender, args) =>
-            {
-                IsDeserializing = true;
-                SelectActiveMaid(null);
-                Debugger.WriteLine(LogLevel.Info, "Deserialize start!");
-                Emit("deserialize_start", new Dict());
-            };
-
-            GameMainHooks.DeserializeEnded += (sender, args) =>
-            {
-                Debugger.WriteLine(LogLevel.Info, "Deserialize end!");
-                IsDeserializing = false;
-                Emit("deserialize_done", new Dict
-                {
-                    ["success"] = args.Success
-                });
-                if (args.Success)
-                    InitMaidList();
-            };
-        }
-
         public Dict GetGameInfo()
         {
-            Dict result = new Dict
+            var result = new Dict
             {
                     ["feature_list"] = GetFeatureInfo(),
                     ["propensity_list"] = GetPropensityInfo(),
@@ -61,132 +39,130 @@ namespace COM3D2.MaidFiddler.Core.Service
             return result;
         }
 
+        private void InitGameMain()
+        {
+            GameMainHooks.DeserializeStarting += (sender, args) =>
+            {
+                IsDeserializing = true;
+                SelectActiveMaid(null);
+                Debugger.WriteLine(LogLevel.Info, "Deserialize start!");
+                Emit("deserialize_start", new Dict());
+            };
+
+            GameMainHooks.DeserializeEnded += (sender, args) =>
+            {
+                Debugger.WriteLine(LogLevel.Info, "Deserialize end!");
+                IsDeserializing = false;
+                Emit("deserialize_done", new Dict {["success"] = args.Success});
+                if (args.Success)
+                    InitMaidList();
+            };
+        }
+
         private List GetLockableClubStatusInfo()
         {
-            return typeof(PlayerStatus.Status).GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                       .Where(p => p.CanWrite && p.PropertyType != typeof(bool) && (p.PropertyType.IsValueType
-                                                   || p.PropertyType == typeof(string))).Select(p => p.Name)
-                                       .Cast<object>().ToList();
+            return typeof(Status).GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                                 .Where(p => p.CanWrite && p.PropertyType != typeof(bool)
+                                                        && (p.PropertyType.IsValueType || p.PropertyType == typeof(string)))
+                                 .Select(p => p.Name).Cast<object>().ToList();
         }
 
         private List GetWorkInfo()
         {
-            return ScheduleCSVData.AllData.Select(d => new Dict
-            {
-                    ["id"] = d.Value.id,
-                    ["name"] = d.Value.name,
-                    ["work_type"] = d.Value.type,
-            }).Cast<object>().ToList();
+            return ScheduleCSVData
+                   .AllData.Select(d => new Dict {["id"] = d.Value.id, ["name"] = d.Value.name, ["work_type"] = d.Value.type})
+                   .Cast<object>().ToList();
         }
 
         private List GetMaidBonusStatusInfo()
         {
-            return typeof(BonusStatus).GetFields(BindingFlags.Instance | BindingFlags.Public).Select(f => f.Name)
-                                      .Cast<object>().ToList();
+            return typeof(BonusStatus).GetFields(BindingFlags.Instance | BindingFlags.Public).Select(f => f.Name).Cast<object>().ToList();
         }
 
-        private List GetLockableMaidStatusValueInfo()
+        private Dict GetLockableMaidStatusValueInfo()
         {
-            return typeof(Status).GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                 .Where(p => p.GetSetMethod() != null && !p.PropertyType.IsEnum && (p.PropertyType.IsValueType
-                                             || p.PropertyType == typeof(string))).Select(p => p.Name).Cast<object>()
-                                 .ToList();
+            return typeof(MaidStatus.Status).GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                                            .Where(p => p.GetSetMethod() != null && !p.PropertyType.IsEnum
+                                                                                 && (p.PropertyType.IsValueType
+                                                                                     || p.PropertyType == typeof(string)))
+                                            .ToDictionary(p => p.Name,
+                                                          p =>
+                                                          {
+                                                              Type t = p.PropertyType;
+                                                              if (t.IsFloat())
+                                                                  return "double" as object;
+                                                              if (t.IsInteger())
+                                                                  return "int" as object;
+                                                              return "string" as object;
+                                                          });
         }
 
         private List GetYotogiSkillInfo()
         {
-            List datas = new List();
+            var datas = new List();
 
             foreach (SortedDictionary<int, Skill.Data> dataList in Skill.skill_data_list)
-            {
-                foreach (KeyValuePair<int, Skill.Data> data in dataList)
-                    datas.Add(new Dict
-                    {
-                            ["id"] = data.Value.id,
-                            ["name"] = data.Value.name
-                    });
-            }
+            foreach (KeyValuePair<int, Skill.Data> data in dataList)
+                datas.Add(new Dict {["id"] = data.Value.id, ["name"] = data.Value.name});
 
             return datas;
         }
 
         private List GetPersonalInfo()
         {
-            List datas = new List();
+            var datas = new List();
 
             foreach (Personal.Data data in Personal.GetAllDatas(false))
-                datas.Add(new Dict
-                {
-                        ["id"] = data.id,
-                        ["name"] = data.uniqueName
-                });
+                datas.Add(new Dict {["id"] = data.id, ["name"] = data.uniqueName});
 
             return datas;
         }
 
         private List GetYotogiClassInfo()
         {
-            List datas = new List();
+            var datas = new List();
 
             foreach (YotogiClass.Data data in YotogiClass.GetAllDatas(false))
-                datas.Add(new Dict
-                {
-                        ["id"] = data.id,
-                        ["name"] = data.uniqueName
-                });
+                datas.Add(new Dict {["id"] = data.id, ["name"] = data.uniqueName});
 
             return datas;
         }
 
         private List GetJobClassInfo()
         {
-            List datas = new List();
+            var datas = new List();
 
             foreach (JobClass.Data data in JobClass.GetAllDatas(false))
-                datas.Add(new Dict
-                {
-                        ["id"] = data.id,
-                        ["name"] = data.uniqueName
-                });
+                datas.Add(new Dict {["id"] = data.id, ["name"] = data.uniqueName});
 
             return datas;
         }
 
         private List GetPropensityInfo()
         {
-            List datas = new List();
+            var datas = new List();
 
             foreach (Propensity.Data data in Propensity.GetAllDatas(false))
-                datas.Add(new Dict
-                {
-                        ["id"] = data.id,
-                        ["name"] = data.uniqueName
-                });
+                datas.Add(new Dict {["id"] = data.id, ["name"] = data.uniqueName});
 
             return datas;
         }
 
         private List GetFeatureInfo()
         {
-            List datas = new List();
+            var datas = new List();
 
             foreach (Feature.Data data in Feature.GetAllDatas(false))
-                datas.Add(new Dict
-                {
-                        ["id"] = data.id,
-                        ["name"] = data.uniqueName
-                });
+                datas.Add(new Dict {["id"] = data.id, ["name"] = data.uniqueName});
 
             return datas;
         }
 
         private static Dict GetEnumInfo<T>()
         {
-            Dict result = new Dict();
+            var result = new Dict();
             foreach (object value in Enum.GetValues(typeof(T)))
-            {
                 result[value.ToString()] = (int) value;
-            }
             return result;
         }
     }
