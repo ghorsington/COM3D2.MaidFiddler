@@ -10,19 +10,10 @@ class MaidStatsTab(UiTab):
         self.properties = {}
         self.bonus_properties = {}
         self.type_generators = {
-            "int" : self.make_int,
-            "double": self.make_double,
-            "string": self.make_text
+            "int" : lambda: NumberElement(QSpinBox()),
+            "double": lambda: NumberElement(QDoubleSpinBox()),
+            "string": lambda: TextElement(QLineEdit())
         }
-
-    def make_int(self):
-        return NumberElement(QSpinBox())
-    
-    def make_double(self):
-        return NumberElement(QDoubleSpinBox())
-
-    def make_text(self):
-        return TextElement(QLineEdit())
 
     def update_ui(self):
         self.properties.clear()
@@ -95,10 +86,20 @@ class MaidStatsTab(UiTab):
             widgets[0].connect(self.commit_property)
             widgets[1].stateChanged.connect(self.commit_lock)
 
+        event_poller.on("maid_prop_changed", self.prop_changed)
+
+    def prop_changed(self, args):
+        if args["property_name"] not in self.properties:
+            return
+
+        prop = self.properties[args["property_name"]]
+        prop[0].set_value(args["value"])
+
     def commit_property(self):
         element = self.sender()
         prop = element.property("prop_name")
-        print(f"Setting {prop} to {element.text()}")
+        el = self.properties[prop][0]
+        self.core.SetMaidPropertyActive(prop, el.value())
 
     def commit_bonus(self):
         element = self.sender()

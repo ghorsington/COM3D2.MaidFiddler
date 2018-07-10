@@ -86,38 +86,33 @@ class MaidInfoTab(UiTab):
         # self.ui.user_comment_text.currentIndexChanged.connect(
         #     self.commit_prop_changes("freeComment"))
 
-        self.ui.personality_combo.currentIndexChanged.connect(lambda: self.core.SetPersonal(
-            self.maid_mgr.selected_maid["guid"], self.properties["personal"].value()))
+        self.ui.personality_combo.currentIndexChanged.connect(
+            lambda: self.core.SetPersonalActive(self.properties["personal"].value()))
 
-        self.ui.contract_combo.currentIndexChanged.connect(lambda: self.core.SetContract(
-            self.maid_mgr.selected_maid["guid"], self.properties["contract"].value()))
+        self.ui.contract_combo.currentIndexChanged.connect(
+            lambda: self.core.SetContractActive(self.properties["contract"].value()))
 
-        self.ui.current_combo.currentIndexChanged.connect(lambda: self.core.SetCurSeikeiken(
-            self.maid_mgr.selected_maid["guid"], self.properties["cur_seikeiken"].value()))
+        self.ui.current_combo.currentIndexChanged.connect(
+            lambda: self.core.SetCurSeikeikenActive(self.properties["cur_seikeiken"].value()))
 
-        self.ui.initial_combo.currentIndexChanged.connect(lambda: self.core.SetInitSeikeiken(
-            self.maid_mgr.selected_maid["guid"], self.properties["init_seikeiken"].value()))
+        self.ui.initial_combo.currentIndexChanged.connect(
+            lambda: self.core.SetInitSeikeikenActive(self.properties["init_seikeiken"].value()))
 
-        self.ui.job_class_combo.currentIndexChanged.connect(lambda: self.core.SetCurrentJobClass(
-            self.maid_mgr.selected_maid["guid"], self.properties["current_job_class_id"].value()))
+        self.ui.job_class_combo.currentIndexChanged.connect(
+            lambda: self.core.SetCurrentJobClassActive(self.properties["current_job_class_id"].value()))
 
-        self.ui.yotogi_class_combo.currentIndexChanged.connect(lambda: self.core.SetCurrentYotogiClass(
-            self.maid_mgr.selected_maid["guid"], self.properties["current_yotogi_class_id"].value()))
+        self.ui.yotogi_class_combo.currentIndexChanged.connect(
+            lambda: self.core.SetCurrentYotogiClassActive(self.properties["current_yotogi_class_id"].value()))
 
         event_poller.on("maid_prop_changed", self.prop_changed)
 
     def commit_prop_changes(self, prop):
         def handler():
-            print(f"Commiting changes for {prop}")
-            try:
-                self.core.SetMaidProperty(
-                    self.maid_mgr.selected_maid["guid"], prop, self.properties[prop].value())
-            except Exception as e:
-                print(f"{e}")
+            self.core.SetMaidPropertyActive(
+                prop, self.properties[prop].value())
         return handler
 
     def prop_changed(self, args):
-        print(f"Property changed: {args['property_name']}")
         if args["property_name"] not in self.properties:
             return
 

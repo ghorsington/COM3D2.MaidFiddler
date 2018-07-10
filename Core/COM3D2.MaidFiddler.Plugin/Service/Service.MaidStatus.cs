@@ -46,55 +46,100 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         public void SetPersonal(string maidId, int personalId)
         {
-            GetMaid(maidId).status.SetPersonal(personalId);
+            SetPersonal(GetMaid(maidId), personalId);
         }
 
         public void SetCurrentJobClass(string maidId, object classId)
         {
-            int id = Convert.ToInt32(classId);
-
-            JobClass.Data data = JobClass.GetData(id);
-
-            Maid maid = GetMaid(maidId);
-
-            if (!maid.status.jobClass.Contains(data.id))
-                maid.status.jobClass.Add(data, true);
-
-            GetMaid(maidId).status.ChangeJobClass(id);
+            SetCurrentJobClass(GetMaid(maidId), classId);
         }
 
         public void SetCurrentYotogiClass(string maidId, object classId)
+        {
+            SetCurrentYotogiClass(GetMaid(maidId), classId);
+        }
+
+        public void SetContract(string maidId, int contract)
+        {
+            SetContract(GetMaid(maidId), contract);
+        }
+
+        public void SetCurSeikeiken(string maidId, int seikeiken)
+        {
+            SetCurSeikeiken(GetMaid(maidId), seikeiken);
+        }
+
+        public void SetInitSeikeiken(string maidId, int seikeiken)
+        {
+            SetInitSeikeiken(GetMaid(maidId), seikeiken);
+        }
+
+        public void SetMaidProperty(string maidId, string propertyName, object value)
+        {
+            SetMaidProperty(GetMaid(maidId), propertyName, value);
+        }
+
+        public Dict GetMaidData(string maidId)
+        {
+            string id = maidId.ToLower(CultureInfo.InvariantCulture);
+
+            Maid[] maids = GameMain.Instance.CharacterMgr.GetStockMaidList()
+                                   .Where(m => m.status.guid.ToLower(CultureInfo.InvariantCulture).StartsWith(id)).ToArray();
+
+            if (maids.Length == 0)
+                throw new ArgumentException($"No such maid with ID: {maidId}", nameof(maidId));
+            if (maids.Length > 1)
+                throw new
+                        ArgumentException($"Found multiple maids whose ID starts the same:\n\n{string.Join("\n", maids.Select(m => $"{m.status.fullNameEnStyle}; ID: {m.status.guid}").ToArray())}\nPlease give a more specific ID!");
+
+            return ReadMaidData(maids[0]);
+        }
+
+        private void SetCurrentYotogiClass(Maid maid, object classId)
         {
             int id = Convert.ToInt32(classId);
 
             YotogiClass.Data data = YotogiClass.GetData(id);
 
-            Maid maid = GetMaid(maidId);
             if (!maid.status.yotogiClass.Contains(data.id))
                 maid.status.yotogiClass.Add(data, true);
 
-            GetMaid(maidId).status.ChangeYotogiClass(data);
+            maid.status.ChangeYotogiClass(data);
         }
 
-        public void SetContract(string maidId, int contract)
+        private void SetPersonal(Maid maid, int personalId)
         {
-            Maid maid = GetMaid(maidId);
+            maid.status.SetPersonal(personalId);
+        }
+
+        private void SetCurrentJobClass(Maid maid, object classId)
+        {
+            int id = Convert.ToInt32(classId);
+
+            JobClass.Data data = JobClass.GetData(id);
+
+            if (!maid.status.jobClass.Contains(data.id))
+                maid.status.jobClass.Add(data, true);
+
+            maid.status.ChangeJobClass(id);
+        }
+
+        private void SetContract(Maid maid, int contract)
+        {
             maid.status.contract = (Contract) contract;
         }
 
-        public void SetCurSeikeiken(string maidId, int seikeiken)
+        private void SetCurSeikeiken(Maid maid, int seikeiken)
         {
-            Maid maid = GetMaid(maidId);
-            maid.status.seikeiken = (Seikeiken)seikeiken;
+            maid.status.seikeiken = (Seikeiken) seikeiken;
         }
 
-        public void SetInitSeikeiken(string maidId, int seikeiken)
+        private void SetInitSeikeiken(Maid maid, int seikeiken)
         {
-            Maid maid = GetMaid(maidId);
-            maid.status.initSeikeiken = (Seikeiken)seikeiken;
+            maid.status.initSeikeiken = (Seikeiken) seikeiken;
         }
 
-        public void SetMaidProperty(string maidId, string propertyName, object value)
+        private void SetMaidProperty(Maid maid, string propertyName, object value)
         {
             if (!maidSetters.TryGetValue(propertyName, out MethodInfo setter))
                 throw new ArgumentException($"No such property: {propertyName}", nameof(propertyName));
@@ -113,41 +158,14 @@ namespace COM3D2.MaidFiddler.Core.Service
                     throw new ArgumentException($"Cannot convert value to {paramType.FullName}.", e);
                 }
 
-            string id = maidId.ToLower(CultureInfo.InvariantCulture);
-
-            Maid[] maids = GameMain.Instance.CharacterMgr.GetStockMaidList()
-                                   .Where(m => m.status.guid.ToLower(CultureInfo.InvariantCulture).StartsWith(id)).ToArray();
-
-            if (maids.Length == 0)
-                throw new ArgumentException($"No such maid with ID: {maidId}", nameof(maidId));
-            if (maids.Length > 1)
-                throw new
-                        ArgumentException($"Found multiple maids whose ID starts the same:\n\n{string.Join("\n", maids.Select(m => $"{m.status.fullNameEnStyle}; ID: {m.status.guid}").ToArray())}\nPlease give a more specific ID!");
-
             try
             {
-                setter.Invoke(maids[0].status, new[] {val});
+                setter.Invoke(maid.status, new[] {val});
             }
             catch (Exception e)
             {
                 Debugger.WriteLine(LogLevel.Error, e.InnerException.ToString());
             }
-        }
-
-        public Dict GetMaidData(string maidId)
-        {
-            string id = maidId.ToLower(CultureInfo.InvariantCulture);
-
-            Maid[] maids = GameMain.Instance.CharacterMgr.GetStockMaidList()
-                                   .Where(m => m.status.guid.ToLower(CultureInfo.InvariantCulture).StartsWith(id)).ToArray();
-
-            if (maids.Length == 0)
-                throw new ArgumentException($"No such maid with ID: {maidId}", nameof(maidId));
-            if (maids.Length > 1)
-                throw new
-                        ArgumentException($"Found multiple maids whose ID starts the same:\n\n{string.Join("\n", maids.Select(m => $"{m.status.fullNameEnStyle}; ID: {m.status.guid}").ToArray())}\nPlease give a more specific ID!");
-
-            return ReadMaidData(maids[0]);
         }
 
         private Maid GetMaid(string maidId)
