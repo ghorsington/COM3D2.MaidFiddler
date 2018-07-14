@@ -79,6 +79,15 @@ namespace COM3D2.MaidFiddler.Core.Service
             SetMaidProperty(GetMaid(maidId), propertyName, value);
         }
 
+        public bool TogglePropertyLock(string maidId, string propertyName, bool value)
+        {
+            if (!maidLockList.TryGetValue(maidId, out var locks))
+                return false;
+
+            locks[propertyName] = value;
+            return locks[propertyName];
+        }
+
         public Dict GetMaidData(string maidId)
         {
             string id = maidId.ToLower(CultureInfo.InvariantCulture);
@@ -160,7 +169,11 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             try
             {
+                var locks = maidLockList[maid.status.guid];
+                bool prev = locks[propertyName];
+                locks[propertyName] = false;
                 setter.Invoke(maid.status, new[] {val});
+                locks[propertyName] = prev;
             }
             catch (Exception e)
             {
@@ -228,6 +241,12 @@ namespace COM3D2.MaidFiddler.Core.Service
             props["active_noon_work_id"] = maid.status.noonWorkId;
             props["active_night_work_id"] = maid.status.nightWorkId;
             props["profile_comment"] = maid.status.profileComment;
+
+            var propLocks = new Dict();
+            result["prop_locks"] = propLocks;
+
+            foreach (var propLock in maidLockList[maid.status.guid])
+                propLocks[propLock.Key] = propLock.Value;
 
             var bonusProps = new Dict();
             result["bonus_properties"] = bonusProps;
@@ -303,6 +322,13 @@ namespace COM3D2.MaidFiddler.Core.Service
             Emit("maid_prop_changed", new Dict {["guid"] = args.Status.guid, ["property_name"] = args.PropertyName, ["value"] = value});
         }
 
+        private void CheckPropertyShouldChange(object sender, MaidStatusSetEventArgs args)
+        {
+            if (args.Maid == null || !maidLockList.TryGetValue(args.Maid.status.guid, out var lockList))
+                return;
+            args.Block = lockList[args.PropertyName];
+        }
+
         private void InitMaidStatus()
         {
             maidSetters = new Dictionary<string, MethodInfo>();
@@ -323,6 +349,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             }
 
             MaidStatusHooks.PropertyChanged += OnPropertyChange;
+            MaidStatusHooks.ProprtyShouldChange += CheckPropertyShouldChange;
 
             MaidStatusHooks.ThumbnailChanged += (sender, args) =>
             {

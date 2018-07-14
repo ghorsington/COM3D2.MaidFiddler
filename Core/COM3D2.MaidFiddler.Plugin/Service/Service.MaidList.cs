@@ -1,34 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace COM3D2.MaidFiddler.Core.Service
 {
     public partial class Service
     {
-        private Dictionary<string, bool> stockMaids; // TODO: Add lock list
+        private Dictionary<string, Dictionary<string, bool>> maidLockList = new Dictionary<string, Dictionary<string, bool>>();
+        private Maid selectedMaid;
 
-        private string selectedMaidGuid = null;
-        private Maid selectedMaid = null;
-
-        internal void InitMaidList()
-        {
-            stockMaids = new Dictionary<string, bool>();
-            foreach (Maid maid in GameMain.Instance.CharacterMgr.GetStockMaidList())
-            {
-                stockMaids[maid.status.guid] = true;
-            }
-        }
-
-        internal void AddMaid(Maid maid)
-        {
-            if(stockMaids != null)
-                stockMaids[maid.status.guid] = true;
-        }
-
-        internal void RemoveMaid(Maid maid)
-        {
-            stockMaids?.Remove(maid.status.guid);
-        }
+        private string selectedMaidGuid;
 
         public Dictionary<string, object> SelectActiveMaid(string guid)
         {
@@ -98,6 +77,47 @@ namespace COM3D2.MaidFiddler.Core.Service
                 return;
 
             SetInitSeikeiken(selectedMaid, seikeiken);
+        }
+
+        public bool ToggleActiveMaidLock(string propertyName, bool value)
+        {
+            if (selectedMaid == null)
+                return false;
+
+            return TogglePropertyLock(selectedMaidGuid, propertyName, value);
+        }
+
+        internal void InitMaidList()
+        {
+            maidLockList.Clear();
+            foreach (Maid maid in GameMain.Instance.CharacterMgr.GetStockMaidList())
+            {
+                var dict = new Dictionary<string, bool>();
+                maidLockList[maid.status.guid] = dict;
+
+                foreach (string setter in maidSetters.Keys)
+                {
+                    dict[setter] = false;
+                }
+            }
+        }
+
+        internal void AddMaid(Maid maid)
+        {
+            if (maidLockList == null)
+                return;
+            var dict = new Dictionary<string, bool>();
+            maidLockList[maid.status.guid] = dict;
+
+            foreach (string setter in maidSetters.Keys)
+            {
+                dict[setter] = false;
+            }
+        }
+
+        internal void RemoveMaid(Maid maid)
+        {
+            maidLockList?.Remove(maid.status.guid);
         }
     }
 }

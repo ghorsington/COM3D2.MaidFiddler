@@ -15,14 +15,30 @@ namespace COM3D2.MaidFiddler.Core.Hooks
         public Maid Maid { get; internal set; }
     }
 
+    public class MaidStatusSetEventArgs : EventArgs
+    {
+        public Maid Maid { get; internal set; }
+        public string PropertyName { get; internal set; }
+        public bool Block { get; set; } = false;
+    }
+
     public static class MaidStatusHooks
     {
+        public static event EventHandler<MaidStatusSetEventArgs> ProprtyShouldChange;
         public static event EventHandler<MaidStatusChangeEventArgs> PropertyChanged;
         public static event EventHandler<MaidEventArgs> ThumbnailChanged;
 
         public static bool OnPropertySetPrefix(string propName, MaidStatus.Status status)
         {
-            return false;
+            MaidStatusSetEventArgs args = new MaidStatusSetEventArgs
+            {
+                    Maid = status.maid,
+                    PropertyName = propName
+            };
+
+            ProprtyShouldChange?.Invoke(null, args);
+
+            return args.Block;
         }
 
         public static void OnPropertySetPostfix(string propName, MaidStatus.Status status)

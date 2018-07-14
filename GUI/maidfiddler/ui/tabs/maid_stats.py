@@ -109,7 +109,11 @@ class MaidStatsTab(UiTab):
     def commit_lock(self, state):
         element = self.sender()
         prop = element.property("prop_name")
-        print(f"Lock state for {prop}: {state}")
+        n_state = self.core.ToggleActiveMaidLock(prop, state == Qt.Checked)
+        
+        element.blockSignals(True)
+        element.setCheckState(Qt.Checked if n_state else Qt.Unchecked)
+        element.blockSignals(False)
 
     def maid_selected(self):
         if self.maid_mgr.selected_maid is None:
@@ -117,9 +121,9 @@ class MaidStatsTab(UiTab):
 
         maid = self.maid_mgr.selected_maid
 
-        print("Loading base properties")
         for name, widgets in self.properties.items():
             widgets[0].set_value(maid["properties"][name])
+            widgets[1].setCheckState(Qt.Checked if maid["prop_locks"][name] else Qt.Unchecked)
             # TODO: Add lock
 
         for name, widget in self.bonus_properties.items():

@@ -45,6 +45,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             {
                 IsDeserializing = true;
                 SelectActiveMaid(null);
+                maidLockList.Clear();
                 Debugger.WriteLine(LogLevel.Info, "Deserialize start!");
                 Emit("deserialize_start", new Dict());
             };
