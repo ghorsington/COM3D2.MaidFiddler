@@ -1491,6 +1491,7 @@
     <property name="title">
      <string>All maids</string>
     </property>
+    <addaction name="actionUnlock_value_ranges"/>
    </widget>
    <widget class="QMenu" name="menuSelected_maid">
     <property name="title">
@@ -1537,6 +1538,17 @@
   <action name="actionSort_maids_by_guid">
    <property name="text">
     <string>Sort maids by guid</string>
+   </property>
+  </action>
+  <action name="actionUnlock_value_ranges">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Unlock value ranges</string>
    </property>
   </action>
  </widget>

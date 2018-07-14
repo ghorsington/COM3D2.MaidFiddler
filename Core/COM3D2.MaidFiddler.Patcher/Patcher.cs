@@ -18,6 +18,7 @@ namespace COM3D2.MaidFiddler.Patcher
 
         private static AssemblyDefinition HookDefinition;
 
+
         public static IEnumerable<string> TargetDLLs => new[] {"Assembly-CSharp.dll"};
 
         public static void Patch(AssemblyDefinition ass)
@@ -27,6 +28,50 @@ namespace COM3D2.MaidFiddler.Patcher
             PatchMaidStatus(ass);
             PatchCharacterMgr(ass);
             PatchGameMain(ass);
+            PatchRoundingFunctions(ass);
+        }
+
+        private static void PatchRoundingFunctions(AssemblyDefinition ass)
+        {
+            TypeDefinition mathUtilHooks = HookDefinition.MainModule.GetType($"{HOOK_NAME}.Hooks.MathUtilHooks");
+
+            MethodDefinition intRound = mathUtilHooks.GetMethod("OnRound", "System.Int32&", "System.Int32");
+            MethodDefinition longRound = mathUtilHooks.GetMethod("OnRound", "System.Int64&", "System.Int64");
+            MethodDefinition minMaxInt =
+                    mathUtilHooks.GetMethod("OnRoundMinMax", "System.Int32&", "System.Int32", "System.Int32", "System.Int32");
+            MethodDefinition minMaxLong =
+                    mathUtilHooks.GetMethod("OnRoundMinMax", "System.Int64&", "System.Int64", "System.Int64", "System.Int64");
+
+            TypeDefinition math = ass.MainModule.GetType("wf.Math");
+
+            foreach (MethodDefinition methodDefinition in math.Methods)
+            {
+                MethodDefinition hook = null;
+                if (methodDefinition.Name.StartsWith("Round"))
+                {
+                    if (methodDefinition.Name == "RoundMinMax")
+                    {
+                        if (methodDefinition.ReturnType.FullName == "System.Int64")
+                            hook = minMaxLong;
+                        else if (methodDefinition.ReturnType.FullName == "System.Int32")
+                            hook = minMaxInt;
+                    }
+                    else
+                    {
+                        if (methodDefinition.ReturnType.FullName == "System.Int64")
+                            hook = longRound;
+                        else if (methodDefinition.ReturnType.FullName == "System.Int32")
+                            hook = intRound;
+                    }
+                }
+
+                if (hook != null)
+                    methodDefinition.InjectWith(hook, flags: InjectFlags.ModifyReturn | InjectFlags.PassParametersVal);
+            }
+
+            TypeDefinition status = ass.MainModule.GetType("MaidStatus.Status");
+            status.GetMethod("ConvertString").InjectWith(mathUtilHooks.GetMethod("OnConvertString"),
+                                                         flags: InjectFlags.ModifyReturn | InjectFlags.PassParametersVal);
         }
 
         private static void PatchGameMain(AssemblyDefinition ass)

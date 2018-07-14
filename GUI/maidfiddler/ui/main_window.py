@@ -60,6 +60,12 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
         for tab in self.tabs:
             tab.init_events(self.event_poller)
+        
+        # TODO: Better place for actions
+        self.actionUnlock_value_ranges.toggled.connect(self.toggle_unlock_values)
+    
+    def toggle_unlock_values(self, checked):
+        self.core.SetUnlockRanges(checked)
 
     def closeEvent(self, event):
         self.core.DisconnectEventHander()
