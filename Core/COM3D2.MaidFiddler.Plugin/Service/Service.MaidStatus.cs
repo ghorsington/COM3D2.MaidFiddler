@@ -178,6 +178,60 @@ namespace COM3D2.MaidFiddler.Core.Service
             maid.status.initSeikeiken = (Seikeiken) seikeiken;
         }
 
+        public void SetWorkDataLevel(string maidId, object id, object level)
+        {
+            SetWorkDataLevel(GetMaid(maidId), id, level);
+        }
+
+        private void SetWorkDataLevel(Maid maid, object id, object level)
+        {
+            int workId = Convert.ToInt32(id);
+            int workLevel = Convert.ToInt32(level);
+
+            maid.status.SetWorkDataLevel(workId, workLevel);
+        }
+
+        public void SetWorkPlayCount(string maidId, object id, object playCount)
+        {
+            SetWorkPlayCount(GetMaid(maidId), id, playCount);
+        }
+
+        private void SetWorkPlayCount(Maid maid, object id, object playCount)
+        {
+            int workId = Convert.ToInt32(id);
+            uint workPlayCount = Convert.ToUInt32(playCount);
+
+            uint baseCount = 0;
+            if (maid.status.workDatas.ContainsKey(workId))
+                baseCount = maid.status.workDatas[workId].playCount;
+
+            maid.status.AddWorkDataPlayCount(workId, (int)(workPlayCount - baseCount));
+        }
+
+        public void SetNoonWork(string maidId, object id)
+        {
+            SetNoonWork(GetMaid(maidId), id);
+        }
+
+        public void SetNightWork(string maidId, object id)
+        {
+            SetNightWork(GetMaid(maidId), id);
+        }
+
+        private void SetNoonWork(Maid maid, object id)
+        {
+            int workId = Convert.ToInt32(id);
+
+            maid.status.noonWorkId = workId;
+        }
+
+        private void SetNightWork(Maid maid, object id)
+        {
+            int workId = Convert.ToInt32(id);
+
+            maid.status.nightWorkId = workId;
+        }
+
         private void SetMaidProperty(Maid maid, string propertyName, object value)
         {
             if (!maidSetters.TryGetValue(propertyName, out MethodInfo setter))
@@ -271,6 +325,18 @@ namespace COM3D2.MaidFiddler.Core.Service
             props["active_noon_work_id"] = maid.status.noonWorkId;
             props["active_night_work_id"] = maid.status.nightWorkId;
             props["profile_comment"] = maid.status.profileComment;
+
+            var workLevels = new Dictionary<int, object>();
+            var workPlayCounts = new Dictionary<int, object>();
+
+            foreach (WorkData data in maid.status.workDatas.GetValueArray())
+            {
+                workLevels[data.id] = data.level;
+                workPlayCounts[data.id] = data.playCount;
+            }
+
+            result["work_levels"] = workLevels;
+            result["work_play_counts"] = workPlayCounts;
 
             var propLocks = new Dict();
             result["prop_locks"] = propLocks;
@@ -376,6 +442,23 @@ namespace COM3D2.MaidFiddler.Core.Service
             });
         }
 
+        private void OnMaidStatusHooksOnWorkDataChanged(object sender, WorkDataChangeEventArgs args)
+        {
+            if (IsDeserializing)
+                return;
+            if (string.IsNullOrEmpty(args.Maid.status.guid)
+                                  || !args.Maid.status.guid.Equals(selectedMaidGuid, StringComparison.CurrentCultureIgnoreCase))
+                return;
+
+            Emit("work_data_changed", new Dict
+            {
+                    ["guid"] = args.Maid.status.guid,
+                    ["id"] = args.ID,
+                    ["level"] = args.Level,
+                    ["play_count"] = args.PlayCount
+            });
+        }
+
         private void InitMaidStatus()
         {
             maidSetters = new Dictionary<string, MethodInfo>();
@@ -396,6 +479,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             }
 
             MaidStatusHooks.PropertyChanged += OnPropertyChange;
+            MaidStatusHooks.WorkDataChanged += OnMaidStatusHooksOnWorkDataChanged;
             MaidStatusHooks.PropFeatureChanged += OnPropFeatureChanged;
             MaidStatusHooks.ProprtyShouldChange += CheckPropertyShouldChange;
 

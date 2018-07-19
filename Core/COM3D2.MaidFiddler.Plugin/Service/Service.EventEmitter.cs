@@ -46,7 +46,6 @@ namespace COM3D2.MaidFiddler.Core.Service
                 {
                     int cache = currentCache;
                     currentCache = 1 - currentCache;
-                    Console.WriteLine($"Emitting {eventCaches[cache].Count} events!");
                     client?.InvokeAsync("emit", new object[] {eventCaches[cache].ToArray()});
                     eventCaches[cache].Clear();
                 }
@@ -85,7 +84,6 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             if (client != null)
                 eventCaches[currentCache].Add(new Dict {["event_name"] = eventName, ["args"] = arguments});
-            //client?.InvokeAsync("emit", eventName, arguments);
         }
     }
 }

@@ -103,6 +103,37 @@ namespace COM3D2.MaidFiddler.Core.Service
             ToggleFeature(selectedMaid, propensityId, toggle);
         }
 
+        public void SetWorkLevelActiveMaid(object id, object level)
+        {
+            if (selectedMaid == null)
+                return;
+
+            SetWorkDataLevel(selectedMaid, id, level);
+        }
+
+        public void SetWorkPlayCountActive(object id, object playCount)
+        {
+            if (selectedMaid == null)
+                return;
+
+            SetWorkPlayCount(selectedMaid, id, playCount);
+        }
+
+        public void SetNoonWorkActive(object id)
+        {
+            if (selectedMaid == null)
+                return;
+
+            SetNoonWork(selectedMaid, id);
+        }
+
+        public void SetNightWorkActive(object id)
+        {
+            if (selectedMaid == null)
+                return;
+
+            SetNightWork(selectedMaid, id);
+        }
 
         internal void InitMaidList()
         {

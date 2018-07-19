@@ -6,3 +6,7 @@
 
 * `MaidStatus.Status.eventEndFlags_` => specifies the events that maid has done
     * Use to reset events that maid has completed
+
+* `ScheduleAPI.Visible*` and `ScheduleAPI.Enable*`
+    * Use to check if the given work should be shown/enabled for a maid
+    * Also `ScheduleWork` constructor

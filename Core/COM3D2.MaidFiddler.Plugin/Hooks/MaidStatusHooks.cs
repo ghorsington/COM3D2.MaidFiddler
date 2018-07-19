@@ -1,4 +1,5 @@
 ﻿using System;
+using MaidStatus;
 
 namespace COM3D2.MaidFiddler.Core.Hooks
 {
@@ -30,12 +31,21 @@ namespace COM3D2.MaidFiddler.Core.Hooks
         public int ID { get; internal set; }
     }
 
+    public class WorkDataChangeEventArgs : EventArgs
+    {
+        public Maid Maid { get; internal set; }
+        public int ID { get; internal set; }
+        public int Level { get; internal set; }
+        public uint PlayCount { get; internal set; }
+    }
+
     public static class MaidStatusHooks
     {
         public static event EventHandler<MaidStatusSetEventArgs> ProprtyShouldChange;
         public static event EventHandler<MaidStatusChangeEventArgs> PropertyChanged;
         public static event EventHandler<MaidEventArgs> ThumbnailChanged;
         public static event EventHandler<PropFeatureChangeEventArgs> PropFeatureChanged;
+        public static event EventHandler<WorkDataChangeEventArgs> WorkDataChanged;
 
         public static bool OnPropertySetPrefix(string propName, MaidStatus.Status status)
         {
@@ -159,7 +169,18 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 
         public static void OnWorkDataUpdate(MaidStatus.Status status, int id)
         {
+            if (status.maid == null)
+                return;
 
+            WorkData data = status.workDatas[id];
+
+            WorkDataChanged?.Invoke(null, new WorkDataChangeEventArgs
+            {
+                    ID = id,
+                    Maid = status.maid,
+                    Level = data.level,
+                    PlayCount = data.playCount
+            });
         }
 
         public static void OnBonusStatusChange(MaidStatus.Status status)
