@@ -6,7 +6,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 {
     public partial class Service
     {
-        private MonoBehaviour parent;
+        private readonly MonoBehaviour parent;
 
         public Service(MonoBehaviour parent)
         {
@@ -23,7 +23,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         public string GetInfo()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine($"Maid Fiddler {MaidFiddlerPlugin.VERSION} running on");
             sb.AppendLine();
 

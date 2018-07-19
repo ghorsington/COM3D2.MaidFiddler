@@ -17,10 +17,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             if (!HasEventHandler || IsDeserializing)
                 return;
 
-            Emit("maid_removed", new Dict
-            {
-                ["maid_id"] = e.Maid.status.guid
-            });
+            Emit("maid_removed", new Dict {["maid_id"] = e.Maid.status.guid});
 
             AddMaid(e.Maid);
         }
@@ -32,10 +29,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             Debugger.WriteLine(LogLevel.Info, $"Got maid: {e.Maid}");
 
-            Emit("maid_added", new Dict
-            {
-                ["maid"] = ReadBasicMaidData(e.Maid)
-            });
+            Emit("maid_added", new Dict {["maid"] = ReadBasicMaidData(e.Maid)});
 
             RemoveMaid(e.Maid);
         }

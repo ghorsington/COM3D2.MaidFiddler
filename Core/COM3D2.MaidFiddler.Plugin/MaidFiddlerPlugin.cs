@@ -1,4 +1,5 @@
 ﻿using System;
+using AsyncIO;
 using BepInEx;
 using COM3D2.MaidFiddler.Core.Utils;
 using NetMQ;
@@ -11,8 +12,8 @@ namespace COM3D2.MaidFiddler.Core
     [BepInPlugin("horse.coder.com3d2.maidfiddler", "Maid Fiddler for COM3D2", "0.0.1")]
     public class MaidFiddlerPlugin : BaseUnityPlugin
     {
-        public const int PORT = 8899;
         public const string IP = "127.0.0.1";
+        public const int PORT = 8899;
         public const string VERSION = "Alpha 0.1";
         private MFService service;
 
@@ -22,7 +23,7 @@ namespace COM3D2.MaidFiddler.Core
         {
             DontDestroyOnLoad(this);
 
-            AsyncIO.ForceDotNet.Force();
+            ForceDotNet.Force();
             NetMQConfig.Linger = TimeSpan.Zero;
 
             Debugger.WriteLine(LogLevel.Info, $"Starting up Maid Fiddler {VERSION}");

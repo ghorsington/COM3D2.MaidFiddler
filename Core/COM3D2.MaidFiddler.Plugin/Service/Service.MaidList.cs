@@ -4,7 +4,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 {
     public partial class Service
     {
-        private Dictionary<string, Dictionary<string, bool>> maidLockList = new Dictionary<string, Dictionary<string, bool>>();
+        private readonly Dictionary<string, Dictionary<string, bool>> maidLockList = new Dictionary<string, Dictionary<string, bool>>();
         private Maid selectedMaid;
 
         private string selectedMaidGuid;
@@ -144,9 +144,7 @@ namespace COM3D2.MaidFiddler.Core.Service
                 maidLockList[maid.status.guid] = dict;
 
                 foreach (string setter in maidSetters.Keys)
-                {
                     dict[setter] = false;
-                }
             }
         }
 
@@ -158,9 +156,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             maidLockList[maid.status.guid] = dict;
 
             foreach (string setter in maidSetters.Keys)
-            {
                 dict[setter] = false;
-            }
         }
 
         internal void RemoveMaid(Maid maid)

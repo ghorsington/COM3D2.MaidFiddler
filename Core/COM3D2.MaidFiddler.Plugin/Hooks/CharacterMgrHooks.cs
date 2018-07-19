@@ -17,10 +17,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             if (isMan)
                 return;
 
-            MaidBanished?.Invoke(null, new MaidChangeEventArgs
-            {
-                Maid = maid
-            });
+            MaidBanished?.Invoke(null, new MaidChangeEventArgs {Maid = maid});
         }
 
         public static void OnCharacterAdded(ref Maid maid, bool isMan, bool isNpc)
@@ -28,10 +25,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             if (isMan || isNpc)
                 return;
 
-            MaidAdded?.Invoke(null, new MaidChangeEventArgs
-            {
-                Maid = maid
-            });
+            MaidAdded?.Invoke(null, new MaidChangeEventArgs {Maid = maid});
         }
     }
 }

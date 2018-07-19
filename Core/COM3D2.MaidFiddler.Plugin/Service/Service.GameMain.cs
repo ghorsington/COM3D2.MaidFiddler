@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using COM3D2.MaidFiddler.Core.Hooks;
@@ -102,8 +101,8 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             var datas = new List();
 
-            foreach (SortedDictionary<int, Skill.Data> dataList in Skill.skill_data_list)
-            foreach (KeyValuePair<int, Skill.Data> data in dataList)
+            foreach (var dataList in Skill.skill_data_list)
+            foreach (var data in dataList)
                 datas.Add(new Dict {["id"] = data.Value.id, ["name"] = data.Value.name});
 
             return datas;

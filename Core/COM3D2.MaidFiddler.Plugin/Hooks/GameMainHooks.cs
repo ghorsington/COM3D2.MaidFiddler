@@ -10,7 +10,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
     public static class GameMainHooks
     {
         public static event EventHandler DeserializeStarting;
-        public static event EventHandler<DeserializeEventArgs> DeserializeEnded; 
+        public static event EventHandler<DeserializeEventArgs> DeserializeEnded;
 
         public static void OnPreDeserialize()
         {
@@ -19,10 +19,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 
         public static bool OnPostDeserialize(bool success)
         {
-            DeserializeEnded?.Invoke(null, new DeserializeEventArgs
-            {
-                Success = success
-            });
+            DeserializeEnded?.Invoke(null, new DeserializeEventArgs {Success = success});
 
             return success;
         }

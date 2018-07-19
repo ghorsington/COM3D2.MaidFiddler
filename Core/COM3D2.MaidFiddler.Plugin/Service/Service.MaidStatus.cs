@@ -102,8 +102,8 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             string id = maidId.ToLower(CultureInfo.InvariantCulture);
 
-            Maid[] maids = GameMain.Instance.CharacterMgr.GetStockMaidList()
-                                   .Where(m => m.status.guid.ToLower(CultureInfo.InvariantCulture).StartsWith(id)).ToArray();
+            var maids = GameMain.Instance.CharacterMgr.GetStockMaidList()
+                                .Where(m => m.status.guid.ToLower(CultureInfo.InvariantCulture).StartsWith(id)).ToArray();
 
             if (maids.Length == 0)
                 throw new ArgumentException($"No such maid with ID: {maidId}", nameof(maidId));
@@ -112,6 +112,46 @@ namespace COM3D2.MaidFiddler.Core.Service
                         ArgumentException($"Found multiple maids whose ID starts the same:\n\n{string.Join("\n", maids.Select(m => $"{m.status.fullNameEnStyle}; ID: {m.status.guid}").ToArray())}\nPlease give a more specific ID!");
 
             return ReadMaidData(maids[0]);
+        }
+
+        public void TogglePropensity(Maid maid, object propensityId, bool toggle)
+        {
+            int id = Convert.ToInt32(propensityId);
+
+            if (toggle)
+                maid.status.AddPropensity(id);
+            else
+                maid.status.RemovePropensity(id);
+        }
+
+        public void ToggleFeature(Maid maid, object propensityId, bool toggle)
+        {
+            int id = Convert.ToInt32(propensityId);
+
+            if (toggle)
+                maid.status.AddFeature(id);
+            else
+                maid.status.RemoveFeature(id);
+        }
+
+        public void SetWorkDataLevel(string maidId, object id, object level)
+        {
+            SetWorkDataLevel(GetMaid(maidId), id, level);
+        }
+
+        public void SetWorkPlayCount(string maidId, object id, object playCount)
+        {
+            SetWorkPlayCount(GetMaid(maidId), id, playCount);
+        }
+
+        public void SetNoonWork(string maidId, object id)
+        {
+            SetNoonWork(GetMaid(maidId), id);
+        }
+
+        public void SetNightWork(string maidId, object id)
+        {
+            SetNightWork(GetMaid(maidId), id);
         }
 
         private void SetCurrentYotogiClass(Maid maid, object classId)
@@ -143,26 +183,6 @@ namespace COM3D2.MaidFiddler.Core.Service
             maid.status.ChangeJobClass(id);
         }
 
-        public void TogglePropensity(Maid maid, object propensityId, bool toggle)
-        {
-            int id = Convert.ToInt32(propensityId);
-
-            if(toggle)
-                maid.status.AddPropensity(id);
-            else
-                maid.status.RemovePropensity(id);
-        }
-
-        public void ToggleFeature(Maid maid, object propensityId, bool toggle)
-        {
-            int id = Convert.ToInt32(propensityId);
-
-            if (toggle)
-                maid.status.AddFeature(id);
-            else
-                maid.status.RemoveFeature(id);
-        }
-
         private void SetContract(Maid maid, int contract)
         {
             maid.status.contract = (Contract) contract;
@@ -178,22 +198,12 @@ namespace COM3D2.MaidFiddler.Core.Service
             maid.status.initSeikeiken = (Seikeiken) seikeiken;
         }
 
-        public void SetWorkDataLevel(string maidId, object id, object level)
-        {
-            SetWorkDataLevel(GetMaid(maidId), id, level);
-        }
-
         private void SetWorkDataLevel(Maid maid, object id, object level)
         {
             int workId = Convert.ToInt32(id);
             int workLevel = Convert.ToInt32(level);
 
             maid.status.SetWorkDataLevel(workId, workLevel);
-        }
-
-        public void SetWorkPlayCount(string maidId, object id, object playCount)
-        {
-            SetWorkPlayCount(GetMaid(maidId), id, playCount);
         }
 
         private void SetWorkPlayCount(Maid maid, object id, object playCount)
@@ -205,17 +215,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             if (maid.status.workDatas.ContainsKey(workId))
                 baseCount = maid.status.workDatas[workId].playCount;
 
-            maid.status.AddWorkDataPlayCount(workId, (int)(workPlayCount - baseCount));
-        }
-
-        public void SetNoonWork(string maidId, object id)
-        {
-            SetNoonWork(GetMaid(maidId), id);
-        }
-
-        public void SetNightWork(string maidId, object id)
-        {
-            SetNightWork(GetMaid(maidId), id);
+            maid.status.AddWorkDataPlayCount(workId, (int) (workPlayCount - baseCount));
         }
 
         private void SetNoonWork(Maid maid, object id)
@@ -269,8 +269,8 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             string id = maidId.ToLower(CultureInfo.InvariantCulture);
 
-            Maid[] maids = GameMain.Instance.CharacterMgr.GetStockMaidList()
-                                   .Where(m => m.status.guid.ToLower(CultureInfo.InvariantCulture).StartsWith(id)).ToArray();
+            var maids = GameMain.Instance.CharacterMgr.GetStockMaidList()
+                                .Where(m => m.status.guid.ToLower(CultureInfo.InvariantCulture).StartsWith(id)).ToArray();
 
             if (maids.Length == 0)
                 throw new ArgumentException($"No such maid with ID: {maidId}", nameof(maidId));
@@ -307,7 +307,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             var props = new Dict();
             result["properties"] = props;
 
-            foreach (KeyValuePair<string, MethodInfo> getter in maidGetters)
+            foreach (var getter in maidGetters)
                 if (maidSetters.ContainsKey(getter.Key))
                     if (getter.Value.ReturnType.IsEnum)
                         props[getter.Key] = (int) getter.Value.Invoke(maid.status, new object[0]);
@@ -355,7 +355,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             foreach (int id in maid.status.jobClass.datas.GetKeyArray())
             {
-                ClassData<JobClass.Data> classData = maid.status.jobClass.datas[id];
+                var classData = maid.status.jobClass.datas[id];
                 jobData[classData.data.id.ToString()] = new Dict {["level"] = classData.level, ["cur_exp"] = classData.cur_exp};
             }
 
@@ -364,7 +364,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             foreach (int id in maid.status.yotogiClass.datas.GetKeyArray())
             {
-                ClassData<YotogiClass.Data> classData = maid.status.yotogiClass.datas[id];
+                var classData = maid.status.yotogiClass.datas[id];
                 yotogiData[classData.data.id.ToString()] = new Dict {["level"] = classData.level, ["cur_exp"] = classData.cur_exp};
             }
 
@@ -431,15 +431,10 @@ namespace COM3D2.MaidFiddler.Core.Service
                 return;
 
             if (args.Maid == null || string.IsNullOrEmpty(args.Maid.status.guid)
-                || !args.Maid.status.guid.Equals(selectedMaidGuid, StringComparison.CurrentCultureIgnoreCase))
+                                  || !args.Maid.status.guid.Equals(selectedMaidGuid, StringComparison.CurrentCultureIgnoreCase))
                 return;
 
-            Emit($"{args.Type}_changed", new Dict
-            {
-                    ["guid"] = args.Maid.status.guid,
-                    ["id"] = args.ID,
-                    ["selected"] = args.Selected
-            });
+            Emit($"{args.Type}_changed", new Dict {["guid"] = args.Maid.status.guid, ["id"] = args.ID, ["selected"] = args.Selected});
         }
 
         private void OnMaidStatusHooksOnWorkDataChanged(object sender, WorkDataChangeEventArgs args)
@@ -447,16 +442,11 @@ namespace COM3D2.MaidFiddler.Core.Service
             if (IsDeserializing)
                 return;
             if (string.IsNullOrEmpty(args.Maid.status.guid)
-                                  || !args.Maid.status.guid.Equals(selectedMaidGuid, StringComparison.CurrentCultureIgnoreCase))
+                || !args.Maid.status.guid.Equals(selectedMaidGuid, StringComparison.CurrentCultureIgnoreCase))
                 return;
 
-            Emit("work_data_changed", new Dict
-            {
-                    ["guid"] = args.Maid.status.guid,
-                    ["id"] = args.ID,
-                    ["level"] = args.Level,
-                    ["play_count"] = args.PlayCount
-            });
+            Emit("work_data_changed",
+                 new Dict {["guid"] = args.Maid.status.guid, ["id"] = args.ID, ["level"] = args.Level, ["play_count"] = args.PlayCount});
         }
 
         private void InitMaidStatus()
@@ -464,7 +454,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             maidSetters = new Dictionary<string, MethodInfo>();
             maidGetters = new Dictionary<string, MethodInfo>();
 
-            PropertyInfo[] props = typeof(Status).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            var props = typeof(Status).GetProperties(BindingFlags.Instance | BindingFlags.Public);
 
             foreach (PropertyInfo propertyInfo in props)
             {
@@ -492,7 +482,5 @@ namespace COM3D2.MaidFiddler.Core.Service
                      new Dict {["guid"] = args.Maid.status.guid, ["thumb"] = args.Maid.GetThumIcon().EncodeToPNG()});
             };
         }
-
-        
     }
 }
