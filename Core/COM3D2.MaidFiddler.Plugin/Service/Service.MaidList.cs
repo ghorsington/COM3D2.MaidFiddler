@@ -87,6 +87,23 @@ namespace COM3D2.MaidFiddler.Core.Service
             return TogglePropertyLock(selectedMaidGuid, propertyName, value);
         }
 
+        public void ToggleActiveMaidPropensity(object propensityId, bool toggle)
+        {
+            if (selectedMaid == null)
+                return;
+
+            TogglePropensity(selectedMaid, propensityId, toggle);
+        }
+
+        public void ToggleActiveMaidFeature(object propensityId, bool toggle)
+        {
+            if (selectedMaid == null)
+                return;
+
+            ToggleFeature(selectedMaid, propensityId, toggle);
+        }
+
+
         internal void InitMaidList()
         {
             maidLockList.Clear();

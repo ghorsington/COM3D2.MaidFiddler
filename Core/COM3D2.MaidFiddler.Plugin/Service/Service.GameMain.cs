@@ -113,7 +113,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             var datas = new List();
 
-            foreach (Personal.Data data in Personal.GetAllDatas(false))
+            foreach (Personal.Data data in Personal.GetAllDatas(true))
                 datas.Add(new Dict {["id"] = data.id, ["name"] = data.uniqueName});
 
             return datas;
@@ -123,7 +123,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             var datas = new List();
 
-            foreach (YotogiClass.Data data in YotogiClass.GetAllDatas(false))
+            foreach (YotogiClass.Data data in YotogiClass.GetAllDatas(true))
                 datas.Add(new Dict {["id"] = data.id, ["name"] = data.uniqueName});
 
             return datas;
@@ -133,7 +133,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             var datas = new List();
 
-            foreach (JobClass.Data data in JobClass.GetAllDatas(false))
+            foreach (JobClass.Data data in JobClass.GetAllDatas(true))
                 datas.Add(new Dict {["id"] = data.id, ["name"] = data.uniqueName});
 
             return datas;
@@ -143,7 +143,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             var datas = new List();
 
-            foreach (Propensity.Data data in Propensity.GetAllDatas(false))
+            foreach (Propensity.Data data in Propensity.GetAllDatas(true))
                 datas.Add(new Dict {["id"] = data.id, ["name"] = data.uniqueName});
 
             return datas;
@@ -153,7 +153,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             var datas = new List();
 
-            foreach (Feature.Data data in Feature.GetAllDatas(false))
+            foreach (Feature.Data data in Feature.GetAllDatas(true))
                 datas.Add(new Dict {["id"] = data.id, ["name"] = data.uniqueName});
 
             return datas;

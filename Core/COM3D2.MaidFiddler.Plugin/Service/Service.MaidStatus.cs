@@ -88,6 +88,16 @@ namespace COM3D2.MaidFiddler.Core.Service
             return locks[propertyName];
         }
 
+        public void TogglePropensity(string maidId, object propensityId, bool toggle)
+        {
+            TogglePropensity(GetMaid(maidId), propensityId, toggle);
+        }
+
+        public void ToggleFeature(string maidId, object propensityId, bool toggle)
+        {
+            ToggleFeature(GetMaid(maidId), propensityId, toggle);
+        }
+
         public Dict GetMaidData(string maidId)
         {
             string id = maidId.ToLower(CultureInfo.InvariantCulture);
@@ -131,6 +141,26 @@ namespace COM3D2.MaidFiddler.Core.Service
                 maid.status.jobClass.Add(data, true);
 
             maid.status.ChangeJobClass(id);
+        }
+
+        public void TogglePropensity(Maid maid, object propensityId, bool toggle)
+        {
+            int id = Convert.ToInt32(propensityId);
+
+            if(toggle)
+                maid.status.AddPropensity(id);
+            else
+                maid.status.RemovePropensity(id);
+        }
+
+        public void ToggleFeature(Maid maid, object propensityId, bool toggle)
+        {
+            int id = Convert.ToInt32(propensityId);
+
+            if (toggle)
+                maid.status.AddFeature(id);
+            else
+                maid.status.RemoveFeature(id);
         }
 
         private void SetContract(Maid maid, int contract)
@@ -324,9 +354,26 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         private void CheckPropertyShouldChange(object sender, MaidStatusSetEventArgs args)
         {
-            if (args.Maid == null || !maidLockList.TryGetValue(args.Maid.status.guid, out var lockList))
+            if (IsDeserializing || args.Maid == null || !maidLockList.TryGetValue(args.Maid.status.guid, out var lockList))
                 return;
             args.Block = lockList[args.PropertyName];
+        }
+
+        private void OnPropFeatureChanged(object sender, PropFeatureChangeEventArgs args)
+        {
+            if (IsDeserializing)
+                return;
+
+            if (args.Maid == null || string.IsNullOrEmpty(args.Maid.status.guid)
+                || !args.Maid.status.guid.Equals(selectedMaidGuid, StringComparison.CurrentCultureIgnoreCase))
+                return;
+
+            Emit($"{args.Type}_changed", new Dict
+            {
+                    ["guid"] = args.Maid.status.guid,
+                    ["id"] = args.ID,
+                    ["selected"] = args.Selected
+            });
         }
 
         private void InitMaidStatus()
@@ -349,6 +396,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             }
 
             MaidStatusHooks.PropertyChanged += OnPropertyChange;
+            MaidStatusHooks.PropFeatureChanged += OnPropFeatureChanged;
             MaidStatusHooks.ProprtyShouldChange += CheckPropertyShouldChange;
 
             MaidStatusHooks.ThumbnailChanged += (sender, args) =>
@@ -360,5 +408,7 @@ namespace COM3D2.MaidFiddler.Core.Service
                      new Dict {["guid"] = args.Maid.status.guid, ["thumb"] = args.Maid.GetThumIcon().EncodeToPNG()});
             };
         }
+
+        
     }
 }
