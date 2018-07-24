@@ -329,10 +329,11 @@ namespace COM3D2.MaidFiddler.Core.Service
             var workLevels = new Dictionary<int, object>();
             var workPlayCounts = new Dictionary<int, object>();
 
-            foreach (WorkData data in maid.status.workDatas.GetValueArray())
+            foreach (int id in maid.status.workDatas.GetKeyArray())
             {
-                workLevels[data.id] = data.level;
-                workPlayCounts[data.id] = data.playCount;
+                WorkData data = maid.status.workDatas[id];
+                workLevels[id] = data.level;
+                workPlayCounts[id] = data.playCount;
             }
 
             result["work_levels"] = workLevels;
