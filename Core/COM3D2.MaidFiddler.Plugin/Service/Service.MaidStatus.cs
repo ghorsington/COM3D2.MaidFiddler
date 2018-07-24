@@ -232,6 +232,45 @@ namespace COM3D2.MaidFiddler.Core.Service
             maid.status.nightWorkId = workId;
         }
 
+        private void ToggleYotogiSkill(Maid maid, object id, bool state)
+        {
+            int skillId = Convert.ToInt32(id);
+
+            Debugger.WriteLine($"Toggling skill {skillId} to state {state}");
+
+            if(state)
+                maid.status.yotogiSkill.Add(skillId);
+            else
+                maid.status.yotogiSkill.Remove(skillId);
+        }
+
+        private void SetYotogiSkillLevel(Maid maid, object id, object level)
+        {
+            int skillId = Convert.ToInt32(id);
+            int skillLevel = Convert.ToInt32(level);
+
+            YotogiSkillData skill = maid.status.yotogiSkill.Get(skillId) ?? maid.status.yotogiSkill.Add(skillId);
+            skill.expSystem.SetLevel(skillLevel);
+        }
+
+        private void SetYotogiSkillExp(Maid maid, object id, object exp)
+        {
+            int skillId = Convert.ToInt32(id);
+            int skillExp = Convert.ToInt32(exp);
+
+            YotogiSkillData skill = maid.status.yotogiSkill.Get(skillId) ?? maid.status.yotogiSkill.Add(skillId);
+            skill.expSystem.SetTotalExp(skillExp);
+        }
+
+        private void SetYotogiSkillPlayCount(Maid maid, object id, object playCount)
+        {
+            int skillId = Convert.ToInt32(id);
+            uint skillPlayCount = Convert.ToUInt32(playCount);
+
+            YotogiSkillData skill = maid.status.yotogiSkill.Get(skillId) ?? maid.status.yotogiSkill.Add(skillId);
+            skill.playCount = skillPlayCount;
+        }
+
         private void SetMaidProperty(Maid maid, string propertyName, object value)
         {
             if (!maidSetters.TryGetValue(propertyName, out MethodInfo setter))
@@ -369,13 +408,24 @@ namespace COM3D2.MaidFiddler.Core.Service
                 yotogiData[classData.data.id.ToString()] = new Dict {["level"] = classData.level, ["cur_exp"] = classData.cur_exp};
             }
 
-            var yotogiSkills = new Dict();
+            var yotogiSkills = new Dictionary<int, object>();
             result["yotogi_skill_data"] = yotogiSkills;
 
             foreach (int id in maid.status.yotogiSkill.datas.GetKeyArray())
             {
                 YotogiSkillData yotogiSkill = maid.status.yotogiSkill.datas[id];
-                yotogiSkills[yotogiSkill.data.id.ToString()] = new Dict
+                yotogiSkills[yotogiSkill.data.id] = new Dict
+                {
+                        ["level"] = yotogiSkill.level,
+                        ["cur_exp"] = yotogiSkill.currentExp,
+                        ["play_count"] = yotogiSkill.playCount
+                };
+            }
+
+            foreach (int id in maid.status.yotogiSkill.oldDatas.GetKeyArray())
+            {
+                YotogiSkillData yotogiSkill = maid.status.yotogiSkill.datas[id];
+                yotogiSkills[yotogiSkill.data.id] = new Dict
                 {
                         ["level"] = yotogiSkill.level,
                         ["cur_exp"] = yotogiSkill.currentExp,
@@ -450,6 +500,17 @@ namespace COM3D2.MaidFiddler.Core.Service
                  new Dict {["guid"] = args.Maid.status.guid, ["id"] = args.ID, ["level"] = args.Level, ["play_count"] = args.PlayCount});
         }
 
+        private void OnYotogiSkillHooksOnSkillInfoChanged(object sender, YotogiSkillEventArgs args)
+        {
+            if (IsDeserializing)
+                return;
+            if (string.IsNullOrEmpty(args.Maid.status.guid)
+                || !args.Maid.status.guid.Equals(selectedMaidGuid, StringComparison.CurrentCultureIgnoreCase))
+                return;
+
+            Emit($"yotogi_skill_{args.Event}", new Dict {["guid"] = args.Maid.status.guid, ["skill_id"] = args.SkillId});
+        }
+
         private void InitMaidStatus()
         {
             maidSetters = new Dictionary<string, MethodInfo>();
@@ -473,6 +534,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             MaidStatusHooks.WorkDataChanged += OnMaidStatusHooksOnWorkDataChanged;
             MaidStatusHooks.PropFeatureChanged += OnPropFeatureChanged;
             MaidStatusHooks.ProprtyShouldChange += CheckPropertyShouldChange;
+            YotogiSkillHooks.SkillInfoChanged += OnYotogiSkillHooksOnSkillInfoChanged;
 
             MaidStatusHooks.ThumbnailChanged += (sender, args) =>
             {

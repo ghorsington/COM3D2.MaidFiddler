@@ -135,6 +135,38 @@ namespace COM3D2.MaidFiddler.Core.Service
             SetNightWork(selectedMaid, id);
         }
 
+        public void ToggleYotogiSkillActive(object id, bool state)
+        {
+            if (selectedMaid == null)
+                return;
+
+            ToggleYotogiSkill(selectedMaid, id, state);
+        }
+
+        public void SetYotogiSkillLevelActive(object id, object level)
+        {
+            if (selectedMaid == null)
+                return;
+
+            SetYotogiSkillLevel(selectedMaid, id, level);
+        }
+
+        public void SetYotogiSkillExpActive(object id, object exp)
+        {
+            if (selectedMaid == null)
+                return;
+
+            SetYotogiSkillExp(selectedMaid, id, exp);
+        }
+
+        public void SetYotogiSkillPlayCountActive(object id, object playCount)
+        {
+            if (selectedMaid == null)
+                return;
+
+            SetYotogiSkillPlayCount(selectedMaid, id, playCount);
+        }
+
         internal void InitMaidList()
         {
             maidLockList.Clear();

@@ -18,7 +18,6 @@ namespace COM3D2.MaidFiddler.Patcher
 
         private static AssemblyDefinition HookDefinition;
 
-
         public static IEnumerable<string> TargetDLLs => new[] {"Assembly-CSharp.dll"};
 
         public static void Patch(AssemblyDefinition ass)
@@ -29,6 +28,22 @@ namespace COM3D2.MaidFiddler.Patcher
             PatchCharacterMgr(ass);
             PatchGameMain(ass);
             PatchRoundingFunctions(ass);
+            PatchYotogiSkillSystem(ass);
+        }
+
+        public static void PatchYotogiSkillSystem(AssemblyDefinition ass)
+        {
+            TypeDefinition yotogiSkillHooks = HookDefinition.MainModule.GetType($"{HOOK_NAME}.Hooks.YotogiSkillHooks");
+            TypeDefinition yotogiSkillSystem = ass.MainModule.GetType("MaidStatus.YotogiSkillSystem");
+
+            MethodDefinition addNew = yotogiSkillSystem.GetMethod("Add", "Yotogis.Skill/Data");
+            MethodDefinition addOld = yotogiSkillSystem.GetMethod("Add", "Yotogis.Skill/Old/Data");
+
+            MethodDefinition remove = yotogiSkillSystem.GetMethod("Remove", "System.Int32");
+
+            addNew.InjectWith(yotogiSkillHooks.GetMethod("OnYotogiSkillAdd"), -2, flags: InjectFlags.PassInvokingInstance | InjectFlags.PassParametersVal);
+            addOld.InjectWith(yotogiSkillHooks.GetMethod("OnYotogiSkillOldAdd"), -2, flags: InjectFlags.PassInvokingInstance | InjectFlags.PassParametersVal);
+            remove.InjectWith(yotogiSkillHooks.GetMethod("OnYotogiSkillRemove"), -1, flags: InjectFlags.PassInvokingInstance | InjectFlags.PassParametersVal);
         }
 
         private static void PatchRoundingFunctions(AssemblyDefinition ass)
