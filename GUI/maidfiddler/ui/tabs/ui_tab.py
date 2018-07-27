@@ -22,3 +22,6 @@ class UiTab(QObject):
 
     def update_ui(self):
         raise NotImplementedError()
+
+    def translate_ui(self):
+        pass

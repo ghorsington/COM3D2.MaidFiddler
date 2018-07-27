@@ -1,7 +1,8 @@
-from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QDoubleSpinBox , QSpinBox , QCheckBox, QWidget, QHBoxLayout
+from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QDoubleSpinBox , QSpinBox , QCheckBox, QWidget, QHBoxLayout, QGroupBox
 from PyQt5.QtCore import Qt, QObject
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import NumberElement, TextElement
+from maidfiddler.util.translation import tr
 
 class MaidStatsTab(UiTab):
     def __init__(self, ui, core, maid_mgr):
@@ -36,7 +37,7 @@ class MaidStatsTab(UiTab):
 
         for (i, maid_prop) in enumerate(self.game_data["maid_status_settable"]):
             prop_type = self.game_data["maid_status_settable"][maid_prop]
-            name = QTableWidgetItem(maid_prop)
+            name = QTableWidgetItem(f"maid_props.{maid_prop}")
             line = self.type_generators[prop_type]()
             line.qt_element.setStyleSheet("width: 15em;")
 
@@ -129,3 +130,12 @@ class MaidStatsTab(UiTab):
         for name, widget in self.bonus_properties.items():
             widget.setValue(maid["bonus_properties"][name])
 
+    def translate_ui(self):
+        self.ui.ui_tabs.setTabText(1, tr(self.ui.tab_maid_stats, self.ui.ui_tabs.tabText(1)))
+        
+        for group in self.ui.tab_maid_stats.findChildren(QGroupBox):
+            group.setTitle(tr(group, group.title()))
+
+        for row in range(0, self.ui.maid_params_lockable_table.rowCount()):
+            name = self.ui.maid_params_lockable_table.item(row, 0)
+            name.setText(tr(name, name.text()))

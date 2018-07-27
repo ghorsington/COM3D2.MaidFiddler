@@ -108,7 +108,7 @@
           </sizepolicy>
          </property>
          <attribute name="title">
-          <string>Maid info</string>
+          <string>tabs.maid_info.title</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <property name="spacing">
@@ -138,7 +138,7 @@
              </sizepolicy>
             </property>
             <property name="title">
-             <string>Main Data</string>
+             <string>tabs.maid_info.maid_data</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -162,7 +162,7 @@
              <item row="1" column="1">
               <widget class="QLabel" name="personality_label">
                <property name="text">
-                <string>Personality</string>
+                <string>maid_props.personal</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -175,7 +175,7 @@
                 <enum>Qt::LeftToRight</enum>
                </property>
                <property name="text">
-                <string>First Name</string>
+                <string>maid_props.firstName</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -188,7 +188,7 @@
              <item row="0" column="4">
               <widget class="QLabel" name="last_name_label">
                <property name="text">
-                <string>Last Name</string>
+                <string>maid_props.lastName</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -201,7 +201,7 @@
              <item row="1" column="4">
               <widget class="QLabel" name="contract_label">
                <property name="text">
-                <string>Contract</string>
+                <string>maid_props.contract</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -214,7 +214,7 @@
              <item row="3" column="1">
               <widget class="QLabel" name="employment_day_label">
                <property name="text">
-                <string>Employment Day</string>
+                <string>maid_props.employmentDay</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -233,7 +233,7 @@
              <item row="2" column="1">
               <widget class="QLabel" name="relation_label">
                <property name="text">
-                <string>Relation</string>
+                <string>maid_props.relation</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -252,7 +252,7 @@
              </sizepolicy>
             </property>
             <property name="title">
-             <string>Sexual experience</string>
+             <string>tabs.maid_info.sex_exp</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_3">
              <item row="0" column="2">
@@ -274,7 +274,7 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Initial</string>
+                <string>tabs.maid_info.sex_exp_init</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -293,7 +293,7 @@
                 <enum>Qt::LeftToRight</enum>
                </property>
                <property name="text">
-                <string>Current</string>
+                <string>tabs.maid_info.sex_exp_cur</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -322,7 +322,7 @@
              </sizepolicy>
             </property>
             <property name="title">
-             <string>Current classes</string>
+             <string>tabs.maid_info.job_class</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
              <item row="0" column="1">
@@ -344,7 +344,7 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Night class</string>
+                <string>tabs.maid_info.job_class_night</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -360,7 +360,7 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Job class</string>
+                <string>tabs.maid_info.job_class_noon</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -407,7 +407,7 @@
              </size>
             </property>
             <property name="title">
-             <string>Maid description</string>
+             <string>maid_props.description</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_4">
              <property name="leftMargin">
@@ -447,7 +447,7 @@
              </sizepolicy>
             </property>
             <property name="title">
-             <string>User comment</string>
+             <string>maid_props.freeComment</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <property name="leftMargin">
@@ -498,7 +498,7 @@
         </widget>
         <widget class="QWidget" name="tab_maid_stats">
          <attribute name="title">
-          <string>Maid stats</string>
+          <string>tabs.maid_stats.title</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <property name="sizeConstraint">
@@ -749,7 +749,7 @@
         </widget>
         <widget class="QWidget" name="tab_feature_propensity">
          <attribute name="title">
-          <string>Features and propensities</string>
+          <string>tabs.feat_props.title</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_9">
           <property name="leftMargin">
@@ -951,7 +951,7 @@
         </widget>
         <widget class="QWidget" name="tab_maid_work">
          <attribute name="title">
-          <string>Maid work</string>
+          <string>tabs.work_data.title</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_14">
           <property name="leftMargin">
@@ -1107,7 +1107,7 @@
         </widget>
         <widget class="QWidget" name="tab_yotogi_skills">
          <attribute name="title">
-          <string>Yotogi skills</string>
+          <string>tabs.yotogi_skills.title</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_13">
           <property name="leftMargin">
@@ -1185,7 +1185,7 @@
         </widget>
         <widget class="QWidget" name="tab_player_info">
          <attribute name="title">
-          <string>Player Info</string>
+          <string>tabs.player_info.title</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_21">
           <property name="spacing">
@@ -1317,28 +1317,27 @@
    </property>
    <widget class="QMenu" name="menuGeneral_tools">
     <property name="title">
-     <string>Current save</string>
+     <string>top_bar.cur_save.name</string>
     </property>
     <addaction name="actionUnlock_all_trohpies"/>
     <addaction name="actionUnlock_all_stock_items"/>
     <addaction name="actionMaximum_credits"/>
     <addaction name="actionMaximum_club_grade_and_evaluation"/>
-    <addaction name="actionSort_maids_by_guid"/>
    </widget>
    <widget class="QMenu" name="menuAll_maids">
     <property name="title">
-     <string>All maids</string>
+     <string>top_bar.all_maid.name</string>
     </property>
     <addaction name="actionUnlock_value_ranges"/>
    </widget>
    <widget class="QMenu" name="menuSelected_maid">
     <property name="title">
-     <string>Selected maid</string>
+     <string>top_bar.cur_maid.name</string>
     </property>
    </widget>
    <widget class="QMenu" name="menuMisc">
     <property name="title">
-     <string>Misc</string>
+     <string>top_bar.misc.name</string>
     </property>
     <addaction name="actionAbout"/>
    </widget>
@@ -1349,28 +1348,31 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionUnlock_all_trohpies">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>Unlock all trohpies</string>
+    <string>top_bar.cur_save.unlock_trophies</string>
    </property>
   </action>
   <action name="actionUnlock_all_stock_items">
    <property name="text">
-    <string>Unlock all stock items</string>
+    <string>top_bar.cur_save.unlock_stock_items</string>
    </property>
   </action>
   <action name="actionMaximum_credits">
    <property name="text">
-    <string>Maximum credits</string>
+    <string>top_bar.cur_save.max_credits</string>
    </property>
   </action>
   <action name="actionMaximum_club_grade_and_evaluation">
    <property name="text">
-    <string>Maximum club grade and evaluation</string>
+    <string>top_bar.cur_save.max_grade</string>
    </property>
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>About</string>
+    <string>top_bar.misc.about</string>
    </property>
   </action>
   <action name="actionSort_maids_by_guid">
@@ -1386,7 +1388,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Unlock value ranges</string>
+    <string>top_bar.all_maid.unlock_ranges</string>
    </property>
   </action>
  </widget>

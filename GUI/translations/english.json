@@ -1,0 +1,98 @@
+{
+    "info": {
+        "language" : "English",
+        "version": "1.0",
+        "authors": ["Geoffrey Horsington"]
+    },
+    "translation": {
+        "top_bar": {
+            "cur_save" : {
+                "name": "Current save",
+                "unlock_trophies": "Unlock all trophies",
+                "unlock_stock_items": "Unlock all stock items",
+                "max_credits": "Maximum credits",
+                "max_grade": "Maximum grade an evaluation"
+            },
+            "all_maid": {
+                "name": "All maids",
+                "unlock_ranges": "Unlock value ranges"
+            },
+            "cur_maid" : {
+                "name": "Selected maid"
+            },
+            "misc": {
+                "name": "Other",
+                "about": "About Maid Fiddler"
+            }
+        },
+        "tabs": {
+            "maid_info": {
+                "title": "Maid info",
+                "maid_data": "Maid Data",
+                "sex_exp": "Sexual experience",
+                "sex_exp_cur": "Current",
+                "sex_exp_init": "Initial",
+                "job_class": "Job class",
+                "job_class_noon": "Noon",
+                "job_class_night": "Night"
+            },
+            "maid_stats": {
+                "title": "Maid stats"
+            },
+            "feat_props": {
+                "title": "Features and propensities"
+            },
+            "work_data": {
+                "title": "Maid work"
+            },
+            "yotogi_skills": {
+                "title": "Yotogi skills"
+            },
+            "player_info": {
+                "title": "Player info"
+            }
+        },
+        "maid_props": {
+            "firstName": "First name",
+            "lastName": "Last name",
+            "personal": "Personality",
+            "contract": "Contract",
+            "relation": "Relation",
+            "employmentDay": "Employment day",
+            "description": "Maid description",
+            "freeComment": "Free comment",
+            "playCountYotogi": "Times had Yotogi",
+            "playCountNightWork": "Times had night work",
+            "likability": "Likability",
+            "studyRate": "Study rate",
+            "currentExcite": "Excitement (current)",
+            "currentSensual": "Sensual power (current)",
+            "baseMaxHp": "Stamina",
+            "currentHp" : "Stamina (current)",
+            "baseMaxMind": "Mind",
+            "currentMind": "Mind (current)",
+            "baseMaxReason": "Reason",
+            "currentReason": "Reason (current)",
+            "baseReception": "Reception",
+            "baseCare": "Care",
+            "baseLovely": "Lovelyness",
+            "baseElegance": "Elegance",
+            "baseCharm": "Charm",
+            "baseCooking": "Cooking skill",
+            "baseVocal": "Vocal skill",
+            "baseDance": "Dance skill",
+            "baseAppealPoint": "Appeal",
+            "baseInyoku": "Inyoku",
+            "baseHentai": "Perversion",
+            "baseMvalue": "Masochism",
+            "baseHousi": "Housi",
+            "baseTeachRate": "Teaching rate",
+            "sexPlayNumberOfPeople": "Number of people had sex with",
+            "popularRank": "Rank",
+            "evaluation": "Evaluation",
+            "totalEvaluations": "Total evaluations",
+            "sales": "Sales",
+            "totalSales": "Total sales"
+        }
+    }    
+}

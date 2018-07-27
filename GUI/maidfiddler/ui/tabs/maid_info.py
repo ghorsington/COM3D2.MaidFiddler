@@ -1,7 +1,9 @@
 from PyQt5.QtCore import Qt, QObject
+from PyQt5.QtWidgets import QGroupBox, QLabel
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import TextElement, ComboElement, NumberElement, PlainTextElement
 from zerorpc import RemoteError
+from maidfiddler.util.translation import tr
 
 
 class MaidInfoTab(UiTab):
@@ -126,3 +128,12 @@ class MaidInfoTab(UiTab):
 
         for name, element in self.properties.items():
             element.set_value(maid["properties"][name])
+
+    def translate_ui(self):
+        self.ui.ui_tabs.setTabText(0, tr(self.ui.tab_maid_info, self.ui.ui_tabs.tabText(0)))
+
+        for group in self.ui.tab_maid_info.findChildren(QGroupBox):
+            group.setTitle(tr(group, group.title()))
+
+        for label in self.ui.tab_maid_info.findChildren(QLabel):
+            label.setText(tr(label, label.text()))

@@ -5,6 +5,13 @@ APP_RUNNING = True
 GAME_ADDRESS = "127.0.0.1"
 CLIENT_ADDRESS = "127.0.0.1"
 
+BASE_DIR = ""
+
+if getattr(sys, "frozen", False):
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    BASE_DIR = os.path.dirname(os.path.abspath(sys.argv[0]))
+
 def get_resource_path(rel_path):
     if getattr(sys, "_MEIPASS", False):
         return os.path.join(getattr(sys, "_MEIPASS"), rel_path)

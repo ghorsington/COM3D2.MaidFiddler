@@ -1,12 +1,14 @@
 import PyQt5.uic as uic
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QCheckBox, QSpinBox, QWidget, QHBoxLayout, QListWidgetItem
+from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QCheckBox, QSpinBox, QWidget, QHBoxLayout, QListWidgetItem, QMenu, QAction
 
 import maidfiddler.util.util as util
 from maidfiddler.util.eventpoller import EventPoller
 from maidfiddler.ui.tabs import *
 from maidfiddler.ui.maids_list import MaidsList
+
+from maidfiddler.util.translation import load_translation, tr
 
 UI_MainWindow = uic.loadUiType(
     open(util.get_resource_path("templates/maid_fiddler.ui")))
@@ -52,10 +54,23 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
         self.load_ui()
         self.init_events()
+        self.translate_ui()
 
         self.maids_list.reload_maids()
         player_tab.reload_player_props()
         print("UI initialized!")
+
+    def translate_ui(self):
+        load_translation("english.json")
+
+        for menu_item in self.findChildren(QMenu):
+            menu_item.setTitle(tr(menu_item, menu_item.title()))
+
+        for menu_action in self.findChildren(QAction):
+            menu_action.setText(tr(menu_action, menu_action.text()))
+
+        for tab in self.tabs:
+            tab.translate_ui()
 
     def init_events(self):
         self.maids_list.init_events(self.event_poller)
