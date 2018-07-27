@@ -29,6 +29,24 @@ namespace COM3D2.MaidFiddler.Patcher
             PatchGameMain(ass);
             PatchRoundingFunctions(ass);
             PatchYotogiSkillSystem(ass);
+            PatchPlayerStatus(ass);
+        }
+
+        public static void PatchPlayerStatus(AssemblyDefinition ass)
+        {
+            TypeDefinition playerSkillHooks = HookDefinition.MainModule.GetType($"{HOOK_NAME}.Hooks.PlayerStatusHooks");
+
+            TypeDefinition playerStatus = ass.MainModule.GetType("PlayerStatus.Status");
+
+            MethodDefinition propChangedPre = playerSkillHooks.GetMethod("OnPropertyChangePrefix");
+            MethodDefinition propChangedPost = playerSkillHooks.GetMethod("OnPropertyChangePostfix");
+
+            foreach (MethodDefinition method in playerStatus.Methods.Where(m => m.Name.StartsWith("set_") && m.IsPublic))
+            {
+                string tag = method.Name.Substring("set_".Length);
+                method.InjectWith(propChangedPre, tag: tag, flags: InjectFlags.PassStringTag | InjectFlags.ModifyReturn);
+                method.InjectWith(propChangedPost, -1, tag, InjectFlags.PassStringTag);
+            }
         }
 
         public static void PatchYotogiSkillSystem(AssemblyDefinition ass)
@@ -148,7 +166,6 @@ namespace COM3D2.MaidFiddler.Patcher
             foreach (MethodDefinition setter in maidStatus.Methods.Where(m => m.Name.StartsWith("set_") && m.IsPublic))
             {
                 string tag = setter.Name.Substring("set_".Length);
-                Console.WriteLine($"Patching {tag}");
                 setter.InjectWith(onPropertySetPrefix,
                                   tag: tag,
                                   flags: InjectFlags.PassInvokingInstance | InjectFlags.ModifyReturn | InjectFlags.PassStringTag);

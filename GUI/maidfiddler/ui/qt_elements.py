@@ -1,3 +1,6 @@
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QHBoxLayout
+
 class UiElement(object):
     def __init__(self, qt_element):
         self.qt_element = qt_element
@@ -17,6 +20,9 @@ class TextElement(UiElement):
 
     def set_value(self, val):
         self.qt_element.setText(val)
+
+    def connect(self, edit_func):
+        self.qt_element.editingFinished.connect(edit_func)
 
 class PlainTextElement(UiElement):
     def value(self):
@@ -57,3 +63,25 @@ class ComboElement(UiElement):
         self.qt_element.blockSignals(True)
         self.qt_element.setCurrentIndex(self.value_to_index_map[val])
         self.qt_element.blockSignals(False)
+
+class CheckboxElement(UiElement):
+    def __init__(self, qt_element):
+        self.checkbox = qt_element
+        widget = QWidget()
+        hbox = QHBoxLayout(widget)
+        hbox.addWidget(qt_element)
+        hbox.setAlignment(Qt.AlignCenter)
+        hbox.setContentsMargins(0, 0, 0, 0)
+        widget.setLayout(hbox)
+        self.qt_element = widget
+
+    def value(self):
+        return self.checkbox.checkState() == Qt.Checked
+
+    def set_value(self, val):
+        self.checkbox.blockSignals(True)
+        self.checkbox.setCheckState(Qt.Checked if val else Qt.Unchecked)
+        self.checkbox.blockSignals(False)
+
+    def connect(self, edit_func):
+        self.checkbox.stateChanged.connect(edit_func)

@@ -46,13 +46,15 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.tabs.append(FeaturePropensityTab(self, self.core, self.maid_mgr))
         self.tabs.append(YotogiTab(self, self.core, self.maid_mgr))
         self.tabs.append(WorkTab(self, self.core, self.maid_mgr))
-        self.tabs.append(PlayerTab(self, self.core, self.maid_mgr))
+        player_tab = PlayerTab(self, self.core, self.maid_mgr)
+        self.tabs.append(player_tab)
         self.maids_list = MaidsList(self, self.core, self.maid_mgr)
 
         self.load_ui()
         self.init_events()
 
         self.maids_list.reload_maids()
+        player_tab.reload_player_props()
         print("UI initialized!")
 
     def init_events(self):

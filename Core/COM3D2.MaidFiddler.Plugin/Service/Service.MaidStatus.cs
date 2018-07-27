@@ -238,7 +238,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             Debugger.WriteLine($"Toggling skill {skillId} to state {state}");
 
-            if(state)
+            if (state)
                 maid.status.yotogiSkill.Add(skillId);
             else
                 maid.status.yotogiSkill.Remove(skillId);

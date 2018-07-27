@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MaidStatus;
 using Yotogis;
 
@@ -9,26 +6,21 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 {
     public class YotogiSkillEventArgs : EventArgs
     {
-        public Maid Maid { get; internal set; }
         public string Event { get; internal set; }
+        public Maid Maid { get; internal set; }
         public int SkillId { get; internal set; }
     }
 
     public static class YotogiSkillHooks
     {
-        public static event EventHandler<YotogiSkillEventArgs> SkillInfoChanged; 
+        public static event EventHandler<YotogiSkillEventArgs> SkillInfoChanged;
 
         public static void OnYotogiSkillAdd(YotogiSkillSystem skillSystem, Skill.Data data)
         {
             if (skillSystem.status.maid == null)
                 return;
 
-            SkillInfoChanged?.Invoke(null, new YotogiSkillEventArgs
-            {
-                Maid = skillSystem.status.maid,
-                Event = "add",
-                SkillId = data.id
-            });
+            SkillInfoChanged?.Invoke(null, new YotogiSkillEventArgs {Maid = skillSystem.status.maid, Event = "add", SkillId = data.id});
         }
 
         public static void OnYotogiSkillOldAdd(YotogiSkillSystem skillSystem, Skill.Old.Data data)
@@ -36,12 +28,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             if (skillSystem.status.maid == null)
                 return;
 
-            SkillInfoChanged?.Invoke(null, new YotogiSkillEventArgs
-            {
-                Maid = skillSystem.status.maid,
-                Event = "add",
-                SkillId = data.id
-            });
+            SkillInfoChanged?.Invoke(null, new YotogiSkillEventArgs {Maid = skillSystem.status.maid, Event = "add", SkillId = data.id});
         }
 
         public static void OnYotogiSkillRemove(YotogiSkillSystem skillSystem, int id)
@@ -49,12 +36,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             if (skillSystem.status.maid == null)
                 return;
 
-            SkillInfoChanged?.Invoke(null, new YotogiSkillEventArgs
-            {
-                Maid = skillSystem.status.maid,
-                Event = "remove",
-                SkillId = id
-            });
+            SkillInfoChanged?.Invoke(null, new YotogiSkillEventArgs {Maid = skillSystem.status.maid, Event = "remove", SkillId = id});
         }
     }
 }

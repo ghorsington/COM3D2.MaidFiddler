@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using COM3D2.MaidFiddler.Core.Hooks;
 using PlayerStatus;
-using wf;
-using ZeroRpc.Net.ServiceProviders;
 
 namespace COM3D2.MaidFiddler.Core.Service
 {
@@ -12,13 +11,13 @@ namespace COM3D2.MaidFiddler.Core.Service
     {
         private Dictionary<string, MethodInfo> playerGetters;
         private Dictionary<string, MethodInfo> playerSetters;
+        private Dictionary<string, bool> playerStatusLocks;
 
         public string[] GetPlayerStatusList()
         {
             return playerSetters.Keys.ToArray();
         }
 
-        [MethodDocumentation("Sets player value.\n\nArguments:\n1. [String] Value name (from GetPlayerStatusList)\n2. [Any] Value to set")]
         public void SetPlayerData(string valueName, object value)
         {
             if (!playerSetters.TryGetValue(valueName, out MethodInfo method))
@@ -35,7 +34,13 @@ namespace COM3D2.MaidFiddler.Core.Service
                 throw new ArgumentException($"Cannot convert value to {paramType.FullName}.", e);
             }
 
+            if (playerStatusLocks.TryGetValue(valueName, out bool prev))
+                playerStatusLocks[valueName] = false;
+
             method.Invoke(GameMain.Instance.CharacterMgr.status, new[] {val});
+
+            if (prev)
+                playerStatusLocks[valueName] = true;
         }
 
         public object GetPlayerData(string valueName)
@@ -46,56 +51,63 @@ namespace COM3D2.MaidFiddler.Core.Service
             return method.Invoke(GameMain.Instance.CharacterMgr.status, new object[0]);
         }
 
-        public void UnlockAllTrophies(bool enableAll = false)
+        public Dictionary<string, object> GetAllPlayerData()
         {
-            Trophy.CreateData();
+            var result = new Dictionary<string, object>();
 
-            if (enableAll)
-            {
-                var commonIdManager =
-                        typeof(Trophy).GetField("commonIdManager", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as
-                                CsvCommonIdManager;
+            var settableProps = new Dictionary<string, object>();
+            result["props"] = settableProps;
 
-                if (commonIdManager != null)
-                {
-                    commonIdManager.enabledIdList.Clear();
-                    foreach (var idKvPair in commonIdManager.idMap.ToArray())
-                        commonIdManager.enabledIdList.Add(idKvPair.Key);
-                }
-            }
+            foreach (var setter in playerSetters)
+                settableProps[setter.Key] = playerGetters[setter.Key].Invoke(GameMain.Instance.CharacterMgr.status, new object[0]);
 
-            var data = Trophy.GetAllDatas(false);
+            result["locked_props"] = playerStatusLocks.Where(p => p.Value).Select(p => p.Key).ToList();
 
-            foreach (Trophy.Data trophyData in data)
-                GameMain.Instance.CharacterMgr.status.AddHaveTrophy(trophyData.id);
+            return result;
         }
 
-        public void UnlockAllStockItems()
+        public void TogglePlayerStatusLock(string prop, bool state)
         {
-            var havePartsItems =
-                    typeof(Status).GetField("havePartsItems_", BindingFlags.Instance | BindingFlags.NonPublic)
-                                  ?.GetValue(GameMain.Instance.CharacterMgr.status) as Dictionary<string, bool>;
+            playerStatusLocks[prop] = state;
+        }
 
-            if (havePartsItems != null)
-                foreach (string key in havePartsItems.Keys.ToArray())
-                    havePartsItems[key] = true;
+        private void ShouldPlayerPropChange(object sender, PlayerStatusChangeArgs e)
+        {
+            e.Locked = playerStatusLocks[e.Status];
+        }
 
-            foreach (var itemData in Shop.item_data_dic)
-                if (itemData.Value is Shop.ItemDataEvent itemDataEvent)
-                    GameMain.Instance.CharacterMgr.status.AddHaveItem(itemDataEvent.target_flag_name);
+        private void OnPlayerStatusChanged(object sender, PlayerStatusChangeArgs e)
+        {
+            if (GameMain.Instance.CharacterMgr == null || GameMain.Instance.CharacterMgr.status == null)
+                return;
+
+            Emit("player_prop_changed",
+                 new Dictionary<string, object>
+                 {
+                         ["prop_name"] = e.Status,
+                         ["value"] = playerGetters[e.Status].Invoke(GameMain.Instance.CharacterMgr.status, new object[0])
+                 });
         }
 
         private void InitPlayerStatus()
         {
             playerSetters = new Dictionary<string, MethodInfo>();
             playerGetters = new Dictionary<string, MethodInfo>();
+            playerStatusLocks = new Dictionary<string, bool>();
+
+            PlayerStatusHooks.ShouldPropertyChange += ShouldPlayerPropChange;
+            PlayerStatusHooks.PropertyChanged += OnPlayerStatusChanged;
 
             foreach (PropertyInfo propertyInfo in typeof(Status).GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 MethodInfo methodSet = propertyInfo.GetSetMethod();
                 MethodInfo methodGet = propertyInfo.GetGetMethod();
-                if (methodSet != null)
+                if (methodSet != null && methodGet != null)
+                {
                     playerSetters[propertyInfo.Name] = methodSet;
+                    playerStatusLocks[propertyInfo.Name] = false;
+                }
+
                 if (methodGet != null)
                     playerGetters[propertyInfo.Name] = methodGet;
             }

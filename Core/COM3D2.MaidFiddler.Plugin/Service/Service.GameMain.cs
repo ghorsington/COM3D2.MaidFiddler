@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using COM3D2.MaidFiddler.Core.Hooks;
@@ -31,7 +32,7 @@ namespace COM3D2.MaidFiddler.Core.Service
                     ["yotogi_skills"] = GetYotogiSkillInfo(),
                     ["maid_status_settable"] = GetLockableMaidStatusValueInfo(),
                     ["maid_bonus_status"] = GetMaidBonusStatusInfo(),
-                    ["club_status_settable"] = GetLockableClubStatusInfo(),
+                    ["player_status_settable"] = GetLockableClubStatusInfo(),
                     ["work_data"] = GetWorkInfo()
             };
 
@@ -59,12 +60,23 @@ namespace COM3D2.MaidFiddler.Core.Service
             };
         }
 
-        private List GetLockableClubStatusInfo()
+        private Dictionary<string, string> GetLockableClubStatusInfo()
         {
             return typeof(Status).GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                 .Where(p => p.CanWrite && p.PropertyType != typeof(bool)
+                                 .Where(p => p.CanWrite && !p.PropertyType.IsEnum
                                                         && (p.PropertyType.IsValueType || p.PropertyType == typeof(string)))
-                                 .Select(p => p.Name).Cast<object>().ToList();
+                                 .ToDictionary(p => p.Name,
+                                               p =>
+                                               {
+                                                   Type t = p.PropertyType;
+                                                   if (t.IsFloat())
+                                                       return "double";
+                                                   if (t.IsInteger())
+                                                       return "int";
+                                                   if (t == typeof(bool))
+                                                       return "bool";
+                                                   return "string";
+                                               });
         }
 
         private List GetWorkInfo()
@@ -79,7 +91,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             return typeof(BonusStatus).GetFields(BindingFlags.Instance | BindingFlags.Public).Select(f => f.Name).Cast<object>().ToList();
         }
 
-        private Dict GetLockableMaidStatusValueInfo()
+        private Dictionary<string, string> GetLockableMaidStatusValueInfo()
         {
             return typeof(MaidStatus.Status).GetProperties(BindingFlags.Instance | BindingFlags.Public)
                                             .Where(p => p.GetSetMethod() != null && !p.PropertyType.IsEnum
@@ -90,10 +102,10 @@ namespace COM3D2.MaidFiddler.Core.Service
                                                           {
                                                               Type t = p.PropertyType;
                                                               if (t.IsFloat())
-                                                                  return "double" as object;
+                                                                  return "double";
                                                               if (t.IsInteger())
-                                                                  return "int" as object;
-                                                              return "string" as object;
+                                                                  return "int";
+                                                              return "string";
                                                           });
         }
 
