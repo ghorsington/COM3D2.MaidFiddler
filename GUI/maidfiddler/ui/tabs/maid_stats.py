@@ -37,7 +37,8 @@ class MaidStatsTab(UiTab):
 
         for (i, maid_prop) in enumerate(self.game_data["maid_status_settable"]):
             prop_type = self.game_data["maid_status_settable"][maid_prop]
-            name = QTableWidgetItem(f"maid_props.{maid_prop}")
+            name = QTableWidgetItem(maid_prop)
+            name.setWhatsThis(f"maid_props.{maid_prop}")
             line = self.type_generators[prop_type]()
             line.qt_element.setStyleSheet("width: 15em;")
 
@@ -71,6 +72,7 @@ class MaidStatsTab(UiTab):
 
         for (i, maid_prop) in enumerate(self.game_data["maid_bonus_status"]):
             name = QTableWidgetItem(maid_prop)
+            name.setWhatsThis(f"maid_bonus_props.{maid_prop}")
             line = QSpinBox()
             line.setStyleSheet("width: 15em;")
 
@@ -125,17 +127,20 @@ class MaidStatsTab(UiTab):
         for name, widgets in self.properties.items():
             widgets[0].set_value(maid["properties"][name])
             widgets[1].setCheckState(Qt.Checked if maid["prop_locks"][name] else Qt.Unchecked)
-            # TODO: Add lock
 
         for name, widget in self.bonus_properties.items():
             widget.setValue(maid["bonus_properties"][name])
 
     def translate_ui(self):
-        self.ui.ui_tabs.setTabText(1, tr(self.ui.tab_maid_stats, self.ui.ui_tabs.tabText(1)))
+        self.ui.ui_tabs.setTabText(1, tr(self.ui.tab_maid_stats))
         
         for group in self.ui.tab_maid_stats.findChildren(QGroupBox):
-            group.setTitle(tr(group, group.title()))
+            group.setTitle(tr(group))
 
         for row in range(0, self.ui.maid_params_lockable_table.rowCount()):
             name = self.ui.maid_params_lockable_table.item(row, 0)
-            name.setText(tr(name, name.text()))
+            name.setText(tr(name))
+
+        for row in range(0, self.ui.maid_params_bonus_table.rowCount()):
+            name = self.ui.maid_params_bonus_table.item(row, 0)
+            name.setText(tr(name))

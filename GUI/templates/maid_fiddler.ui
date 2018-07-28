@@ -107,6 +107,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="whatsThis">
+          <string>tabs.maid_info.title</string>
+         </property>
          <attribute name="title">
           <string>tabs.maid_info.title</string>
          </attribute>
@@ -137,6 +140,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="whatsThis">
+             <string>tabs.maid_info.maid_data</string>
+            </property>
             <property name="title">
              <string>tabs.maid_info.maid_data</string>
             </property>
@@ -161,6 +167,9 @@
              </property>
              <item row="1" column="1">
               <widget class="QLabel" name="personality_label">
+               <property name="whatsThis">
+                <string>maid_props.personal</string>
+               </property>
                <property name="text">
                 <string>maid_props.personal</string>
                </property>
@@ -171,6 +180,9 @@
              </item>
              <item row="0" column="1">
               <widget class="QLabel" name="first_name_label">
+               <property name="whatsThis">
+                <string>maid_props.firstName</string>
+               </property>
                <property name="layoutDirection">
                 <enum>Qt::LeftToRight</enum>
                </property>
@@ -187,6 +199,9 @@
              </item>
              <item row="0" column="4">
               <widget class="QLabel" name="last_name_label">
+               <property name="whatsThis">
+                <string>maid_props.lastName</string>
+               </property>
                <property name="text">
                 <string>maid_props.lastName</string>
                </property>
@@ -200,6 +215,9 @@
              </item>
              <item row="1" column="4">
               <widget class="QLabel" name="contract_label">
+               <property name="whatsThis">
+                <string>maid_props.contract</string>
+               </property>
                <property name="text">
                 <string>maid_props.contract</string>
                </property>
@@ -213,6 +231,9 @@
              </item>
              <item row="3" column="1">
               <widget class="QLabel" name="employment_day_label">
+               <property name="whatsThis">
+                <string>maid_props.employmentDay</string>
+               </property>
                <property name="text">
                 <string>maid_props.employmentDay</string>
                </property>
@@ -232,6 +253,9 @@
              </item>
              <item row="2" column="1">
               <widget class="QLabel" name="relation_label">
+               <property name="whatsThis">
+                <string>maid_props.relation</string>
+               </property>
                <property name="text">
                 <string>maid_props.relation</string>
                </property>
@@ -250,6 +274,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="whatsThis">
+             <string>tabs.maid_info.sex_exp</string>
             </property>
             <property name="title">
              <string>tabs.maid_info.sex_exp</string>
@@ -273,6 +300,9 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="whatsThis">
+                <string>tabs.maid_info.sex_exp_init</string>
+               </property>
                <property name="text">
                 <string>tabs.maid_info.sex_exp_init</string>
                </property>
@@ -288,6 +318,9 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="whatsThis">
+                <string>tabs.maid_info.sex_exp_cur</string>
                </property>
                <property name="layoutDirection">
                 <enum>Qt::LeftToRight</enum>
@@ -321,6 +354,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="whatsThis">
+             <string>tabs.maid_info.job_class</string>
+            </property>
             <property name="title">
              <string>tabs.maid_info.job_class</string>
             </property>
@@ -343,6 +379,9 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="whatsThis">
+                <string>tabs.maid_info.job_class_night</string>
+               </property>
                <property name="text">
                 <string>tabs.maid_info.job_class_night</string>
                </property>
@@ -358,6 +397,9 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="whatsThis">
+                <string>tabs.maid_info.job_class_noon</string>
                </property>
                <property name="text">
                 <string>tabs.maid_info.job_class_noon</string>
@@ -406,6 +448,9 @@
               <height>0</height>
              </size>
             </property>
+            <property name="whatsThis">
+             <string>maid_props.description</string>
+            </property>
             <property name="title">
              <string>maid_props.description</string>
             </property>
@@ -445,6 +490,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="whatsThis">
+             <string>maid_props.freeComment</string>
             </property>
             <property name="title">
              <string>maid_props.freeComment</string>
@@ -497,6 +545,9 @@
          </layout>
         </widget>
         <widget class="QWidget" name="tab_maid_stats">
+         <property name="whatsThis">
+          <string>tabs.maid_stats.title</string>
+         </property>
          <attribute name="title">
           <string>tabs.maid_stats.title</string>
          </attribute>
@@ -566,8 +617,11 @@
                   <height>0</height>
                  </size>
                 </property>
+                <property name="whatsThis">
+                 <string>tabs.maid_stats.base_stats</string>
+                </property>
                 <property name="title">
-                 <string>Base Stats</string>
+                 <string>tabs.maid_stats.base_stats</string>
                 </property>
                 <property name="flat">
                  <bool>true</bool>
@@ -675,8 +729,11 @@
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="whatsThis">
+                 <string>tabs.maid_stats.bonus_stats</string>
+                </property>
                 <property name="title">
-                 <string>Bonus Stats</string>
+                 <string>tabs.maid_stats.bonus_stats</string>
                 </property>
                 <property name="flat">
                  <bool>true</bool>
@@ -748,6 +805,9 @@
          </layout>
         </widget>
         <widget class="QWidget" name="tab_feature_propensity">
+         <property name="whatsThis">
+          <string>tabs.feat_props.title</string>
+         </property>
          <attribute name="title">
           <string>tabs.feat_props.title</string>
          </attribute>
@@ -813,6 +873,9 @@
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
+                </property>
+                <property name="whatsThis">
+                 <string>tabs.feat_props.features</string>
                 </property>
                 <property name="title">
                  <string>Features</string>
@@ -884,6 +947,9 @@
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="whatsThis">
+                 <string>tabs.feat_props.propensities</string>
+                </property>
                 <property name="title">
                  <string>Propensities</string>
                 </property>
@@ -950,6 +1016,9 @@
          </layout>
         </widget>
         <widget class="QWidget" name="tab_maid_work">
+         <property name="whatsThis">
+          <string>tabs.work_data.title</string>
+         </property>
          <attribute name="title">
           <string>tabs.work_data.title</string>
          </attribute>
@@ -989,6 +1058,9 @@
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="whatsThis">
+                 <string>tabs.work_data.last_work</string>
+                </property>
                 <property name="title">
                  <string>Last known work</string>
                 </property>
@@ -1000,6 +1072,9 @@
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
+                   </property>
+                   <property name="whatsThis">
+                    <string>tabs.work_data.day_work</string>
                    </property>
                    <property name="text">
                     <string>Day</string>
@@ -1027,6 +1102,9 @@
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
+                   <property name="whatsThis">
+                    <string>tabs.work_data.night_work</string>
+                   </property>
                    <property name="text">
                     <string>Night</string>
                    </property>
@@ -1043,6 +1121,9 @@
               </item>
               <item>
                <widget class="QGroupBox" name="groupBox_6">
+                <property name="whatsThis">
+                 <string>tabs.work_data.work_data</string>
+                </property>
                 <property name="title">
                  <string>Work data</string>
                 </property>
@@ -1106,6 +1187,9 @@
          </layout>
         </widget>
         <widget class="QWidget" name="tab_yotogi_skills">
+         <property name="whatsThis">
+          <string>tabs.yotogi_skills.title</string>
+         </property>
          <attribute name="title">
           <string>tabs.yotogi_skills.title</string>
          </attribute>
@@ -1184,6 +1268,9 @@
          </layout>
         </widget>
         <widget class="QWidget" name="tab_player_info">
+         <property name="whatsThis">
+          <string>tabs.player_info.title</string>
+         </property>
          <attribute name="title">
           <string>tabs.player_info.title</string>
          </attribute>
@@ -1225,6 +1312,9 @@
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
+                </property>
+                <property name="whatsThis">
+                 <string>tabs.player_info.parameters</string>
                 </property>
                 <property name="title">
                  <string>Parameters</string>
@@ -1315,7 +1405,13 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="nativeMenuBar">
+    <bool>true</bool>
+   </property>
    <widget class="QMenu" name="menuGeneral_tools">
+    <property name="whatsThis">
+     <string>top_bar.cur_save.name</string>
+    </property>
     <property name="title">
      <string>top_bar.cur_save.name</string>
     </property>
@@ -1325,17 +1421,26 @@
     <addaction name="actionMaximum_club_grade_and_evaluation"/>
    </widget>
    <widget class="QMenu" name="menuAll_maids">
+    <property name="whatsThis">
+     <string>top_bar.all_maid.name</string>
+    </property>
     <property name="title">
      <string>top_bar.all_maid.name</string>
     </property>
     <addaction name="actionUnlock_value_ranges"/>
    </widget>
    <widget class="QMenu" name="menuSelected_maid">
+    <property name="whatsThis">
+     <string>top_bar.cur_maid.name</string>
+    </property>
     <property name="title">
      <string>top_bar.cur_maid.name</string>
     </property>
    </widget>
    <widget class="QMenu" name="menuMisc">
+    <property name="whatsThis">
+     <string>top_bar.misc.name</string>
+    </property>
     <property name="title">
      <string>top_bar.misc.name</string>
     </property>
@@ -1354,9 +1459,15 @@
    <property name="text">
     <string>top_bar.cur_save.unlock_trophies</string>
    </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_save.unlock_trophies</string>
+   </property>
   </action>
   <action name="actionUnlock_all_stock_items">
    <property name="text">
+    <string>top_bar.cur_save.unlock_stock_items</string>
+   </property>
+   <property name="whatsThis">
     <string>top_bar.cur_save.unlock_stock_items</string>
    </property>
   </action>
@@ -1364,14 +1475,23 @@
    <property name="text">
     <string>top_bar.cur_save.max_credits</string>
    </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_save.max_credits</string>
+   </property>
   </action>
   <action name="actionMaximum_club_grade_and_evaluation">
    <property name="text">
     <string>top_bar.cur_save.max_grade</string>
    </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_save.max_grade</string>
+   </property>
   </action>
   <action name="actionAbout">
    <property name="text">
+    <string>top_bar.misc.about</string>
+   </property>
+   <property name="whatsThis">
     <string>top_bar.misc.about</string>
    </property>
   </action>
@@ -1388,6 +1508,9 @@
     <bool>false</bool>
    </property>
    <property name="text">
+    <string>top_bar.all_maid.unlock_ranges</string>
+   </property>
+   <property name="whatsThis">
     <string>top_bar.all_maid.unlock_ranges</string>
    </property>
   </action>

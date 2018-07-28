@@ -63,11 +63,14 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
     def translate_ui(self):
         load_translation("english.json")
 
+        print("setting topmenu")
         for menu_item in self.findChildren(QMenu):
-            menu_item.setTitle(tr(menu_item, menu_item.title()))
+            menu_item.setTitle(tr(menu_item))
 
+        print("setting topmenu items")
         for menu_action in self.findChildren(QAction):
-            menu_action.setText(tr(menu_action, menu_action.text()))
+            if len(menu_action.objectName()) != 0:
+                menu_action.setText(tr(menu_action))
 
         for tab in self.tabs:
             tab.translate_ui()

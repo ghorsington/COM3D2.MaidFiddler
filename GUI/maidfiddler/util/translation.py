@@ -3,14 +3,11 @@ import os
 from maidfiddler.util.util import BASE_DIR
 
 current_translation = {}
-FIRST_TIME = True
 
-def tr(obj, original):
-    if not FIRST_TIME:
-        original = obj.whatsThis()
-    else:
-        obj.setWhatsThis(original)
-    
+def tr(obj):
+    return tr_str(obj.whatsThis())
+
+def tr_str(original):
     if "translation" not in current_translation:
         return original
     parts = original.split(".")

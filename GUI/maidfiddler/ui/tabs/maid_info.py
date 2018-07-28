@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QGroupBox, QLabel
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import TextElement, ComboElement, NumberElement, PlainTextElement
 from zerorpc import RemoteError
-from maidfiddler.util.translation import tr
+from maidfiddler.util.translation import tr, tr_str
 
 
 class MaidInfoTab(UiTab):
@@ -15,6 +15,13 @@ class MaidInfoTab(UiTab):
         self.seikeiken = {}
         self.job_classes = {}
         self.yotogi_classes = {}
+
+        self.personality_names = []
+        self.contracts_names = []
+        self.relations_names = []
+        self.seikeiken_names = []
+        self.job_classes_names = []
+        self.yotogi_classes_names = []
 
         self.properties = {
             "firstName": TextElement(self.ui.first_name_edit),
@@ -39,34 +46,47 @@ class MaidInfoTab(UiTab):
         self.job_classes.clear()
         self.yotogi_classes.clear()
 
+        self.personality_names.clear()
+        self.contracts_names.clear()
+        self.relations_names.clear()
+        self.seikeiken_names.clear()
+        self.job_classes_names.clear()
+        self.yotogi_classes_names.clear()
+
         for i, personal in enumerate(self._game_data["personal_list"]):
             self.ui.personality_combo.addItem(personal["name"], personal["id"])
             self.personalities[personal["id"]] = i
+            self.personality_names.append(f"personality.{personal['name']}")
 
         for i, contract_name in enumerate(self._game_data["contract"]):
             contract_id = self._game_data["contract"][contract_name]
             self.ui.contract_combo.addItem(contract_name, contract_id)
             self.contracts[contract_id] = i
+            self.contracts_names.append(f"contracts.{contract_name}")
 
         for i, relation_name in enumerate(self._game_data["relation"]):
             relation_id = self._game_data["relation"][relation_name]
             self.ui.relation_combo.addItem(relation_name, relation_id)
             self.relations[relation_id] = i
+            self.relations_names.append(f"relations.{relation_name}")
 
         for i, seik_name in enumerate(self._game_data["seikeiken"]):
             seik_id = self._game_data["seikeiken"][seik_name]
             self.ui.current_combo.addItem(seik_name, seik_id)
             self.ui.initial_combo.addItem(seik_name, seik_id)
             self.seikeiken[seik_id] = i
+            self.seikeiken_names.append(f"seikeiken.{seik_name}")
 
         for i, job_class in enumerate(self._game_data["job_class_list"]):
             self.ui.job_class_combo.addItem(job_class["name"], job_class["id"])
             self.job_classes[job_class["id"]] = i
+            self.job_classes_names.append(f"job_class.{job_class['name']}")
 
         for i, yotogi_class in enumerate(self._game_data["yotogi_class_list"]):
             self.ui.yotogi_class_combo.addItem(
                 yotogi_class["name"], yotogi_class["id"])
             self.yotogi_classes[yotogi_class["id"]] = i
+            self.yotogi_classes_names.append(f"yotogi_class.{yotogi_class['name']}")
 
         self.ui.yotogi_class_combo.view().setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
 
@@ -130,10 +150,29 @@ class MaidInfoTab(UiTab):
             element.set_value(maid["properties"][name])
 
     def translate_ui(self):
-        self.ui.ui_tabs.setTabText(0, tr(self.ui.tab_maid_info, self.ui.ui_tabs.tabText(0)))
+        self.ui.ui_tabs.setTabText(0, tr(self.ui.tab_maid_info))
 
         for group in self.ui.tab_maid_info.findChildren(QGroupBox):
-            group.setTitle(tr(group, group.title()))
+            group.setTitle(tr(group))
 
         for label in self.ui.tab_maid_info.findChildren(QLabel):
-            label.setText(tr(label, label.text()))
+            label.setText(tr(label))
+
+        for i, personality in enumerate(self.personality_names):
+            self.ui.personality_combo.setItemText(i, tr_str(personality))
+
+        for i, contract in enumerate(self.contracts_names):
+            self.ui.contract_combo.setItemText(i, tr_str(contract))
+
+        for i, relation in enumerate(self.relations_names):
+            self.ui.relation_combo.setItemText(i, tr_str(relation))
+
+        for i, seikeiken in enumerate(self.seikeiken_names):
+            self.ui.current_combo.setItemText(i, tr_str(seikeiken))
+            self.ui.initial_combo.setItemText(i, tr_str(seikeiken))
+
+        for i, job_class in enumerate(self.job_classes_names):
+            self.ui.job_class_combo.setItemText(i, tr_str(job_class))
+
+        for i, yotogi_class in enumerate(self.yotogi_classes_names):
+            self.ui.yotogi_class_combo.setItemText(i, tr_str(yotogi_class))
