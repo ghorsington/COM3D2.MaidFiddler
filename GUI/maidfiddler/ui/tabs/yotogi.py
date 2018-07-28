@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QCheckBox, QSpinBox, QWidget, QHBoxLayout
 from PyQt5.QtCore import Qt
 from .ui_tab import UiTab
+from maidfiddler.util.translation import tr, tr_str
 
 class YotogiTab(UiTab):
     def __init__(self, ui, core, maid_mgr):
@@ -28,9 +29,10 @@ class YotogiTab(UiTab):
 
         for (i, skill) in enumerate(self.game_data["yotogi_skills"]):
             name = QTableWidgetItem(skill["name"])
+            name.setWhatsThis(f"yotogi_skills.{skill['name']}")
             line_level = QSpinBox()
             line_level.setMinimum(0)
-            line_level.setMaximum(99999)
+            line_level.setMaximum(3)
             line_exp = QSpinBox()
             line_exp.setMinimum(0)
             line_exp.setMaximum(99999)
@@ -153,4 +155,15 @@ class YotogiTab(UiTab):
             level.blockSignals(False)
             exp.blockSignals(False)
             play_count.blockSignals(False)
+
+    def translate_ui(self):
+        self.ui.ui_tabs.setTabText(4, tr(self.ui.tab_yotogi_skills))
+
+        for col in range(0, self.ui.yotogi_skills_table.columnCount()):
+            name = self.ui.yotogi_skills_table.horizontalHeaderItem(col)
+            name.setText(tr(name))
+
+        for row in range(0, self.ui.yotogi_skills_table.rowCount()):
+            name = self.ui.yotogi_skills_table.item(row, 1)
+            name.setText(tr(name))
 

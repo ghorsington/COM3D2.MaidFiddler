@@ -1,6 +1,7 @@
-from PyQt5.QtWidgets import QListWidgetItem
+from PyQt5.QtWidgets import QListWidgetItem, QGroupBox
 from PyQt5.QtCore import Qt
 from .ui_tab import UiTab
+from maidfiddler.util.translation import tr, tr_str
 
 
 class FeaturePropensityTab(UiTab):
@@ -17,6 +18,7 @@ class FeaturePropensityTab(UiTab):
 
         for feature in self.game_data["feature_list"]:
             item = QListWidgetItem(feature["name"])
+            item.setWhatsThis(f"features.{feature['name']}")
             item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
             item.setCheckState(Qt.Unchecked)
             item.setData(Qt.UserRole, feature["id"])
@@ -28,6 +30,7 @@ class FeaturePropensityTab(UiTab):
 
         for propensity in self.game_data["propensity_list"]:
             item = QListWidgetItem(propensity["name"])
+            item.setWhatsThis(f"propensities.{propensity['name']}")
             item.setData(Qt.UserRole, propensity["id"])
             item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
             item.setCheckState(Qt.Unchecked)
@@ -82,3 +85,17 @@ class FeaturePropensityTab(UiTab):
         for prop_id in maid["propensity_ids"]:
             self.propensities[prop_id].setCheckState(Qt.Checked)
         self.ui.propensity_list.blockSignals(False)
+
+    def translate_ui(self):
+        self.ui.ui_tabs.setTabText(2, tr(self.ui.tab_feature_propensity))
+
+        for group in self.ui.tab_feature_propensity.findChildren(QGroupBox):
+            group.setTitle(tr(group))
+
+        for i in range(0, self.ui.feature_list.count()):
+            item = self.ui.feature_list.item(i)
+            item.setText(tr(item))
+
+        for i in range(0, self.ui.propensity_list.count()):
+            item = self.ui.propensity_list.item(i)
+            item.setText(tr(item))

@@ -1,7 +1,8 @@
-from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QCheckBox, QSpinBox, QWidget, QHBoxLayout
+from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QCheckBox, QSpinBox, QWidget, QHBoxLayout, QGroupBox, QLabel
 from PyQt5.QtCore import Qt
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import NumberElement
+from maidfiddler.util.translation import tr, tr_str
 
 
 class WorkTab(UiTab):
@@ -12,10 +13,15 @@ class WorkTab(UiTab):
         self.noon_work_id_index = {}
         self.night_work_id_index = {}
 
+        self.work_day_names = []
+        self.work_yotogi_names = []
+
     def update_ui(self):
         self.work_elements.clear()
         self.night_work_id_index.clear()
         self.noon_work_id_index.clear()
+        self.work_day_names.clear()
+        self.work_yotogi_names.clear()
 
         noon_work = [data for data in self.game_data["work_data"]
                      if data["work_type"] != "Yotogi"]
@@ -30,9 +36,11 @@ class WorkTab(UiTab):
 
         for (i, work_data) in enumerate(noon_work):
             self.ui.cur_noon_work_combo.addItem(work_data["name"], work_data["id"])
+            self.work_day_names.append(f"work_noon.{work_data['name']}")
             self.noon_work_id_index[work_data["id"]] = i
 
             name = QTableWidgetItem(work_data["name"])
+            name.setWhatsThis(f"work_noon.{work_data['name']}")
             line_level = QSpinBox()
             line_level.setMinimum(0)
             line_level.setProperty("work_id", work_data["id"])
@@ -56,6 +64,7 @@ class WorkTab(UiTab):
         for (i, work_data) in enumerate(yotogi_work):
             self.ui.cur_night_work_combo.addItem(work_data["name"], work_data["id"])
             self.night_work_id_index[work_data["id"]] = i
+            self.work_yotogi_names.append(f"work_yotogi.{work_data['name']}")
 
     def init_events(self, event_poller):
         self.ui.maid_list.currentItemChanged.connect(self.maid_selected)
@@ -103,3 +112,26 @@ class WorkTab(UiTab):
         self.ui.cur_night_work_combo.blockSignals(True)
         self.ui.cur_night_work_combo.setCurrentIndex(self.night_work_id_index[maid["properties"]["active_night_work_id"]])
         self.ui.cur_night_work_combo.blockSignals(False)
+    
+    def translate_ui(self):
+        self.ui.ui_tabs.setTabText(3, tr(self.ui.tab_maid_work))
+
+        for group in self.ui.tab_maid_work.findChildren(QGroupBox):
+            group.setTitle(tr(group))
+
+        for label in self.ui.tab_maid_work.findChildren(QLabel):
+            label.setText(tr(label))
+
+        for i, work_name in enumerate(self.work_day_names):
+            self.ui.cur_noon_work_combo.setItemText(i, tr_str(work_name))
+
+        for i, work_name in enumerate(self.work_yotogi_names):
+            self.ui.cur_night_work_combo.setItemText(i, tr_str(work_name))
+
+        for col in range(0, self.ui.noon_work_table.columnCount()):
+            name = self.ui.noon_work_table.horizontalHeaderItem(col)
+            name.setText(tr(name))
+
+        for row in range(0, self.ui.noon_work_table.rowCount()):
+            name = self.ui.noon_work_table.item(row, 0)
+            name.setText(tr(name))

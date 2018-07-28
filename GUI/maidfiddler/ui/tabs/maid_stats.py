@@ -137,10 +137,18 @@ class MaidStatsTab(UiTab):
         for group in self.ui.tab_maid_stats.findChildren(QGroupBox):
             group.setTitle(tr(group))
 
+        for col in range(0, self.ui.maid_params_lockable_table.columnCount()):
+            name = self.ui.maid_params_lockable_table.horizontalHeaderItem(col)
+            name.setText(tr(name))
+
         for row in range(0, self.ui.maid_params_lockable_table.rowCount()):
             name = self.ui.maid_params_lockable_table.item(row, 0)
             name.setText(tr(name))
 
         for row in range(0, self.ui.maid_params_bonus_table.rowCount()):
             name = self.ui.maid_params_bonus_table.item(row, 0)
+            name.setText(tr(name))
+
+        for col in range(0, self.ui.maid_params_bonus_table.columnCount()):
+            name = self.ui.maid_params_bonus_table.horizontalHeaderItem(col)
             name.setText(tr(name))

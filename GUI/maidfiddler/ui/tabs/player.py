@@ -1,9 +1,8 @@
-from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QCheckBox, QWidget, QHBoxLayout, QLineEdit, QSpinBox, QDoubleSpinBox
+from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QCheckBox, QWidget, QHBoxLayout, QLineEdit, QSpinBox, QDoubleSpinBox, QGroupBox
 from PyQt5.QtCore import Qt
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import NumberElement, TextElement, CheckboxElement
-from zerorpc import RemoteError
-
+from maidfiddler.util.translation import tr, tr_str
 
 class PlayerTab(UiTab):
     def __init__(self, ui, core, maid_mgr):
@@ -35,6 +34,7 @@ class PlayerTab(UiTab):
         for i, prop in enumerate(self.game_data["player_status_settable"]):
             prop_type = self.game_data["player_status_settable"][prop]
             name = QTableWidgetItem(prop)
+            name.setWhatsThis(f"player_props.{prop}")
             line = self.type_generators[prop_type]()
             line.qt_element.setProperty("prop_name", prop)
 
@@ -100,3 +100,17 @@ class PlayerTab(UiTab):
             cb.blockSignals(True)
             cb.setCheckState(Qt.Checked if prop in locked_vals else Qt.Unchecked)
             cb.blockSignals(False)
+
+    def translate_ui(self):
+        self.ui.ui_tabs.setTabText(5, tr(self.ui.tab_player_info))
+
+        for group in self.ui.tab_maid_work.findChildren(QGroupBox):
+            group.setTitle(tr(group))
+
+        for row in range(0, self.ui.player_params_table.rowCount()):
+            name = self.ui.player_params_table.item(row, 0)
+            name.setText(tr(name))
+
+        for col in range(0, self.ui.player_params_table.columnCount()):
+            name = self.ui.player_params_table.horizontalHeaderItem(col)
+            name.setText(tr(name))

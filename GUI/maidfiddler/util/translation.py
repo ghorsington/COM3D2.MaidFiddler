@@ -1,6 +1,7 @@
 import json
 import os
 from maidfiddler.util.util import BASE_DIR
+import random
 
 current_translation = {}
 
@@ -35,3 +36,8 @@ def load_translation(name):
         print("translation invalid")
         current_translation = {}
         return
+
+def get_random_title():
+    if "titles" not in current_translation or len(current_translation["titles"]) == 0:
+        return None
+    return random.choice(current_translation["titles"])

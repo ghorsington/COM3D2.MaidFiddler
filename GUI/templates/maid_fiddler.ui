@@ -213,21 +213,8 @@
              <item row="0" column="3">
               <widget class="QLineEdit" name="first_name_edit"/>
              </item>
-             <item row="1" column="4">
-              <widget class="QLabel" name="contract_label">
-               <property name="whatsThis">
-                <string>maid_props.contract</string>
-               </property>
-               <property name="text">
-                <string>maid_props.contract</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="5">
-              <widget class="QLineEdit" name="last_name_edit"/>
+             <item row="2" column="3">
+              <widget class="QComboBox" name="relation_combo"/>
              </item>
              <item row="3" column="1">
               <widget class="QLabel" name="employment_day_label">
@@ -245,9 +232,6 @@
              <item row="1" column="5">
               <widget class="QComboBox" name="contract_combo"/>
              </item>
-             <item row="2" column="3">
-              <widget class="QComboBox" name="relation_combo"/>
-             </item>
              <item row="3" column="3">
               <widget class="QSpinBox" name="employment_day_box"/>
              </item>
@@ -263,6 +247,22 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
+             </item>
+             <item row="1" column="4">
+              <widget class="QLabel" name="contract_label">
+               <property name="whatsThis">
+                <string>maid_props.contract</string>
+               </property>
+               <property name="text">
+                <string>maid_props.contract</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="5">
+              <widget class="QLineEdit" name="last_name_edit"/>
              </item>
             </layout>
            </widget>
@@ -696,6 +696,9 @@
                     <property name="text">
                      <string>Parameter</string>
                     </property>
+                    <property name="whatsThis">
+                     <string>tabs.maid_stats.table_param</string>
+                    </property>
                     <property name="textAlignment">
                      <set>AlignCenter</set>
                     </property>
@@ -704,6 +707,9 @@
                     <property name="text">
                      <string>Value</string>
                     </property>
+                    <property name="whatsThis">
+                     <string>tabs.maid_stats.table_value</string>
+                    </property>
                     <property name="textAlignment">
                      <set>AlignCenter</set>
                     </property>
@@ -711,6 +717,9 @@
                    <column>
                     <property name="text">
                      <string>Lock</string>
+                    </property>
+                    <property name="whatsThis">
+                     <string>tabs.maid_stats.table_lock</string>
                     </property>
                     <property name="textAlignment">
                      <set>AlignCenter</set>
@@ -787,10 +796,16 @@
                     <property name="text">
                      <string>Parameter</string>
                     </property>
+                    <property name="whatsThis">
+                     <string>tabs.maid_stats.table_param</string>
+                    </property>
                    </column>
                    <column>
                     <property name="text">
                      <string>Value</string>
+                    </property>
+                    <property name="whatsThis">
+                     <string>tabs.maid_stats.table_value</string>
                     </property>
                    </column>
                   </widget>
@@ -878,7 +893,7 @@
                  <string>tabs.feat_props.features</string>
                 </property>
                 <property name="title">
-                 <string>Features</string>
+                 <string>tabs.feat_props.features</string>
                 </property>
                 <property name="flat">
                  <bool>true</bool>
@@ -951,7 +966,7 @@
                  <string>tabs.feat_props.propensities</string>
                 </property>
                 <property name="title">
-                 <string>Propensities</string>
+                 <string>tabs.feat_props.propensities</string>
                 </property>
                 <property name="flat">
                  <bool>true</bool>
@@ -1062,7 +1077,7 @@
                  <string>tabs.work_data.last_work</string>
                 </property>
                 <property name="title">
-                 <string>Last known work</string>
+                 <string>tabs.work_data.last_work</string>
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout">
                  <item>
@@ -1077,7 +1092,7 @@
                     <string>tabs.work_data.day_work</string>
                    </property>
                    <property name="text">
-                    <string>Day</string>
+                    <string>tabs.work_data.day_work</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1106,7 +1121,7 @@
                     <string>tabs.work_data.night_work</string>
                    </property>
                    <property name="text">
-                    <string>Night</string>
+                    <string>tabs.work_data.night_work</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1125,7 +1140,7 @@
                  <string>tabs.work_data.work_data</string>
                 </property>
                 <property name="title">
-                 <string>Work data</string>
+                 <string>tabs.work_data.work_data</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_16">
                  <item>
@@ -1164,15 +1179,24 @@
                     <property name="text">
                      <string>Work Name</string>
                     </property>
+                    <property name="whatsThis">
+                     <string>tabs.work_data.table_work</string>
+                    </property>
                    </column>
                    <column>
                     <property name="text">
                      <string>Level</string>
                     </property>
+                    <property name="whatsThis">
+                     <string>tabs.work_data.table_level</string>
+                    </property>
                    </column>
                    <column>
                     <property name="text">
                      <string>Play count</string>
+                    </property>
+                    <property name="whatsThis">
+                     <string>tabs.work_data.table_play_count</string>
                     </property>
                    </column>
                   </widget>
@@ -1242,25 +1266,40 @@
              <property name="text">
               <string>Has</string>
              </property>
+             <property name="whatsThis">
+              <string>tabs.yotogi_skills.table_has</string>
+             </property>
             </column>
             <column>
              <property name="text">
               <string>Skill</string>
+             </property>
+             <property name="whatsThis">
+              <string>tabs.yotogi_skills.table_skill</string>
              </property>
             </column>
             <column>
              <property name="text">
               <string>Level</string>
              </property>
+             <property name="whatsThis">
+              <string>tabs.yotogi_skills.table_level</string>
+             </property>
             </column>
             <column>
              <property name="text">
               <string>Exp</string>
              </property>
+             <property name="whatsThis">
+              <string>tabs.yotogi_skills.table_exp</string>
+             </property>
             </column>
             <column>
              <property name="text">
               <string>Play count</string>
+             </property>
+             <property name="whatsThis">
+              <string>tabs.yotogi_skills.table_play_count</string>
              </property>
             </column>
            </widget>
@@ -1317,7 +1356,7 @@
                  <string>tabs.player_info.parameters</string>
                 </property>
                 <property name="title">
-                 <string>Parameters</string>
+                 <string>tabs.player_info.parameters</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_19">
                  <property name="leftMargin">
@@ -1368,15 +1407,24 @@
                     <property name="text">
                      <string>Parameter</string>
                     </property>
+                    <property name="whatsThis">
+                     <string>tabs.player_info.table_param</string>
+                    </property>
                    </column>
                    <column>
                     <property name="text">
                      <string>Value</string>
                     </property>
+                    <property name="whatsThis">
+                     <string>tabs.player_info.table_value</string>
+                    </property>
                    </column>
                    <column>
                     <property name="text">
                      <string>Lock</string>
+                    </property>
+                    <property name="whatsThis">
+                     <string>tabs.player_info.table_lock</string>
                     </property>
                    </column>
                   </widget>
@@ -1444,7 +1492,18 @@
     <property name="title">
      <string>top_bar.misc.name</string>
     </property>
+    <widget class="QMenu" name="menutop_bar_misc_language">
+     <property name="whatsThis">
+      <string>top_bar.misc.language</string>
+     </property>
+     <property name="title">
+      <string>top_bar.misc.language</string>
+     </property>
+     <addaction name="actionEnglish"/>
+     <addaction name="actionHorse"/>
+    </widget>
     <addaction name="actionAbout"/>
+    <addaction name="menutop_bar_misc_language"/>
    </widget>
    <addaction name="menuGeneral_tools"/>
    <addaction name="menuAll_maids"/>
@@ -1512,6 +1571,22 @@
    </property>
    <property name="whatsThis">
     <string>top_bar.all_maid.unlock_ranges</string>
+   </property>
+  </action>
+  <action name="actionEnglish">
+   <property name="text">
+    <string>English</string>
+   </property>
+   <property name="whatsThis">
+    <string>English</string>
+   </property>
+  </action>
+  <action name="actionHorse">
+   <property name="text">
+    <string>Horse</string>
+   </property>
+   <property name="whatsThis">
+    <string>Horse</string>
    </property>
   </action>
  </widget>

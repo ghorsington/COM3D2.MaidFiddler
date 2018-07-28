@@ -8,11 +8,12 @@ from maidfiddler.util.eventpoller import EventPoller
 from maidfiddler.ui.tabs import *
 from maidfiddler.ui.maids_list import MaidsList
 
-from maidfiddler.util.translation import load_translation, tr
+from maidfiddler.util.translation import load_translation, tr, get_random_title
 
 UI_MainWindow = uic.loadUiType(
     open(util.get_resource_path("templates/maid_fiddler.ui")))
 
+BASE_TITLE = "Maid Fiddler for COM"
 
 class MaidManager:
     def __init__(self):
@@ -54,20 +55,24 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
         self.load_ui()
         self.init_events()
-        self.translate_ui()
+        self.translate_ui("english")
 
         self.maids_list.reload_maids()
         player_tab.reload_player_props()
         print("UI initialized!")
 
-    def translate_ui(self):
-        load_translation("english.json")
+    def translate_ui(self, language):
+        load_translation(f"{language}.json")
 
-        print("setting topmenu")
+        subtitle = get_random_title()
+        title = BASE_TITLE
+        if subtitle is not None:
+            title += f" -- {subtitle}"
+        self.setWindowTitle(title)
+
         for menu_item in self.findChildren(QMenu):
             menu_item.setTitle(tr(menu_item))
 
-        print("setting topmenu items")
         for menu_action in self.findChildren(QAction):
             if len(menu_action.objectName()) != 0:
                 menu_action.setText(tr(menu_action))
@@ -83,6 +88,8 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         
         # TODO: Better place for actions
         self.actionUnlock_value_ranges.toggled.connect(self.toggle_unlock_values)
+        self.actionEnglish.triggered.connect(lambda: self.translate_ui("english"))
+        self.actionHorse.triggered.connect(lambda: self.translate_ui("neigh"))
     
     def toggle_unlock_values(self, checked):
         self.core.SetUnlockRanges(checked)
