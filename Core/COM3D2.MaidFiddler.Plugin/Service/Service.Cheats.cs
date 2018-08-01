@@ -19,6 +19,11 @@ namespace COM3D2.MaidFiddler.Core.Service
             MiscHooks.EnableYotogiSkills = value;
         }
 
+        public void SetEnableAllYotogiCommand(bool value)
+        {
+            MiscHooks.EnableAllCommands = value;
+        }
+
         public void UnlockAllTrophies(bool enableAll = false)
         {
             Trophy.CreateData();

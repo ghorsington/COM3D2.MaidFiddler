@@ -49,6 +49,13 @@ namespace COM3D2.MaidFiddler.Patcher
 
             MethodDefinition getYotogiSkillSystem = maidStatus.GetMethod("get_yotogiSkill");
             getYotogiSkillSystem.InjectWith(miscHooks.GetMethod("GetYotogiSkill"), flags: InjectFlags.ModifyReturn);
+
+            /* Enable all Yotogi commands */
+
+            TypeDefinition yotogiPlayManager = ass.MainModule.GetType("YotogiPlayManager");
+
+            MethodDefinition onEnabledCommand = yotogiPlayManager.GetMethod("OnEnabledCommand");
+            onEnabledCommand.InjectWith(miscHooks.GetMethod("CheckCommandEnabled"), flags: InjectFlags.ModifyReturn);
         }
 
         public static void PatchPlayerStatus(AssemblyDefinition ass)

@@ -9,6 +9,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
     {
         private static YotogiSkillSystem enabledSkillSystem;
         public static bool EnableYotogiSkills { get; set; } = true;
+        public static bool EnableAllCommands { get; set; } = true;
 
         public static bool PrefixCreateDatas(out Dictionary<int, YotogiSkillListManager.Data> result,
                                              Status status,
@@ -107,6 +108,12 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             }
 
             return enabledSkillSystem;
+        }
+
+        public static bool CheckCommandEnabled(out bool result)
+        {
+            result = true;
+            return EnableAllCommands;
         }
     }
 }

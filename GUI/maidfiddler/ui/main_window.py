@@ -89,6 +89,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         # TODO: Better place for actions
         self.actionUnlock_value_ranges.toggled.connect(lambda c: self.core.SetUnlockRanges(c))
         self.actionAll_unlock_yotogi_skills.toggled.connect(lambda c: self.core.SetShowAllYotogiSkills(c))
+        self.actionAll_unlock_yotogi_commands.toggled.connect(lambda c: self.core.SetEnableAllYotogiCommand(c))
         self.actionEnglish.triggered.connect(lambda: self.translate_ui("english"))
         self.actionHorse.triggered.connect(lambda: self.translate_ui("neigh"))
 

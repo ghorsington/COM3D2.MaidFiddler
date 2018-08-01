@@ -586,8 +586,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>684</width>
-               <height>679</height>
+               <width>155</width>
+               <height>186</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -858,8 +858,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>684</width>
-               <height>679</height>
+               <width>155</width>
+               <height>190</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1060,8 +1060,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>684</width>
-               <height>679</height>
+               <width>463</width>
+               <height>181</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -1339,8 +1339,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>684</width>
-               <height>679</height>
+               <width>175</width>
+               <height>116</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -1477,6 +1477,7 @@
     </property>
     <addaction name="actionUnlock_value_ranges"/>
     <addaction name="actionAll_unlock_yotogi_skills"/>
+    <addaction name="actionAll_unlock_yotogi_commands"/>
    </widget>
    <widget class="QMenu" name="menuSelected_maid">
     <property name="whatsThis">
@@ -1599,6 +1600,17 @@
    </property>
    <property name="whatsThis">
     <string>top_bar.all_maid.unlock_all_yotogi_skills</string>
+   </property>
+  </action>
+  <action name="actionAll_unlock_yotogi_commands">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>top_bar.all_maid.unlock_all_yotogi_commands</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.all_maid.unlock_all_yotogi_commands</string>
    </property>
   </action>
  </widget>
