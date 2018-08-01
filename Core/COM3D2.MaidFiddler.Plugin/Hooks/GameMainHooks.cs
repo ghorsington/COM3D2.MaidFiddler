@@ -11,14 +11,17 @@ namespace COM3D2.MaidFiddler.Core.Hooks
     {
         public static event EventHandler DeserializeStarting;
         public static event EventHandler<DeserializeEventArgs> DeserializeEnded;
+        public static bool IsDeserializing { get; private set; }
 
         public static void OnPreDeserialize()
         {
+            IsDeserializing = true;
             DeserializeStarting?.Invoke(null, new EventArgs());
         }
 
         public static bool OnPostDeserialize(bool success)
         {
+            IsDeserializing = false;
             DeserializeEnded?.Invoke(null, new DeserializeEventArgs {Success = success});
 
             return success;

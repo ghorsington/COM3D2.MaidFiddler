@@ -30,6 +30,25 @@ namespace COM3D2.MaidFiddler.Patcher
             PatchRoundingFunctions(ass);
             PatchYotogiSkillSystem(ass);
             PatchPlayerStatus(ass);
+            PatchCheats(ass);
+        }
+
+        public static void PatchCheats(AssemblyDefinition ass)
+        {
+            TypeDefinition miscHooks = HookDefinition.MainModule.GetType($"{HOOK_NAME}.Hooks.MiscHooks");
+
+            /* Enable all Yotogi skills */
+            TypeDefinition yotogiSkillListManager = ass.MainModule.GetType("YotogiSkillListManager");
+            TypeDefinition maidStatus = ass.MainModule.GetType("MaidStatus.Status");
+
+            MethodDefinition createDatas = yotogiSkillListManager.GetMethod("CreateDatas");
+            createDatas.InjectWith(miscHooks.GetMethod("PrefixCreateDatas"), flags: InjectFlags.ModifyReturn | InjectFlags.PassParametersVal);
+
+            MethodDefinition createDatasOld = yotogiSkillListManager.GetMethod("CreateDatasOld");
+            createDatasOld.InjectWith(miscHooks.GetMethod("PrefixCreateDatasOld"), flags: InjectFlags.ModifyReturn | InjectFlags.PassParametersVal);
+
+            MethodDefinition getYotogiSkillSystem = maidStatus.GetMethod("get_yotogiSkill");
+            getYotogiSkillSystem.InjectWith(miscHooks.GetMethod("GetYotogiSkill"), flags: InjectFlags.ModifyReturn);
         }
 
         public static void PatchPlayerStatus(AssemblyDefinition ass)

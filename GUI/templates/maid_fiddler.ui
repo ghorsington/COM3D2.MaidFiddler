@@ -1476,6 +1476,7 @@
      <string>top_bar.all_maid.name</string>
     </property>
     <addaction name="actionUnlock_value_ranges"/>
+    <addaction name="actionAll_unlock_yotogi_skills"/>
    </widget>
    <widget class="QMenu" name="menuSelected_maid">
     <property name="whatsThis">
@@ -1587,6 +1588,17 @@
    </property>
    <property name="whatsThis">
     <string>Horse</string>
+   </property>
+  </action>
+  <action name="actionAll_unlock_yotogi_skills">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>top_bar.all_maid.unlock_all_yotogi_skills</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.all_maid.unlock_all_yotogi_skills</string>
    </property>
   </action>
  </widget>

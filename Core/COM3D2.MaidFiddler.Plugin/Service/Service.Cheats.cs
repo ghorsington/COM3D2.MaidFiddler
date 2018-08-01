@@ -14,6 +14,11 @@ namespace COM3D2.MaidFiddler.Core.Service
             MathUtilHooks.UnlockRange = value;
         }
 
+        public void SetShowAllYotogiSkills(bool value)
+        {
+            MiscHooks.EnableYotogiSkills = value;
+        }
+
         public void UnlockAllTrophies(bool enableAll = false)
         {
             Trophy.CreateData();

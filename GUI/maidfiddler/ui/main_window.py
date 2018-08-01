@@ -87,12 +87,10 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
             tab.init_events(self.event_poller)
         
         # TODO: Better place for actions
-        self.actionUnlock_value_ranges.toggled.connect(self.toggle_unlock_values)
+        self.actionUnlock_value_ranges.toggled.connect(lambda c: self.core.SetUnlockRanges(c))
+        self.actionAll_unlock_yotogi_skills.toggled.connect(lambda c: self.core.SetShowAllYotogiSkills(c))
         self.actionEnglish.triggered.connect(lambda: self.translate_ui("english"))
         self.actionHorse.triggered.connect(lambda: self.translate_ui("neigh"))
-    
-    def toggle_unlock_values(self, checked):
-        self.core.SetUnlockRanges(checked)
 
     def closeEvent(self, event):
         self.core.DisconnectEventHander()

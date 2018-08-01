@@ -17,7 +17,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 
         public static void OnYotogiSkillAdd(YotogiSkillSystem skillSystem, Skill.Data data)
         {
-            if (skillSystem.status.maid == null)
+            if (skillSystem.status == null || skillSystem.status.maid == null)
                 return;
 
             SkillInfoChanged?.Invoke(null, new YotogiSkillEventArgs {Maid = skillSystem.status.maid, Event = "add", SkillId = data.id});
@@ -25,7 +25,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 
         public static void OnYotogiSkillOldAdd(YotogiSkillSystem skillSystem, Skill.Old.Data data)
         {
-            if (skillSystem.status.maid == null)
+            if (skillSystem.status == null || skillSystem.status.maid == null)
                 return;
 
             SkillInfoChanged?.Invoke(null, new YotogiSkillEventArgs {Maid = skillSystem.status.maid, Event = "add", SkillId = data.id});
@@ -33,7 +33,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 
         public static void OnYotogiSkillRemove(YotogiSkillSystem skillSystem, int id)
         {
-            if (skillSystem.status.maid == null)
+            if (skillSystem.status == null || skillSystem.status.maid == null)
                 return;
 
             SkillInfoChanged?.Invoke(null, new YotogiSkillEventArgs {Maid = skillSystem.status.maid, Event = "remove", SkillId = id});

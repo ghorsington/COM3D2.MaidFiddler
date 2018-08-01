@@ -61,6 +61,7 @@
     <Compile Include="Hooks\GameMainHooks.cs" />
     <Compile Include="Hooks\MaidStatusHooks.cs" />
     <Compile Include="Hooks\MathUtilHooks.cs" />
+    <Compile Include="Hooks\MiscHooks.cs" />
     <Compile Include="Hooks\PlayerStatusHooks.cs" />
     <Compile Include="Hooks\YotogiSkillHooks.cs" />
     <Compile Include="MaidFiddlerPlugin.cs" />
