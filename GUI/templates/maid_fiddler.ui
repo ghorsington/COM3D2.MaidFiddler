@@ -1478,6 +1478,7 @@
     <addaction name="actionUnlock_value_ranges"/>
     <addaction name="actionAll_unlock_yotogi_skills"/>
     <addaction name="actionAll_unlock_yotogi_commands"/>
+    <addaction name="actionUnlock_all_scenarios"/>
    </widget>
    <widget class="QMenu" name="menuSelected_maid">
     <property name="whatsThis">
@@ -1611,6 +1612,14 @@
    </property>
    <property name="whatsThis">
     <string>top_bar.all_maid.unlock_all_yotogi_commands</string>
+   </property>
+  </action>
+  <action name="actionUnlock_all_scenarios">
+   <property name="text">
+    <string>top_bar.all_maid.unlock_all_scenes</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.all_maid.unlock_all_scenes</string>
    </property>
   </action>
  </widget>

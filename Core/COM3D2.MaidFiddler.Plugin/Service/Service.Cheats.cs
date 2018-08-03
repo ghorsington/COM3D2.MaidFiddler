@@ -24,6 +24,11 @@ namespace COM3D2.MaidFiddler.Core.Service
             MiscHooks.EnableAllCommands = value;
         }
 
+        public void SetEnableAllScenarios(bool value)
+        {
+            MiscHooks.EnableAllScenarios = value;
+        }
+
         public void UnlockAllTrophies(bool enableAll = false)
         {
             Trophy.CreateData();

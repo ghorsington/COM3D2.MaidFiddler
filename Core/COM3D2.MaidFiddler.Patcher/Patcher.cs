@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -56,6 +57,16 @@ namespace COM3D2.MaidFiddler.Patcher
 
             MethodDefinition onEnabledCommand = yotogiPlayManager.GetMethod("OnEnabledCommand");
             onEnabledCommand.InjectWith(miscHooks.GetMethod("CheckCommandEnabled"), flags: InjectFlags.ModifyReturn);
+
+            /* Make all scenarios visible */
+
+            TypeDefinition scenarioData = ass.MainModule.GetType("ScenarioData");
+
+            MethodDefinition checkPlayableCondition = scenarioData.GetMethod("CheckPlayableCondition", "System.Boolean");
+            checkPlayableCondition.InjectWith(miscHooks.GetMethod("ScenarioCheckPlayableCondition"), flags: InjectFlags.ModifyReturn | InjectFlags.PassFields, typeFields: new[] { scenarioData.GetField("m_EventMaid") });
+
+            MethodDefinition isPlayable = scenarioData.GetMethod("get_IsPlayable");
+            isPlayable.InjectWith(miscHooks.GetMethod("GetIsScenarioPlayable"), flags: InjectFlags.ModifyReturn | InjectFlags.PassFields, typeFields: new[] { scenarioData.GetField("m_EventMaid") });
         }
 
         public static void PatchPlayerStatus(AssemblyDefinition ass)

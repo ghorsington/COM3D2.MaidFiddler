@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using MaidStatus;
 using Yotogis;
 
@@ -8,8 +8,28 @@ namespace COM3D2.MaidFiddler.Core.Hooks
     public static class MiscHooks
     {
         private static YotogiSkillSystem enabledSkillSystem;
-        public static bool EnableYotogiSkills { get; set; } = true;
-        public static bool EnableAllCommands { get; set; } = true;
+        public static bool EnableYotogiSkills { get; set; }
+        public static bool EnableAllCommands { get; set; }
+        public static bool EnableAllScenarios { get; set; }
+
+        public static bool ScenarioCheckPlayableCondition(out bool result, ref List<Maid> eventMaids)
+        {
+            result = true;
+
+            if (EnableAllScenarios)
+            {
+                eventMaids.Clear();
+                var list = eventMaids;
+                eventMaids.AddRange(GameMain.Instance.CharacterMgr.GetStockMaidList().Where(m => !list.Contains(m)));
+            }
+
+            return EnableAllScenarios;
+        }
+
+        public static bool GetIsScenarioPlayable(out bool result, ref List<Maid> eventMaids)
+        {
+            return ScenarioCheckPlayableCondition(out result, ref eventMaids);
+        }
 
         public static bool PrefixCreateDatas(out Dictionary<int, YotogiSkillListManager.Data> result,
                                              Status status,
