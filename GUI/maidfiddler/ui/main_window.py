@@ -51,6 +51,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.tabs.append(WorkTab(self, self.core, self.maid_mgr))
         player_tab = PlayerTab(self, self.core, self.maid_mgr)
         self.tabs.append(player_tab)
+
         self.maids_list = MaidsList(self, self.core, self.maid_mgr)
 
         self.load_ui()
@@ -85,12 +86,13 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
         for tab in self.tabs:
             tab.init_events(self.event_poller)
-        
-        # TODO: Better place for actions
-        self.actionUnlock_value_ranges.toggled.connect(lambda c: self.core.SetUnlockRanges(c))
-        self.actionAll_unlock_yotogi_skills.toggled.connect(lambda c: self.core.SetShowAllYotogiSkills(c))
-        self.actionAll_unlock_yotogi_commands.toggled.connect(lambda c: self.core.SetEnableAllYotogiCommand(c))
-        self.actionUnlock_all_scenarios.toggled.connect(lambda c: self.core.SetEnableAllScenarios(c))
+        # Game-related
+        self.actionMax_facility_grade.triggered.connect(lambda: self.core.MaxFacilityGrades())
+        self.actionUnlock_all_trohpies.triggered.connect(lambda: self.core.UnlockAllTrophies())
+        self.actionUnlock_all_stock_items.triggered.connect(lambda: self.core.UnlockAllStockItems())
+        self.actionMaximum_credits.triggered.connect(lambda: self.core.MaxCredits())
+        self.actionMaximum_club_grade_and_evaluation.triggered.connect(lambda: self.core.MaxGrade())
+
         self.actionEnglish.triggered.connect(lambda: self.translate_ui("english"))
         self.actionHorse.triggered.connect(lambda: self.translate_ui("neigh"))
 

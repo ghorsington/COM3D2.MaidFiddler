@@ -19,6 +19,8 @@ class MaidStatsTab(UiTab):
     def update_ui(self):
         self.properties.clear()
         self.bonus_properties.clear()
+        self.ui.maid_params_lockable_table.clearContents()
+        self.ui.maid_params_bonus_table.clearContents()
 
         self.ui.maid_params_lockable_table      \
             .horizontalHeader()                 \
@@ -58,6 +60,9 @@ class MaidStatsTab(UiTab):
             checkbox.setProperty("prop_name", maid_prop)
             self.properties[maid_prop] = (line, checkbox)
 
+            line.connect(self.commit_property)
+            checkbox.stateChanged.connect(self.commit_lock)
+
         # Maid bonus stats table
 
         self.ui.maid_params_bonus_table     \
@@ -83,13 +88,18 @@ class MaidStatsTab(UiTab):
             self.bonus_properties[maid_prop] = line
 
     def init_events(self, event_poller):
-        self.ui.maid_list.currentItemChanged.connect(self.maid_selected)
-
-        for prop, widgets in self.properties.items():
-            widgets[0].connect(self.commit_property)
-            widgets[1].stateChanged.connect(self.commit_lock)
-
         event_poller.on("maid_prop_changed", self.prop_changed)
+
+        self.ui.actiontop_bar_cur_maid_lock_all.triggered.connect(lambda: self.toggle_locks(True))
+        self.ui.actiontop_bar_cur_maid_unlock_all_2.triggered.connect(lambda: self.toggle_locks(False))
+
+    def toggle_locks(self, state):
+        self.core.ToggleAllParametersLockActive(state)
+
+        for line, cb in self.properties.values():
+            cb.blockSignals(True)
+            cb.setCheckState(Qt.Checked)
+            cb.blockSignals(False)
 
     def prop_changed(self, args):
         if args["property_name"] not in self.properties:
@@ -118,7 +128,7 @@ class MaidStatsTab(UiTab):
         element.setCheckState(Qt.Checked if n_state else Qt.Unchecked)
         element.blockSignals(False)
 
-    def maid_selected(self):
+    def on_maid_selected(self):
         if self.maid_mgr.selected_maid is None:
             return
 

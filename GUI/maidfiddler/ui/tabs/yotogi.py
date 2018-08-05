@@ -11,6 +11,7 @@ class YotogiTab(UiTab):
     
     def update_ui(self):
         self.skill_elements.clear()
+        self.ui.yotogi_skills_table.clearContents()
 
         self.ui.yotogi_skills_table.setRowCount(
             len(self.game_data["yotogi_skills"]))
@@ -61,17 +62,24 @@ class YotogiTab(UiTab):
 
             self.skill_elements[skill["id"]] = (checkbox, line_level, line_exp, line_play_count)
 
+            checkbox.stateChanged.connect(self.toggle_skill)
+            line_level.valueChanged.connect(self.set_level)
+            line_exp.valueChanged.connect(self.set_exp)
+            line_play_count.valueChanged.connect(self.set_play_count)
+
     def init_events(self, event_poller):
-        self.ui.maid_list.currentItemChanged.connect(self.maid_selected)
-
-        for (cb, level, exp, play_count) in self.skill_elements.values():
-            cb.stateChanged.connect(self.toggle_skill)
-            level.valueChanged.connect(self.set_level)
-            exp.valueChanged.connect(self.set_exp)
-            play_count.valueChanged.connect(self.set_play_count)
-
         event_poller.on("yotogi_skill_add", self.on_skill_add)
         event_poller.on("yotogi_skill_remove", self.on_skill_remove)
+
+        self.ui.actiontop_bar_cur_maid_unlock_yotogi_skills.triggered.connect(self.update_if_success(lambda: self.core.UnlockAllYotogiSkillsActive(False)))
+        self.ui.actiontop_bar_cur_maid_max_yotogi_skills.triggered.connect(self.update_if_success(lambda: self.core.UnlockAllYotogiSkillsActive(True)))
+
+    def update_if_success(self, work):
+        def handler():
+            if work():
+                self.maid_mgr.selected_maid = self.core.GetMaidData(self.maid_mgr.selected_maid["guid"])
+                self.on_maid_selected()
+        return handler
 
     def on_skill_add(self, args):
         (cb, level, exp, play_count) = self.skill_elements[args["skill_id"]]
@@ -127,7 +135,7 @@ class YotogiTab(UiTab):
         play_count = self.sender()
         self.core.SetYotogiSkillPlayCountActive(play_count.property("id"), play_count.value())
 
-    def maid_selected(self):
+    def on_maid_selected(self):
         if self.maid_mgr.selected_maid is None:
             return
 

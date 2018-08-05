@@ -67,6 +67,24 @@ namespace COM3D2.MaidFiddler.Patcher
 
             MethodDefinition isPlayable = scenarioData.GetMethod("get_IsPlayable");
             isPlayable.InjectWith(miscHooks.GetMethod("GetIsScenarioPlayable"), flags: InjectFlags.ModifyReturn | InjectFlags.PassFields, typeFields: new[] { scenarioData.GetField("m_EventMaid") });
+
+            /* Make all schedule work visible and selectable */
+
+            TypeDefinition scheduleApi = ass.MainModule.GetType("Schedule.ScheduleAPI");
+
+            MethodDefinition workIdReset = scheduleApi.GetMethod("WorkIdReset");
+            workIdReset.InjectWith(miscHooks.GetMethod("WorkIdReset"), flags: InjectFlags.ModifyReturn);
+
+            MethodDefinition toggleWork = miscHooks.GetMethod("ToggleWork");
+
+            MethodDefinition visibleNightWork = scheduleApi.GetMethod("VisibleNightWork");
+            visibleNightWork.InjectWith(toggleWork, flags: InjectFlags.ModifyReturn);
+
+            MethodDefinition enableNightWork = scheduleApi.GetMethod("EnableNightWork");
+            enableNightWork.InjectWith(toggleWork, flags: InjectFlags.ModifyReturn);
+
+            MethodDefinition enableNoonWork = scheduleApi.GetMethod("EnableNoonWork");
+            enableNoonWork.InjectWith(toggleWork, flags: InjectFlags.ModifyReturn);
         }
 
         public static void PatchPlayerStatus(AssemblyDefinition ass)

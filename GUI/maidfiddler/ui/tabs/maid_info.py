@@ -53,6 +53,14 @@ class MaidInfoTab(UiTab):
         self.job_classes_names.clear()
         self.yotogi_classes_names.clear()
 
+        self.ui.personality_combo.clear()
+        self.ui.contract_combo.clear()
+        self.ui.relation_combo.clear()
+        self.ui.current_combo.clear()
+        self.ui.initial_combo.clear()
+        self.ui.job_class_combo.clear()
+        self.ui.yotogi_class_combo.clear()
+
         for i, personal in enumerate(self._game_data["personal_list"]):
             self.ui.personality_combo.addItem(personal["name"], personal["id"])
             self.personalities[personal["id"]] = i
@@ -91,41 +99,29 @@ class MaidInfoTab(UiTab):
         self.ui.yotogi_class_combo.view().setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
 
     def init_events(self, event_poller):
-        self.ui.maid_list.currentItemChanged.connect(self.maid_selected)
-
         self.ui.first_name_edit.editingFinished.connect(
             self.commit_prop_changes("firstName"))
-
         self.ui.last_name_edit.editingFinished.connect(
             self.commit_prop_changes("lastName"))
-
         self.ui.relation_combo.currentIndexChanged.connect(
             self.commit_prop_changes("relation"))
-
         self.ui.employment_day_box.valueChanged.connect(
             self.commit_prop_changes("employmentDay"))
-
         # self.ui.user_comment_text.currentIndexChanged.connect(
         #     self.commit_prop_changes("freeComment"))
-
         self.ui.personality_combo.currentIndexChanged.connect(
             lambda: self.core.SetPersonalActive(self.properties["personal"].value()))
-
         self.ui.contract_combo.currentIndexChanged.connect(
             lambda: self.core.SetContractActive(self.properties["contract"].value()))
-
         self.ui.current_combo.currentIndexChanged.connect(
             lambda: self.core.SetCurSeikeikenActive(self.properties["cur_seikeiken"].value()))
-
         self.ui.initial_combo.currentIndexChanged.connect(
             lambda: self.core.SetInitSeikeikenActive(self.properties["init_seikeiken"].value()))
-
         self.ui.job_class_combo.currentIndexChanged.connect(
             lambda: self.core.SetCurrentJobClassActive(self.properties["current_job_class_id"].value()))
-
         self.ui.yotogi_class_combo.currentIndexChanged.connect(
             lambda: self.core.SetCurrentYotogiClassActive(self.properties["current_yotogi_class_id"].value()))
-
+        
         event_poller.on("maid_prop_changed", self.prop_changed)
 
     def commit_prop_changes(self, prop):
@@ -140,7 +136,7 @@ class MaidInfoTab(UiTab):
 
         self.properties[args["property_name"]].set_value(args["value"])
 
-    def maid_selected(self, n, p):
+    def on_maid_selected(self):
         if self.maid_mgr.selected_maid is None:
             return
 

@@ -5,6 +5,7 @@ namespace COM3D2.MaidFiddler.Core.Service
     public partial class Service
     {
         private readonly Dictionary<string, Dictionary<string, bool>> maidLockList = new Dictionary<string, Dictionary<string, bool>>();
+        private bool GloballyUnlocked { get; set; } = false;
         private Maid selectedMaid;
 
         private string selectedMaidGuid;

@@ -473,7 +473,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             if (IsDeserializing || args.Maid == null || !maidLockList.TryGetValue(args.Maid.status.guid, out var lockList))
                 return;
-            args.Block = lockList[args.PropertyName];
+            args.Block = !GloballyUnlocked && lockList[args.PropertyName];
         }
 
         private void OnPropFeatureChanged(object sender, PropFeatureChangeEventArgs args)

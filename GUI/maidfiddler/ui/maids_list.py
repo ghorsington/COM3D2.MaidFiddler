@@ -20,10 +20,31 @@ class MaidsList(QObject):
         event_poller.on("maid_prop_changed", self.prop_changed)
 
         self.maid_list.currentItemChanged.connect(self.maid_selected)
-        self.ui.actionSort_maids_by_guid.triggered.connect(self.sort_test)
 
-    def sort_test(self):
-        self.maid_list.sortItems()
+        # All maids
+        self.ui.actionUnlock_value_ranges.toggled.connect(lambda c: self.core.SetUnlockRanges(c))
+        self.ui.actionAll_unlock_yotogi_skills.toggled.connect(lambda c: self.core.SetShowAllYotogiSkills(c))
+        self.ui.actionAll_unlock_yotogi_commands.toggled.connect(lambda c: self.core.SetEnableAllYotogiCommand(c))
+        self.ui.actionUnlock_all_scenarios.toggled.connect(lambda c: self.core.SetEnableAllScenarios(c))
+        self.ui.actionUnlock_all_schedule_events.toggled.connect(lambda c: self.core.SetEnableAllScheduleItems(c))
+        self.ui.actionMax_all_maids.triggered.connect(self.do_and_reselect(lambda: self.core.MaxAllForAllMaids()))
+        self.ui.actiontop_bar_all_maid_unlock_max_stats.triggered.connect(self.do_and_reselect(lambda: self.core.UnlockAllForAllMaids()))
+
+        # "Unlock all" for current maid (easier to have here)
+        self.ui.actiontop_bar_cur_maid_unlock_all.triggered.connect(self.do_and_reselect(lambda: self.core.UnlockAllActive(False)))
+        self.ui.actiontop_bar_cur_maid_set_max_all.triggered.connect(self.do_and_reselect(lambda: self.core.UnlockAllActive(True)))
+        self.ui.actionCur_maid_max_all.triggered.connect(self.do_and_reselect(lambda: self.core.MaxAllActive()))
+
+        self.ui.actiontop_bar_cur_maid_unlock_noon_class.triggered.connect(lambda: self.core.UlockAllJobClassActive(False))
+        self.ui.actiontop_bar_cur_maid_unlock_yotogi_class.triggered.connect(lambda: self.core.UnlockAllYotogiClassActive(False))
+        self.ui.actiontop_bar_cur_maid_max_job.triggered.connect(lambda: self.core.UlockAllJobClassActive(True))
+        self.ui.actiontop_bar_cur_maid_max_yotogi_job.triggered.connect(lambda: self.core.UnlockAllYotogiClassActive(True))
+
+    def do_and_reselect(self, work):
+        def handler():
+            if work():
+                self.maid_selected(self.ui.maid_list.currentItem(), None)
+        return handler
 
     def prop_changed(self, args):
         if args["guid"] not in self.maid_list_widgets:
@@ -40,10 +61,12 @@ class MaidsList(QObject):
     def maid_selected(self, n, p):
         if n is None:
             self.ui.ui_tabs.setEnabled(False)
+            self.ui.menuSelected_maid.setEnabled(False)
             self.maid_mgr.selected_maid = None
-            return
+            return  
         
         self.ui.ui_tabs.setEnabled(True)
+        self.ui.menuSelected_maid.setEnabled(True)
 
         maid = self.core.SelectActiveMaid(n.guid)
         
@@ -55,8 +78,12 @@ class MaidsList(QObject):
         self.maid_mgr.maid_data[n.guid]["thumbnail"] = maid["maid_thumbnail"]
         self.maid_mgr.selected_maid = maid
 
+        for tab in self.ui.tabs:
+            tab.on_maid_selected()
+
     def clear_list(self, аrgs=None):
         self.ui.ui_tabs.setEnabled(False)
+
         self.maid_mgr.clear()
         self.maid_list.clear()
         self.maid_list_widgets.clear()
@@ -64,6 +91,7 @@ class MaidsList(QObject):
     def save_changed(self, args):
         if not args["success"]:
             return
+        
         self.reload_maids()
 
     def add_maid(self, maid):

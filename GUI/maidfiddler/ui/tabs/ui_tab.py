@@ -20,6 +20,9 @@ class UiTab(QObject):
     def init_events(self, event_poller):
         pass
 
+    def on_maid_selected(self):
+        pass
+
     def update_ui(self):
         raise NotImplementedError()
 

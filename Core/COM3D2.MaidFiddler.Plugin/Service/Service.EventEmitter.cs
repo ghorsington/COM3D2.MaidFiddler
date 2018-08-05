@@ -17,6 +17,8 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         private bool HasEventHandler => client != null;
 
+        private bool EmitEvents { get; set; } = true;
+
         public void SubscribeToEventHandler(string address)
         {
             Unsubscribe();
@@ -42,6 +44,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             while (true)
             {
                 yield return new WaitForFixedUpdate();
+
                 if (eventCaches[currentCache].Count != 0)
                 {
                     int cache = currentCache;
@@ -82,7 +85,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         private void Emit(string eventName, Dict arguments)
         {
-            if (client != null)
+            if (client != null && EmitEvents)
                 eventCaches[currentCache].Add(new Dict {["event_name"] = eventName, ["args"] = arguments});
         }
     }

@@ -14,8 +14,10 @@ class FeaturePropensityTab(UiTab):
     def update_ui(self):
         self.propensities.clear()
         self.features.clear()
-        # Feature list
+        self.ui.feature_list.clear()
+        self.ui.propensity_list.clear();
 
+        # Feature list
         for feature in self.game_data["feature_list"]:
             item = QListWidgetItem(feature["name"])
             item.setWhatsThis(f"features.{feature['name']}")
@@ -40,13 +42,11 @@ class FeaturePropensityTab(UiTab):
             self.ui.propensity_list.addItem(item)
 
     def init_events(self, event_poller):
-        self.ui.maid_list.currentItemChanged.connect(self.maid_selected)
+        self.ui.feature_list.itemChanged.connect(self.on_feature_click)
+        self.ui.propensity_list.itemChanged.connect(self.on_propensity_click)
 
         event_poller.on("feature_changed", self.on_feature_change)
         event_poller.on("propensity_changed", self.on_propensity_change)
-
-        self.ui.feature_list.itemChanged.connect(self.on_feature_click)
-        self.ui.propensity_list.itemChanged.connect(self.on_propensity_click)
 
     def on_feature_click(self, item):
         feature_id = item.data(Qt.UserRole)
@@ -66,7 +66,7 @@ class FeaturePropensityTab(UiTab):
         self.propensities[args["id"]].setCheckState(Qt.Checked if args["selected"] else Qt.Unchecked)
         self.ui.propensity_list.blockSignals(False)
 
-    def maid_selected(self):
+    def on_maid_selected(self):
         if self.maid_mgr.selected_maid is None:
             return
         

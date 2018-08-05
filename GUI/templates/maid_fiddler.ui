@@ -512,6 +512,9 @@
              </property>
              <item>
               <widget class="QPlainTextEdit" name="user_comment_text">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -586,8 +589,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>155</width>
-               <height>186</height>
+               <width>684</width>
+               <height>679</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -858,8 +861,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>155</width>
-               <height>190</height>
+               <width>684</width>
+               <height>679</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1060,8 +1063,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>463</width>
-               <height>181</height>
+               <width>684</width>
+               <height>679</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -1339,8 +1342,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>175</width>
-               <height>116</height>
+               <width>684</width>
+               <height>679</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -1457,6 +1460,9 @@
     <bool>true</bool>
    </property>
    <widget class="QMenu" name="menuGeneral_tools">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="whatsThis">
      <string>top_bar.cur_save.name</string>
     </property>
@@ -1467,26 +1473,77 @@
     <addaction name="actionUnlock_all_stock_items"/>
     <addaction name="actionMaximum_credits"/>
     <addaction name="actionMaximum_club_grade_and_evaluation"/>
+    <addaction name="actionMax_facility_grade"/>
    </widget>
    <widget class="QMenu" name="menuAll_maids">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="whatsThis">
      <string>top_bar.all_maid.name</string>
     </property>
     <property name="title">
      <string>top_bar.all_maid.name</string>
     </property>
+    <widget class="QMenu" name="menutop_bar_all_maid_unlocks">
+     <property name="whatsThis">
+      <string>top_bar.all_maid.unlock.name</string>
+     </property>
+     <property name="title">
+      <string>top_bar.all_maid.unlock.name</string>
+     </property>
+     <addaction name="actionUnlock_all_schedule_events"/>
+     <addaction name="actionUnlock_all_scenarios"/>
+     <addaction name="actionAll_unlock_yotogi_skills"/>
+     <addaction name="actionAll_unlock_yotogi_commands"/>
+    </widget>
+    <addaction name="actionMax_all_maids"/>
+    <addaction name="actiontop_bar_all_maid_unlock_max_stats"/>
     <addaction name="actionUnlock_value_ranges"/>
-    <addaction name="actionAll_unlock_yotogi_skills"/>
-    <addaction name="actionAll_unlock_yotogi_commands"/>
-    <addaction name="actionUnlock_all_scenarios"/>
+    <addaction name="menutop_bar_all_maid_unlocks"/>
    </widget>
    <widget class="QMenu" name="menuSelected_maid">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="whatsThis">
      <string>top_bar.cur_maid.name</string>
     </property>
     <property name="title">
      <string>top_bar.cur_maid.name</string>
     </property>
+    <widget class="QMenu" name="menutop_bar_cur_maid_set_max">
+     <property name="whatsThis">
+      <string>top_bar.cur_maid.set_max.name</string>
+     </property>
+     <property name="title">
+      <string>top_bar.cur_maid.set_max.name</string>
+     </property>
+     <addaction name="actionCur_maid_max_all"/>
+     <addaction name="actiontop_bar_cur_maid_max_job"/>
+     <addaction name="actiontop_bar_cur_maid_max_yotogi_job"/>
+     <addaction name="actiontop_bar_cur_maid_max_yotogi_skills"/>
+     <addaction name="actiontop_bar_cur_maid_set_max_all"/>
+    </widget>
+    <widget class="QMenu" name="menutop_bar_cur_maid_unlock">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="whatsThis">
+      <string>top_bar.cur_maid.unlock.name</string>
+     </property>
+     <property name="title">
+      <string>top_bar.cur_maid.unlock.name</string>
+     </property>
+     <addaction name="actiontop_bar_cur_maid_unlock_noon_class"/>
+     <addaction name="actiontop_bar_cur_maid_unlock_yotogi_class"/>
+     <addaction name="actiontop_bar_cur_maid_unlock_yotogi_skills"/>
+     <addaction name="actiontop_bar_cur_maid_unlock_all"/>
+    </widget>
+    <addaction name="menutop_bar_cur_maid_unlock"/>
+    <addaction name="menutop_bar_cur_maid_set_max"/>
+    <addaction name="actiontop_bar_cur_maid_lock_all"/>
+    <addaction name="actiontop_bar_cur_maid_unlock_all_2"/>
    </widget>
    <widget class="QMenu" name="menuMisc">
     <property name="whatsThis">
@@ -1597,10 +1654,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>top_bar.all_maid.unlock_all_yotogi_skills</string>
+    <string>top_bar.all_maid.unlock.yotogi_skills</string>
    </property>
    <property name="whatsThis">
-    <string>top_bar.all_maid.unlock_all_yotogi_skills</string>
+    <string>top_bar.all_maid.unlock.yotogi_skills</string>
    </property>
   </action>
   <action name="actionAll_unlock_yotogi_commands">
@@ -1608,18 +1665,144 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>top_bar.all_maid.unlock_all_yotogi_commands</string>
+    <string>top_bar.all_maid.unlock.yotogi_commands</string>
    </property>
    <property name="whatsThis">
-    <string>top_bar.all_maid.unlock_all_yotogi_commands</string>
+    <string>top_bar.all_maid.unlock.yotogi_commands</string>
    </property>
   </action>
   <action name="actionUnlock_all_scenarios">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>top_bar.all_maid.unlock_all_scenes</string>
+    <string>top_bar.all_maid.unlock.scenes</string>
    </property>
    <property name="whatsThis">
-    <string>top_bar.all_maid.unlock_all_scenes</string>
+    <string>top_bar.all_maid.unlock.scenes</string>
+   </property>
+  </action>
+  <action name="actionUnlock_all_schedule_events">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>top_bar.all_maid.unlock.schedule_events</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.all_maid.unlock.schedule_events</string>
+   </property>
+  </action>
+  <action name="actionMax_facility_grade">
+   <property name="text">
+    <string>top_bar.cur_save.max_facility_grade</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_save.max_facility_grade</string>
+   </property>
+  </action>
+  <action name="actionMax_all_maids">
+   <property name="text">
+    <string>top_bar.all_maid.max_stats</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.all_maid.max_stats</string>
+   </property>
+  </action>
+  <action name="actionCur_maid_max_all">
+   <property name="text">
+    <string>top_bar.cur_maid.set_max.stats</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_maid.set_max.stats</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_all_maid_unlock_max_stats">
+   <property name="text">
+    <string>top_bar.all_maid.unlock_max_stats</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.all_maid.unlock_max_stats</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_cur_maid_max_job">
+   <property name="text">
+    <string>top_bar.cur_maid.set_max.noon_class</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_maid.set_max.noon_class</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_cur_maid_max_yotogi_job">
+   <property name="text">
+    <string>top_bar.cur_maid.set_max.yotogi_class</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_maid.set_max.yotogi_class</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_cur_maid_max_yotogi_skills">
+   <property name="text">
+    <string>top_bar.cur_maid.set_max.yotogi_skills</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_maid.set_max.yotogi_skills</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_cur_maid_unlock_yotogi_class">
+   <property name="text">
+    <string>top_bar.cur_maid.unlock.yotogi_class</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_maid.unlock.yotogi_class</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_cur_maid_unlock_noon_class">
+   <property name="text">
+    <string>top_bar.cur_maid.unlock.noon_class</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_maid.unlock.noon_class</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_cur_maid_unlock_yotogi_skills">
+   <property name="text">
+    <string>top_bar.cur_maid.unlock.yotogi_skills</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_maid.unlock.yotogi_skills</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_cur_maid_unlock_all">
+   <property name="text">
+    <string>top_bar.cur_maid.unlock.all</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_maid.unlock.all</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_cur_maid_set_max_all">
+   <property name="text">
+    <string>top_bar.cur_maid.set_max.all</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_maid.set_max.all</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_cur_maid_lock_all">
+   <property name="text">
+    <string>top_bar.cur_maid.lock_all</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_maid.lock_all</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_cur_maid_unlock_all_2">
+   <property name="text">
+    <string>top_bar.cur_maid.unlock_all</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_maid.unlock_all</string>
    </property>
   </action>
  </widget>

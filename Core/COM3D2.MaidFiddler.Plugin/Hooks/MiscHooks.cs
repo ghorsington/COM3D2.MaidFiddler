@@ -11,6 +11,18 @@ namespace COM3D2.MaidFiddler.Core.Hooks
         public static bool EnableYotogiSkills { get; set; }
         public static bool EnableAllCommands { get; set; }
         public static bool EnableAllScenarios { get; set; }
+        public static bool EnableAllScheduleItems { get; set; }
+
+        public static bool WorkIdReset()
+        {
+            return EnableAllScheduleItems;
+        }
+
+        public static bool ToggleWork(out bool result)
+        {
+            result = true;
+            return EnableAllScheduleItems;
+        }
 
         public static bool ScenarioCheckPlayableCondition(out bool result, ref List<Maid> eventMaids)
         {

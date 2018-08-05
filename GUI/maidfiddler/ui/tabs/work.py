@@ -23,6 +23,10 @@ class WorkTab(UiTab):
         self.work_day_names.clear()
         self.work_yotogi_names.clear()
 
+        self.ui.noon_work_table.clearContents()
+        self.ui.cur_noon_work_combo.clear()
+        self.ui.cur_night_work_combo.clear()
+
         noon_work = [data for data in self.game_data["work_data"]
                      if data["work_type"] != "Yotogi"]
 
@@ -52,6 +56,9 @@ class WorkTab(UiTab):
             play_count = NumberElement(line_play_count)
             self.work_elements[work_data["id"]] = (level, play_count)
 
+            level.connect(self.change_level)
+            play_count.connect(self.change_play_count)
+
             self.ui.noon_work_table.setItem(i, 0, name)
             self.ui.noon_work_table.setCellWidget(i, 1, line_level)
             self.ui.noon_work_table.setCellWidget(i, 2, line_play_count)
@@ -67,17 +74,10 @@ class WorkTab(UiTab):
             self.work_yotogi_names.append(f"work_yotogi.{work_data['name']}")
 
     def init_events(self, event_poller):
-        self.ui.maid_list.currentItemChanged.connect(self.maid_selected)
-
         self.ui.cur_noon_work_combo.currentIndexChanged.connect(lambda: self.core.SetNoonWorkActive(self.ui.cur_noon_work_combo.currentData(Qt.UserRole)))
         self.ui.cur_night_work_combo.currentIndexChanged.connect(lambda: self.core.SetNightWorkActive(self.ui.cur_night_work_combo.currentData(Qt.UserRole)))
-
-        for (level, play_count) in self.work_elements.values():
-            level.connect(self.change_level)
-            play_count.connect(self.change_play_count)
-
         event_poller.on("work_data_changed", self.work_data_changed)
-    
+
     def work_data_changed(self, args):
         (level, play_count) = self.work_elements[args["id"]]
         level.set_value(args["level"])
@@ -91,7 +91,7 @@ class WorkTab(UiTab):
         count = self.sender()
         self.core.SetWorkPlayCountActive(count.property("work_id"), count.value())
 
-    def maid_selected(self, n, p):
+    def on_maid_selected(self):
         if self.maid_mgr.selected_maid is None:
             return
 

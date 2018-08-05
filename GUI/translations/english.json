@@ -21,14 +21,41 @@
                 "unlock_trophies": "Unlock all trophies",
                 "unlock_stock_items": "Unlock all stock items",
                 "max_credits": "Maximum credits",
-                "max_grade": "Maximum grade an evaluation"
+                "max_grade": "Maximum grade an evaluation",
+                "max_facility_grade": "Max grade for all selected facilities"
             },
             "all_maid": {
                 "name": "All maids",
-                "unlock_ranges": "Unlock value ranges"
+                "unlock_ranges": "Unlock value ranges",
+                "max_stats": "Max stats for all maids",
+                "unlock_max_stats": "Unlock everything and set to max",
+                "unlock": {
+                    "name": "Unlock cheats",
+                    "schedule_events": "Make all schedule events visible",
+                    "scenes": "Make all scenarios visible",
+                    "yotogi_skills": "Make all yotogi skills selectable",
+                    "yotogi_commands": "Make all yotogi commands selectable"
+                }
             },
             "cur_maid" : {
-                "name": "Selected maid"
+                "name": "Selected maid",
+                "unlock": {
+                    "name": "Unlock all",
+                    "noon_class": "Noon work classes",
+                    "yotogi_class": "Yotogi classes",
+                    "yotogi_skills": "Yotogi skills",
+                    "all": "All of the above"
+                },
+                "set_max": {
+                    "name": "Unlock and set to max",
+                    "stats": "Maid stats",
+                    "noon_class": "Noon work classes",
+                    "yotogi_class": "Yotogi classes",
+                    "yotogi_skills": "Yotogi skills",
+                    "all": "All of the above"
+                },
+                "lock_all": "Lock all stats",
+                "unlock_all": "Unlock all stats"
             },
             "misc": {
                 "name": "Other",

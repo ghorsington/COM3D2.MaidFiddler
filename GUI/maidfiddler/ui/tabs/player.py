@@ -19,6 +19,7 @@ class PlayerTab(UiTab):
     def update_ui(self):
         #self.ui.player_params_table.clear()
         self.properties.clear()
+        self.ui.player_params_table.clearContents()
 
         self.ui.player_params_table.setRowCount(
             len(self.game_data["player_status_settable"]))
@@ -59,13 +60,12 @@ class PlayerTab(UiTab):
 
             self.properties[prop] = (line, checkbox)
 
+            line.connect(self.commit_prop)
+            checkbox.stateChanged.connect(self.commit_lock)
+
     def init_events(self, event_poller):
         event_poller.on("deserialize_done", self.update_player_props)
         event_poller.on("player_prop_changed", self.on_player_prop_change)
-
-        for prop, cb in self.properties.values():
-            prop.connect(self.commit_prop)
-            cb.stateChanged.connect(self.commit_lock)
 
     def commit_prop(self):
         sender = self.sender()
