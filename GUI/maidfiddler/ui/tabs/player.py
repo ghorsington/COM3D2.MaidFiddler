@@ -5,8 +5,8 @@ from maidfiddler.ui.qt_elements import NumberElement, TextElement, CheckboxEleme
 from maidfiddler.util.translation import tr, tr_str
 
 class PlayerTab(UiTab):
-    def __init__(self, ui, core, maid_mgr):
-        UiTab.__init__(self, ui, core, maid_mgr)
+    def __init__(self, ui):
+        UiTab.__init__(self, ui)
 
         self.properties = {}
         self.type_generators = {

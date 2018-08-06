@@ -6,8 +6,8 @@ from maidfiddler.util.translation import tr, tr_str
 
 
 class WorkTab(UiTab):
-    def __init__(self, ui, core, maid_mgr):
-        UiTab.__init__(self, ui, core, maid_mgr)
+    def __init__(self, ui):
+        UiTab.__init__(self, ui)
 
         self.work_elements = {}
         self.noon_work_id_index = {}
@@ -26,6 +26,9 @@ class WorkTab(UiTab):
         self.ui.noon_work_table.clearContents()
         self.ui.cur_noon_work_combo.clear()
         self.ui.cur_night_work_combo.clear()
+
+        self.ui.cur_noon_work_combo.blockSignals(True)
+        self.ui.cur_night_work_combo.blockSignals(True)
 
         noon_work = [data for data in self.game_data["work_data"]
                      if data["work_type"] != "Yotogi"]
@@ -72,6 +75,9 @@ class WorkTab(UiTab):
             self.ui.cur_night_work_combo.addItem(work_data["name"], work_data["id"])
             self.night_work_id_index[work_data["id"]] = i
             self.work_yotogi_names.append(f"work_yotogi.{work_data['name']}")
+
+        self.ui.cur_noon_work_combo.blockSignals(False)
+        self.ui.cur_night_work_combo.blockSignals(False)
 
     def init_events(self, event_poller):
         self.ui.cur_noon_work_combo.currentIndexChanged.connect(lambda: self.core.SetNoonWorkActive(self.ui.cur_noon_work_combo.currentData(Qt.UserRole)))

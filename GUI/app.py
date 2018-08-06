@@ -1,34 +1,17 @@
 import sys
 import gevent
-import zerorpc
+#import zerorpc
 from PyQt5.QtWidgets import QApplication, QStyleFactory
 import maidfiddler.util.util as util
 from maidfiddler.ui.main_window import MainWindow
-
-
-def connect():
-    print(f"Connecting to tcp://{util.GAME_ADDRESS}:8899")
-    client = zerorpc.Client()
-    client.connect(f"tcp://{util.GAME_ADDRESS}:8899")
-    try:
-        client._zerorpc_ping()
-        return client
-    except Exception as ex:
-        print("Failed to connect because " + str(ex))
-        client.close()
-        return None
-    print("Connected!")
-
 
 def event_loop(app):
     while util.APP_RUNNING:
         app.processEvents()
         gevent.sleep()
 
-
 def close():
     util.APP_RUNNING = False
-
 
 def main():
     # We set switch interval to change how often gevent switches 
@@ -44,18 +27,19 @@ def main():
     group = gevent.pool.Group()
 
     print("Starting MF")
-    client = connect()
+    #client = connect()
 
-    if client is None:
-        sys.exit(1)
+    #if client is None:
+    #    sys.exit(1)
 
     app = QApplication(sys.argv)
     app.setStyle(QStyleFactory.create("Fusion"))
-
-    window = MainWindow(client, group, close)
-
-    window.show()
     group.spawn(event_loop, app)
+
+    window = MainWindow(group, close)
+    window.show()
+    window.connect()
+
     group.join()
 
 

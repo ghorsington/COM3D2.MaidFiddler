@@ -4,8 +4,8 @@ from .ui_tab import UiTab
 from maidfiddler.util.translation import tr, tr_str
 
 class YotogiTab(UiTab):
-    def __init__(self, ui, core, maid_mgr):
-        UiTab.__init__(self, ui, core, maid_mgr)
+    def __init__(self, ui):
+        UiTab.__init__(self, ui)
 
         self.skill_elements = {}
     

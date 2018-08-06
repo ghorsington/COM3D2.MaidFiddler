@@ -5,8 +5,8 @@ from maidfiddler.util.translation import tr, tr_str
 
 
 class FeaturePropensityTab(UiTab):
-    def __init__(self, ui, core, maid_mgr):
-        UiTab.__init__(self, ui, core, maid_mgr)
+    def __init__(self, ui):
+        UiTab.__init__(self, ui)
 
         self.propensities = {}
         self.features = {}
@@ -14,6 +14,8 @@ class FeaturePropensityTab(UiTab):
     def update_ui(self):
         self.propensities.clear()
         self.features.clear()
+        self.ui.feature_list.blockSignals(True)
+        self.ui.propensity_list.blockSignals(True)
         self.ui.feature_list.clear()
         self.ui.propensity_list.clear();
 
@@ -40,6 +42,9 @@ class FeaturePropensityTab(UiTab):
 
             self.propensities[propensity["id"]] = item
             self.ui.propensity_list.addItem(item)
+
+        self.ui.feature_list.blockSignals(False)
+        self.ui.propensity_list.blockSignals(False)
 
     def init_events(self, event_poller):
         self.ui.feature_list.itemChanged.connect(self.on_feature_click)

@@ -1,16 +1,22 @@
 from PyQt5.QtCore import Qt, QObject
 
 class UiTab(QObject):
-    def __init__(self, ui, core, maid_mgr):
+    def __init__(self, ui):
         QObject.__init__(self)
         self.ui = ui
-        self.core = core
-        self.maid_mgr = maid_mgr
         self._game_data = None
 
     @property
     def game_data(self):
         return self._game_data
+
+    @property
+    def core(self):
+        return self.ui.core
+
+    @property
+    def maid_mgr(self):
+        return self.ui.maid_mgr
 
     @game_data.setter
     def game_data(self, value):

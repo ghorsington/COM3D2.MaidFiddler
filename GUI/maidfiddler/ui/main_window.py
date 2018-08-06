@@ -1,19 +1,23 @@
 import PyQt5.uic as uic
+import zerorpc
+import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QCheckBox, QSpinBox, QWidget, QHBoxLayout, QListWidgetItem, QMenu, QAction
+from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QCheckBox, QSpinBox, QWidget, QHBoxLayout, QListWidgetItem, QMenu, QAction, QDialog
 
 import maidfiddler.util.util as util
 from maidfiddler.util.eventpoller import EventPoller
 from maidfiddler.ui.tabs import *
 from maidfiddler.ui.maids_list import MaidsList
 
+from maidfiddler.ui.connect_dialog import ConnectDialog
+
 from maidfiddler.util.translation import load_translation, tr, get_random_title
 
 UI_MainWindow = uic.loadUiType(
     open(util.get_resource_path("templates/maid_fiddler.ui")))
 
-BASE_TITLE = "Maid Fiddler for COM"
+BASE_TITLE = "Maid Fiddler COM3D2"
 
 class MaidManager:
     def __init__(self):
@@ -22,45 +26,64 @@ class MaidManager:
 
     def clear(self):
         self.maid_data.clear()
+        self.selected_maid = None
 
     def add_maid(self, maid):
         self.maid_data[maid["guid"]] = maid
 
 
 class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
-    def __init__(self, core, group, close_func):
+    def __init__(self, group, close_func):
         print("Initializing UI")
         super(MainWindow, self).__init__()
         self.setupUi(self)
         self.ui_tabs.setEnabled(False)
 
-        self.maid_list_widgets = {}
-
+        self.core = None
+        self.connect_dialog = ConnectDialog(self)
         self.close_func = close_func
-        self.core = core
-        self.event_poller = EventPoller(8890)
-        self.event_poller.start(self.core, group)
+        self.event_poller = EventPoller(group)
+        #self.event_poller.start(self.core)
 
+        self.maid_list_widgets = {}
         self.maid_mgr = MaidManager()
         self.tabs = []
 
-        self.tabs.append(MaidInfoTab(self, self.core, self.maid_mgr))
-        self.tabs.append(MaidStatsTab(self, self.core, self.maid_mgr))
-        self.tabs.append(FeaturePropensityTab(self, self.core, self.maid_mgr))
-        self.tabs.append(YotogiTab(self, self.core, self.maid_mgr))
-        self.tabs.append(WorkTab(self, self.core, self.maid_mgr))
-        player_tab = PlayerTab(self, self.core, self.maid_mgr)
-        self.tabs.append(player_tab)
+        self.tabs.append(MaidInfoTab(self))
+        self.tabs.append(MaidStatsTab(self))
+        self.tabs.append(FeaturePropensityTab(self))
+        self.tabs.append(YotogiTab(self))
+        self.tabs.append(WorkTab(self))
+        self.player_tab = PlayerTab(self)
+        self.tabs.append(self.player_tab)
 
-        self.maids_list = MaidsList(self, self.core, self.maid_mgr)
+        self.maids_list = MaidsList(self)
 
-        self.load_ui()
+        #self.load_ui()
         self.init_events()
         self.translate_ui("english")
 
+        #self.maids_list.reload_maids()
+        #player_tab.reload_player_props()
+        #self.connect_dialog.exec()
+
+    def connect(self):
+        self.connect_dialog.reload()
+
+        result = self.connect_dialog.exec()
+        if result != QDialog.Accepted:
+            sys.exit(0)
+        
+        self.core = self.connect_dialog.client
+        self.connect_dialog.client = None
+
+        open_port = self.core.GetAvailableTcpPort()
+        print(f"Got open TCP port: {open_port}")
+        self.event_poller.start(open_port, self.core)
+
+        self.load_ui()
         self.maids_list.reload_maids()
-        player_tab.reload_player_props()
-        print("UI initialized!")
+        self.player_tab.reload_player_props()
 
     def translate_ui(self, language):
         load_translation(f"{language}.json")
@@ -81,7 +104,14 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         for tab in self.tabs:
             tab.translate_ui()
 
+    def on_connection_close(self, args=None):
+        print("Connection closed!")
+        self.maids_list.clear_list()
+        self.connect()
+
     def init_events(self):
+        self.event_poller.on("connection_closed", self.on_connection_close)
+
         self.maids_list.init_events(self.event_poller)
 
         for tab in self.tabs:

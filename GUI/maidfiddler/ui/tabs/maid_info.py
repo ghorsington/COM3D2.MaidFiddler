@@ -7,8 +7,8 @@ from maidfiddler.util.translation import tr, tr_str
 
 
 class MaidInfoTab(UiTab):
-    def __init__(self, ui, core, maid_mgr):
-        UiTab.__init__(self, ui, core, maid_mgr)
+    def __init__(self, ui):
+        UiTab.__init__(self, ui)
         self.personalities = {}
         self.contracts = {}
         self.relations = {}
@@ -61,6 +61,14 @@ class MaidInfoTab(UiTab):
         self.ui.job_class_combo.clear()
         self.ui.yotogi_class_combo.clear()
 
+        self.ui.personality_combo.blockSignals(True)
+        self.ui.contract_combo.blockSignals(True)
+        self.ui.relation_combo.blockSignals(True)
+        self.ui.current_combo.blockSignals(True)
+        self.ui.initial_combo.blockSignals(True)
+        self.ui.job_class_combo.blockSignals(True)
+        self.ui.yotogi_class_combo.blockSignals(True)
+
         for i, personal in enumerate(self._game_data["personal_list"]):
             self.ui.personality_combo.addItem(personal["name"], personal["id"])
             self.personalities[personal["id"]] = i
@@ -97,6 +105,14 @@ class MaidInfoTab(UiTab):
             self.yotogi_classes_names.append(f"yotogi_class.{yotogi_class['name']}")
 
         self.ui.yotogi_class_combo.view().setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+
+        self.ui.personality_combo.blockSignals(False)
+        self.ui.contract_combo.blockSignals(False)
+        self.ui.relation_combo.blockSignals(False)
+        self.ui.current_combo.blockSignals(False)
+        self.ui.initial_combo.blockSignals(False)
+        self.ui.job_class_combo.blockSignals(False)
+        self.ui.yotogi_class_combo.blockSignals(False)
 
     def init_events(self, event_poller):
         self.ui.first_name_edit.editingFinished.connect(

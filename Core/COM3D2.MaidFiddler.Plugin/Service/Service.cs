@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using COM3D2.MaidFiddler.Core.Utils;
 using UnityEngine;
 
@@ -7,6 +9,7 @@ namespace COM3D2.MaidFiddler.Core.Service
     public partial class Service
     {
         private readonly MonoBehaviour parent;
+        private static readonly IPEndPoint DefaultLoopbackEndpoint = new IPEndPoint(IPAddress.Loopback, port: 0);
 
         public Service(MonoBehaviour parent)
         {
@@ -34,6 +37,15 @@ namespace COM3D2.MaidFiddler.Core.Service
                 sb.AppendLine($"  - {s}{(PluginData.IsEnabled(s) ? " [ENABLED]" : "")}");
 
             return sb.ToString();
+        }
+
+        public int GetAvailableTcpPort()
+        {
+            using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            {
+                socket.Bind(DefaultLoopbackEndpoint);
+                return ((IPEndPoint)socket.LocalEndPoint).Port;
+            }
         }
     }
 }

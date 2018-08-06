@@ -3,12 +3,13 @@ import zerorpc
 import maidfiddler.util.util as util
 
 class EventPoller(object):
-    def __init__(self, port):
-        self.port = port
+    def __init__(self, group):
         self.event_handlers = dict()
         self.server = None
         self.ge_server = None
         self.job_stack = []
+        self.group = group
+        self.group.spawn(self.event_loop)
 
     def event_loop(self):
         while util.APP_RUNNING:
@@ -19,25 +20,25 @@ class EventPoller(object):
                 self.job_stack.clear()
             gevent.sleep(0.1)
 
-    def start(self, client, group):
+    def start(self, port, client):
         print("Initializing event poller")
         self.server = zerorpc.Server(self)
-        self.server.bind(f"tcp://{util.CLIENT_ADDRESS}:{self.port}")
-        self.ge_server = group.spawn(self.server.run)
-        group.spawn(self.event_loop)
-        client.SubscribeToEventHandler(f"tcp://{util.CLIENT_ADDRESS}:{self.port}")
+        self.server.bind(f"tcp://{util.CLIENT_ADDRESS}:{port}")
+        self.ge_server = self.group.spawn(self.server.run)
+        client.SubscribeToEventHandler(f"tcp://{util.CLIENT_ADDRESS}:{port}")
     
     def dispose_handler(self):
-        # TODO: When called from COM, add disconnected message
         self.stop()
+        self.job_stack.append(("connection_closed", {}))
 
     def stop(self):
         try:
             gevent.kill(self.ge_server)
         except Exception:
-            print("Closed gevent!")
+            print("Closed server!")
         finally:
             self.server.close()
+            self.server = None
 
     def on(self, event_name, handler):
         if event_name not in self.event_handlers:

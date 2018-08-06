@@ -5,8 +5,8 @@ from maidfiddler.ui.qt_elements import NumberElement, TextElement
 from maidfiddler.util.translation import tr
 
 class MaidStatsTab(UiTab):
-    def __init__(self, ui, core, maid_mgr):
-        UiTab.__init__(self, ui, core, maid_mgr)
+    def __init__(self, ui):
+        UiTab.__init__(self, ui)
 
         self.properties = {}
         self.bonus_properties = {}
@@ -19,6 +19,7 @@ class MaidStatsTab(UiTab):
     def update_ui(self):
         self.properties.clear()
         self.bonus_properties.clear()
+
         self.ui.maid_params_lockable_table.clearContents()
         self.ui.maid_params_bonus_table.clearContents()
 

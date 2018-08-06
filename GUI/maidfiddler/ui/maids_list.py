@@ -4,13 +4,19 @@ from PyQt5.QtWidgets import QListWidgetItem
 from maidfiddler.ui.resources import NO_THUMBNAIL
 
 class MaidsList(QObject):
-    def __init__(self, ui, core, maid_mgr):
+    def __init__(self, ui):
         QObject.__init__(self)
         self.ui = ui
-        self.core = core
-        self.maid_mgr = maid_mgr
         self.maid_list = self.ui.maid_list
         self.maid_list_widgets = {}
+
+    @property
+    def core(self):
+        return self.ui.core
+
+    @property
+    def maid_mgr(self):
+        return self.ui.maid_mgr
 
     def init_events(self, event_poller):
         event_poller.on("deserialize_start", self.clear_list)
@@ -111,6 +117,7 @@ class MaidsList(QObject):
         self.maid_list.addItem(self.maid_list_widgets[maid["guid"]])
 
     def reload_maids(self):
+        self.clear_list()
         maids = self.core.GetAllStockMaidsBasic()
 
         for maid in maids:

@@ -15,6 +15,17 @@
         "Now with horse meat!"
     ],
     "translation": {
+        "connect_dialog" : {
+            "info": "Before using Maid Fiddler, you must connect the tool to the game!\n\nPlease input a port number here:",
+            "title": "Connect to COM3D2",
+            "status" : {
+                "wait": "Waiting to connect...",
+                "connect": "Trying to connect to tcp://{}:{}",
+                "fail": "Failed to connect because: {}"
+            },
+            "connect": "Connect",
+            "close": "Close Maid Fiddler"
+        },
         "top_bar": {
             "cur_save" : {
                 "name": "Current save",
