@@ -1,6 +1,7 @@
 import PyQt5.uic as uic
 import zerorpc
 import sys
+import os
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QCheckBox, QSpinBox, QWidget, QHBoxLayout, QListWidgetItem, QMenu, QAction, QDialog
@@ -12,7 +13,8 @@ from maidfiddler.ui.maids_list import MaidsList
 
 from maidfiddler.ui.connect_dialog import ConnectDialog
 
-from maidfiddler.util.translation import load_translation, tr, get_random_title
+from maidfiddler.util.translation import load_translation, tr, get_random_title, get_language_name
+from maidfiddler.util.config import CONFIG, save_config
 
 UI_MainWindow = uic.loadUiType(
     open(util.get_resource_path("templates/maid_fiddler.ui")))
@@ -43,7 +45,6 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.connect_dialog = ConnectDialog(self)
         self.close_func = close_func
         self.event_poller = EventPoller(group)
-        #self.event_poller.start(self.core)
 
         self.maid_list_widgets = {}
         self.maid_mgr = MaidManager()
@@ -59,13 +60,8 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
         self.maids_list = MaidsList(self)
 
-        #self.load_ui()
         self.init_events()
-        self.translate_ui("english")
-
-        #self.maids_list.reload_maids()
-        #player_tab.reload_player_props()
-        #self.connect_dialog.exec()
+        self.init_translations()
 
     def connect(self):
         self.connect_dialog.reload()
@@ -85,8 +81,26 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.maids_list.reload_maids()
         self.player_tab.reload_player_props()
 
+    def init_translations(self):
+        tl_path = os.path.join(util.BASE_DIR, "translations")
+        for tl_file in os.listdir(tl_path):
+            lang_name = get_language_name(os.path.join(tl_path, tl_file))
+            if lang_name is None:
+                continue
+            action = self.menutop_bar_misc_language.addAction(lang_name)
+            action.triggered.connect(self.tl_action(tl_file))
+        language = CONFIG.get("Options", "language", fallback="english.json")
+        self.translate_ui(language)
+
+    def tl_action(self, language):
+        def handler():
+            self.translate_ui(language)
+        return handler
+
     def translate_ui(self, language):
-        load_translation(f"{language}.json")
+        load_translation(language)
+        CONFIG["Options"]["language"] = language
+        save_config()
 
         subtitle = get_random_title()
         title = BASE_TITLE
@@ -122,9 +136,6 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.actionUnlock_all_stock_items.triggered.connect(lambda: self.core.UnlockAllStockItems())
         self.actionMaximum_credits.triggered.connect(lambda: self.core.MaxCredits())
         self.actionMaximum_club_grade_and_evaluation.triggered.connect(lambda: self.core.MaxGrade())
-
-        self.actionEnglish.triggered.connect(lambda: self.translate_ui("english"))
-        self.actionHorse.triggered.connect(lambda: self.translate_ui("neigh"))
 
     def closeEvent(self, event):
         self.core.DisconnectEventHander()

@@ -26,7 +26,6 @@ def load_translation(name):
     print(f"TL path: {path}")
 
     if not os.path.isfile(path):
-        print("translation invalid: No file found")
         return
     
     with open(path, "r", encoding="utf-8") as tl_file:
@@ -41,3 +40,14 @@ def get_random_title():
     if "titles" not in current_translation or len(current_translation["titles"]) == 0:
         return None
     return random.choice(current_translation["titles"])
+
+def get_language_name(path):
+    if not os.path.isfile(path):
+        return None
+    
+    try:
+        with open(path, "r", encoding="utf-8") as tl_file:
+            tl = json.load(tl_file)
+        return tl["info"]["language"]
+    except:
+        return None

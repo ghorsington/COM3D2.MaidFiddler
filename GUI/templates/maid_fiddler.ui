@@ -1527,7 +1527,7 @@
     </widget>
     <widget class="QMenu" name="menutop_bar_cur_maid_unlock">
      <property name="enabled">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="whatsThis">
       <string>top_bar.cur_maid.unlock.name</string>
@@ -1559,8 +1559,6 @@
      <property name="title">
       <string>top_bar.misc.language</string>
      </property>
-     <addaction name="actionEnglish"/>
-     <addaction name="actionHorse"/>
     </widget>
     <addaction name="actionAbout"/>
     <addaction name="menutop_bar_misc_language"/>

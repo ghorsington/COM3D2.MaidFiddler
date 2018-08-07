@@ -4,6 +4,7 @@ import zerorpc
 from PyQt5.QtWidgets import QPushButton, QLabel
 import maidfiddler.util.util as util
 from maidfiddler.util.translation import tr, tr_str
+from maidfiddler.util.config import CONFIG, save_config
 
 (ui_class, ui_base) = uic.loadUiType(
     open(util.get_resource_path("templates/connect_dialog.ui")))
@@ -21,6 +22,7 @@ class ConnectDialog(ui_class, ui_base):
     def reload(self):
         self.connect_button.setEnabled(True)
         self.port.setEnabled(True)
+        self.port.setValue(CONFIG.getint("Connection", "port", fallback=8899))
 
         for label in self.findChildren(QLabel):
             label.setText(tr(label))
@@ -55,5 +57,7 @@ class ConnectDialog(ui_class, ui_base):
             self.port.setEnabled(True)
             return
         
+        CONFIG["Connection"]["port"] = str(self.port.value())
+        save_config()
         self.accept()
 

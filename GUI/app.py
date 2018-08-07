@@ -1,6 +1,6 @@
 import sys
 import gevent
-#import zerorpc
+from maidfiddler.util.config import load_config, CONFIG
 from PyQt5.QtWidgets import QApplication, QStyleFactory
 import maidfiddler.util.util as util
 from maidfiddler.ui.main_window import MainWindow
@@ -27,10 +27,8 @@ def main():
     group = gevent.pool.Group()
 
     print("Starting MF")
-    #client = connect()
 
-    #if client is None:
-    #    sys.exit(1)
+    load_config()
 
     app = QApplication(sys.argv)
     app.setStyle(QStyleFactory.create("Fusion"))
