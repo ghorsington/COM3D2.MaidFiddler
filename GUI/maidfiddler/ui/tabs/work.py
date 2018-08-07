@@ -23,12 +23,11 @@ class WorkTab(UiTab):
         self.work_day_names.clear()
         self.work_yotogi_names.clear()
 
+        self.ui.cur_noon_work_combo.blockSignals(True)
+        self.ui.cur_night_work_combo.blockSignals(True)
         self.ui.noon_work_table.clearContents()
         self.ui.cur_noon_work_combo.clear()
         self.ui.cur_night_work_combo.clear()
-
-        self.ui.cur_noon_work_combo.blockSignals(True)
-        self.ui.cur_night_work_combo.blockSignals(True)
 
         noon_work = [data for data in self.game_data["work_data"]
                      if data["work_type"] != "Yotogi"]

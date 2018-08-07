@@ -1504,7 +1504,7 @@
    </widget>
    <widget class="QMenu" name="menuSelected_maid">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="whatsThis">
      <string>top_bar.cur_maid.name</string>
@@ -1513,6 +1513,9 @@
      <string>top_bar.cur_maid.name</string>
     </property>
     <widget class="QMenu" name="menutop_bar_cur_maid_set_max">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="whatsThis">
       <string>top_bar.cur_maid.set_max.name</string>
      </property>
@@ -1527,7 +1530,7 @@
     </widget>
     <widget class="QMenu" name="menutop_bar_cur_maid_unlock">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="whatsThis">
       <string>top_bar.cur_maid.unlock.name</string>
@@ -1801,6 +1804,11 @@
    </property>
    <property name="whatsThis">
     <string>top_bar.cur_maid.unlock_all</string>
+   </property>
+  </action>
+  <action name="actionreload_guid">
+   <property name="text">
+    <string>reload_guid</string>
    </property>
   </action>
  </widget>

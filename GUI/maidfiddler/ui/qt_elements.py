@@ -52,9 +52,12 @@ class NumberElement(UiElement):
         self.qt_element.valueChanged.connect(edit_func)
 
 class ComboElement(UiElement):
-    def __init__(self, qt_element, value_to_index_map):
+    def __init__(self, qt_element):
         UiElement.__init__(self, qt_element)
-        self.value_to_index_map = value_to_index_map
+        self.value_to_index_map = {}
+
+    def index_map(self):
+        return self.value_to_index_map
 
     def value(self):
         return self.qt_element.currentData()

@@ -40,6 +40,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         super(MainWindow, self).__init__()
         self.setupUi(self)
         self.ui_tabs.setEnabled(False)
+        self.menuSelected_maid.setEnabled(False)
 
         self.core = None
         self.connect_dialog = ConnectDialog(self)
@@ -80,6 +81,10 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.load_ui()
         self.maids_list.reload_maids()
         self.player_tab.reload_player_props()
+        
+        # Reload translations to translate updated UI
+        for tab in self.tabs:
+            tab.translate_ui()
 
     def init_translations(self):
         tl_path = os.path.join(util.BASE_DIR, "translations")
@@ -120,6 +125,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
     def on_connection_close(self, args=None):
         print("Connection closed!")
+        self.close()
         self.maids_list.clear_list()
         self.connect()
 
@@ -139,16 +145,18 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
     def closeEvent(self, event):
         self.core.DisconnectEventHander()
-        self.event_poller.stop()
+        self.close()
         self.close_func()
 
     def close(self):
         self.event_poller.stop()
+        self.core.close()
+        self.core = None
 
     def load_ui(self):
         print("Getting game information!")
-        self.game_data = self.core.GetGameInfo()
+        game_data = self.core.GetGameInfo()
         print("Got game info! Intializing the UI...")
 
         for tab in self.tabs:
-            tab.game_data = self.game_data
+            tab.game_data = game_data

@@ -33,11 +33,11 @@ class EventPoller(object):
 
     def stop(self):
         try:
+            self.server.close()
             gevent.kill(self.ge_server)
         except Exception:
-            print("Closed server!")
+            pass    #supress any exceptions
         finally:
-            self.server.close()
             self.server = None
 
     def on(self, event_name, handler):

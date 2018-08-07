@@ -9,13 +9,6 @@ from maidfiddler.util.translation import tr, tr_str
 class MaidInfoTab(UiTab):
     def __init__(self, ui):
         UiTab.__init__(self, ui)
-        self.personalities = {}
-        self.contracts = {}
-        self.relations = {}
-        self.seikeiken = {}
-        self.job_classes = {}
-        self.yotogi_classes = {}
-
         self.personality_names = []
         self.contracts_names = []
         self.relations_names = []
@@ -26,25 +19,34 @@ class MaidInfoTab(UiTab):
         self.properties = {
             "firstName": TextElement(self.ui.first_name_edit),
             "lastName": TextElement(self.ui.last_name_edit),
-            "personal": ComboElement(self.ui.personality_combo, self.personalities),
-            "contract": ComboElement(self.ui.contract_combo, self.contracts),
-            "relation": ComboElement(self.ui.relation_combo, self.relations),
-            "cur_seikeiken": ComboElement(self.ui.current_combo, self.seikeiken),
-            "init_seikeiken": ComboElement(self.ui.initial_combo, self.seikeiken),
-            "current_job_class_id": ComboElement(self.ui.job_class_combo, self.job_classes),
-            "current_yotogi_class_id": ComboElement(self.ui.yotogi_class_combo, self.yotogi_classes),
+            "personal": ComboElement(self.ui.personality_combo),
+            "contract": ComboElement(self.ui.contract_combo),
+            "relation": ComboElement(self.ui.relation_combo),
+            "cur_seikeiken": ComboElement(self.ui.current_combo),
+            "init_seikeiken": ComboElement(self.ui.initial_combo),
+            "current_job_class_id": ComboElement(self.ui.job_class_combo),
+            "current_yotogi_class_id": ComboElement(self.ui.yotogi_class_combo),
             "employmentDay": NumberElement(self.ui.employment_day_box),
             "profile_comment": PlainTextElement(self.ui.maid_description_edit),
             "freeComment": PlainTextElement(self.ui.user_comment_text)
         }
 
     def update_ui(self):
-        self.personalities.clear()
-        self.contracts.clear()
-        self.relations.clear()
-        self.seikeiken.clear()
-        self.job_classes.clear()
-        self.yotogi_classes.clear()
+        personalities = self.properties["personal"].index_map()
+        contracts = self.properties["contract"].index_map()
+        relations = self.properties["relation"].index_map()
+        cur_seikeiken = self.properties["cur_seikeiken"].index_map()
+        init_seikeiken = self.properties["init_seikeiken"].index_map()
+        job_classes = self.properties["current_job_class_id"].index_map()
+        yotogi_classes = self.properties["current_yotogi_class_id"].index_map()
+
+        personalities.clear()
+        contracts.clear()
+        relations.clear()
+        cur_seikeiken.clear()
+        init_seikeiken.clear()
+        job_classes.clear()
+        yotogi_classes.clear()
 
         self.personality_names.clear()
         self.contracts_names.clear()
@@ -52,14 +54,6 @@ class MaidInfoTab(UiTab):
         self.seikeiken_names.clear()
         self.job_classes_names.clear()
         self.yotogi_classes_names.clear()
-
-        self.ui.personality_combo.clear()
-        self.ui.contract_combo.clear()
-        self.ui.relation_combo.clear()
-        self.ui.current_combo.clear()
-        self.ui.initial_combo.clear()
-        self.ui.job_class_combo.clear()
-        self.ui.yotogi_class_combo.clear()
 
         self.ui.personality_combo.blockSignals(True)
         self.ui.contract_combo.blockSignals(True)
@@ -69,39 +63,48 @@ class MaidInfoTab(UiTab):
         self.ui.job_class_combo.blockSignals(True)
         self.ui.yotogi_class_combo.blockSignals(True)
 
+        self.ui.personality_combo.clear()
+        self.ui.contract_combo.clear()
+        self.ui.relation_combo.clear()
+        self.ui.current_combo.clear()
+        self.ui.initial_combo.clear()
+        self.ui.job_class_combo.clear()
+        self.ui.yotogi_class_combo.clear()
+
         for i, personal in enumerate(self._game_data["personal_list"]):
             self.ui.personality_combo.addItem(personal["name"], personal["id"])
-            self.personalities[personal["id"]] = i
+            personalities[personal["id"]] = i
             self.personality_names.append(f"personality.{personal['name']}")
 
         for i, contract_name in enumerate(self._game_data["contract"]):
             contract_id = self._game_data["contract"][contract_name]
             self.ui.contract_combo.addItem(contract_name, contract_id)
-            self.contracts[contract_id] = i
+            contracts[contract_id] = i
             self.contracts_names.append(f"contracts.{contract_name}")
 
         for i, relation_name in enumerate(self._game_data["relation"]):
             relation_id = self._game_data["relation"][relation_name]
             self.ui.relation_combo.addItem(relation_name, relation_id)
-            self.relations[relation_id] = i
+            relations[relation_id] = i
             self.relations_names.append(f"relations.{relation_name}")
 
         for i, seik_name in enumerate(self._game_data["seikeiken"]):
             seik_id = self._game_data["seikeiken"][seik_name]
             self.ui.current_combo.addItem(seik_name, seik_id)
             self.ui.initial_combo.addItem(seik_name, seik_id)
-            self.seikeiken[seik_id] = i
+            cur_seikeiken[seik_id] = i
+            init_seikeiken[seik_id] = i
             self.seikeiken_names.append(f"seikeiken.{seik_name}")
 
         for i, job_class in enumerate(self._game_data["job_class_list"]):
             self.ui.job_class_combo.addItem(job_class["name"], job_class["id"])
-            self.job_classes[job_class["id"]] = i
+            job_classes[job_class["id"]] = i
             self.job_classes_names.append(f"job_class.{job_class['name']}")
 
         for i, yotogi_class in enumerate(self._game_data["yotogi_class_list"]):
             self.ui.yotogi_class_combo.addItem(
                 yotogi_class["name"], yotogi_class["id"])
-            self.yotogi_classes[yotogi_class["id"]] = i
+            yotogi_classes[yotogi_class["id"]] = i
             self.yotogi_classes_names.append(f"yotogi_class.{yotogi_class['name']}")
 
         self.ui.yotogi_class_combo.view().setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
