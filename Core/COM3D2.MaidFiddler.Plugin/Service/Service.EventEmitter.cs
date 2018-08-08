@@ -15,9 +15,9 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         private readonly List<Dict>[] eventCaches = new List<Dict>[2];
 
-        private bool HasEventHandler => client != null;
-
         private bool EmitEvents { get; set; } = true;
+
+        private bool HasEventHandler => client != null;
 
         public void SubscribeToEventHandler(string address)
         {

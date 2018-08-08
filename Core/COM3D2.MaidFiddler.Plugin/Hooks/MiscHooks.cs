@@ -8,10 +8,10 @@ namespace COM3D2.MaidFiddler.Core.Hooks
     public static class MiscHooks
     {
         private static YotogiSkillSystem enabledSkillSystem;
-        public static bool EnableYotogiSkills { get; set; }
         public static bool EnableAllCommands { get; set; }
         public static bool EnableAllScenarios { get; set; }
         public static bool EnableAllScheduleItems { get; set; }
+        public static bool EnableYotogiSkills { get; set; }
 
         public static bool WorkIdReset()
         {
@@ -52,13 +52,13 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             if (!EnableYotogiSkills)
                 return false;
 
-            var skillSystem = enabledSkillSystem ?? CreateDummySkillSystem();
+            YotogiSkillSystem skillSystem = enabledSkillSystem ?? CreateDummySkillSystem();
 
             foreach (var skillDatas in Skill.skill_data_list)
             foreach (var idSkillPair in skillDatas)
             {
                 Skill.Data skill = idSkillPair.Value;
-                
+
                 YotogiSkillData skillData = skillSystem.Get(skill.id);
                 if (skillData == null)
                 {
@@ -84,7 +84,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             if (!EnableYotogiSkills)
                 return false;
 
-            var skillSystem = enabledSkillSystem ?? CreateDummySkillSystem();
+            YotogiSkillSystem skillSystem = enabledSkillSystem ?? CreateDummySkillSystem();
 
             foreach (var skillDatas in Skill.Old.skill_data_list)
             foreach (var idSkillPair in skillDatas)
@@ -119,6 +119,12 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             return true;
         }
 
+        public static bool CheckCommandEnabled(out bool result)
+        {
+            result = true;
+            return EnableAllCommands;
+        }
+
         private static YotogiSkillSystem CreateDummySkillSystem()
         {
             enabledSkillSystem = new YotogiSkillSystem(null);
@@ -140,12 +146,6 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             }
 
             return enabledSkillSystem;
-        }
-
-        public static bool CheckCommandEnabled(out bool result)
-        {
-            result = true;
-            return EnableAllCommands;
         }
     }
 }

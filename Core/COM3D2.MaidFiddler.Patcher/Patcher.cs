@@ -10,13 +10,12 @@ namespace COM3D2.MaidFiddler.Patcher
 {
     public static class Patcher
     {
-        private static readonly string SybarisDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        private static readonly string UnityInjectorDir = Path.Combine(SybarisDir, "UnityInjector");
+        public static readonly string[] TargetAssemblyNames = {"Assembly-CSharp.dll"};
         private const string HOOK_NAME = "COM3D2.MaidFiddler.Core";
 
         private static AssemblyDefinition HookDefinition;
-
-        public static readonly string[] TargetAssemblyNames = new[] {"Assembly-CSharp.dll"};
+        private static readonly string SybarisDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private static readonly string UnityInjectorDir = Path.Combine(SybarisDir, "UnityInjector");
 
         public static void Patch(AssemblyDefinition ass)
         {
@@ -33,13 +32,6 @@ namespace COM3D2.MaidFiddler.Patcher
             PatchCheats(ass);
         }
 
-        private static Assembly ResolveMaidFiddler(object sender, ResolveEventArgs args)
-        {
-            string assemblyName = new AssemblyName(args.Name).Name;
-
-            return assemblyName != HOOK_NAME ? null : Assembly.LoadFile(Path.Combine(UnityInjectorDir, $"{HOOK_NAME}.dll"));
-        }
-
         public static void PatchCheats(AssemblyDefinition ass)
         {
             TypeDefinition miscHooks = HookDefinition.MainModule.GetType($"{HOOK_NAME}.Hooks.MiscHooks");
@@ -49,10 +41,12 @@ namespace COM3D2.MaidFiddler.Patcher
             TypeDefinition maidStatus = ass.MainModule.GetType("MaidStatus.Status");
 
             MethodDefinition createDatas = yotogiSkillListManager.GetMethod("CreateDatas");
-            createDatas.InjectWith(miscHooks.GetMethod("PrefixCreateDatas"), flags: InjectFlags.ModifyReturn | InjectFlags.PassParametersVal);
+            createDatas.InjectWith(miscHooks.GetMethod("PrefixCreateDatas"),
+                                   flags: InjectFlags.ModifyReturn | InjectFlags.PassParametersVal);
 
             MethodDefinition createDatasOld = yotogiSkillListManager.GetMethod("CreateDatasOld");
-            createDatasOld.InjectWith(miscHooks.GetMethod("PrefixCreateDatasOld"), flags: InjectFlags.ModifyReturn | InjectFlags.PassParametersVal);
+            createDatasOld.InjectWith(miscHooks.GetMethod("PrefixCreateDatasOld"),
+                                      flags: InjectFlags.ModifyReturn | InjectFlags.PassParametersVal);
 
             MethodDefinition getYotogiSkillSystem = maidStatus.GetMethod("get_yotogiSkill");
             getYotogiSkillSystem.InjectWith(miscHooks.GetMethod("GetYotogiSkill"), flags: InjectFlags.ModifyReturn);
@@ -69,10 +63,14 @@ namespace COM3D2.MaidFiddler.Patcher
             TypeDefinition scenarioData = ass.MainModule.GetType("ScenarioData");
 
             MethodDefinition checkPlayableCondition = scenarioData.GetMethod("CheckPlayableCondition", "System.Boolean");
-            checkPlayableCondition.InjectWith(miscHooks.GetMethod("ScenarioCheckPlayableCondition"), flags: InjectFlags.ModifyReturn | InjectFlags.PassFields, typeFields: new[] { scenarioData.GetField("m_EventMaid") });
+            checkPlayableCondition.InjectWith(miscHooks.GetMethod("ScenarioCheckPlayableCondition"),
+                                              flags: InjectFlags.ModifyReturn | InjectFlags.PassFields,
+                                              typeFields: new[] {scenarioData.GetField("m_EventMaid")});
 
             MethodDefinition isPlayable = scenarioData.GetMethod("get_IsPlayable");
-            isPlayable.InjectWith(miscHooks.GetMethod("GetIsScenarioPlayable"), flags: InjectFlags.ModifyReturn | InjectFlags.PassFields, typeFields: new[] { scenarioData.GetField("m_EventMaid") });
+            isPlayable.InjectWith(miscHooks.GetMethod("GetIsScenarioPlayable"),
+                                  flags: InjectFlags.ModifyReturn | InjectFlags.PassFields,
+                                  typeFields: new[] {scenarioData.GetField("m_EventMaid")});
 
             /* Make all schedule work visible and selectable */
 
@@ -120,9 +118,22 @@ namespace COM3D2.MaidFiddler.Patcher
 
             MethodDefinition remove = yotogiSkillSystem.GetMethod("Remove", "System.Int32");
 
-            addNew.InjectWith(yotogiSkillHooks.GetMethod("OnYotogiSkillAdd"), -2, flags: InjectFlags.PassInvokingInstance | InjectFlags.PassParametersVal);
-            addOld.InjectWith(yotogiSkillHooks.GetMethod("OnYotogiSkillOldAdd"), -2, flags: InjectFlags.PassInvokingInstance | InjectFlags.PassParametersVal);
-            remove.InjectWith(yotogiSkillHooks.GetMethod("OnYotogiSkillRemove"), -1, flags: InjectFlags.PassInvokingInstance | InjectFlags.PassParametersVal);
+            addNew.InjectWith(yotogiSkillHooks.GetMethod("OnYotogiSkillAdd"),
+                              -2,
+                              flags: InjectFlags.PassInvokingInstance | InjectFlags.PassParametersVal);
+            addOld.InjectWith(yotogiSkillHooks.GetMethod("OnYotogiSkillOldAdd"),
+                              -2,
+                              flags: InjectFlags.PassInvokingInstance | InjectFlags.PassParametersVal);
+            remove.InjectWith(yotogiSkillHooks.GetMethod("OnYotogiSkillRemove"),
+                              -1,
+                              flags: InjectFlags.PassInvokingInstance | InjectFlags.PassParametersVal);
+        }
+
+        private static Assembly ResolveMaidFiddler(object sender, ResolveEventArgs args)
+        {
+            string assemblyName = new AssemblyName(args.Name).Name;
+
+            return assemblyName != HOOK_NAME ? null : Assembly.LoadFile(Path.Combine(UnityInjectorDir, $"{HOOK_NAME}.dll"));
         }
 
         private static void PatchRoundingFunctions(AssemblyDefinition ass)

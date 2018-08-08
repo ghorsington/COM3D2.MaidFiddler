@@ -11,19 +11,20 @@ namespace COM3D2.MaidFiddler.Core
 {
     public class MaidFiddlerPlugin : PluginBase
     {
-        public const string IP = "127.0.0.1";
         public const int DEFAULT_PORT = 8899;
-
-        internal string Version { get; } = typeof(MaidFiddlerPlugin).Assembly.GetName().Version.ToString();
+        public const string IP = "127.0.0.1";
 
         private MFService service;
         private Server zeroServer;
+
+        internal string Version { get; } = typeof(MaidFiddlerPlugin).Assembly.GetName().Version.ToString();
 
         public void Awake()
         {
             DontDestroyOnLoad(this);
 
-            if (!int.TryParse(Preferences["Connection"]["port"].Value, out int connectionPort) || connectionPort < 0 || connectionPort > ushort.MaxValue)
+            if (!int.TryParse(Preferences["Connection"]["port"].Value, out int connectionPort) || connectionPort < 0
+                                                                                               || connectionPort > ushort.MaxValue)
             {
                 connectionPort = DEFAULT_PORT;
                 Preferences["Connection"]["port"].Value = DEFAULT_PORT.ToString();

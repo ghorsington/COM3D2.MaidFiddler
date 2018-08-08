@@ -39,7 +39,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         public bool MaxAllForAllMaids()
         {
             EmitEvents = false;
-            foreach (var maid in GameMain.Instance.CharacterMgr.GetStockMaidList())
+            foreach (Maid maid in GameMain.Instance.CharacterMgr.GetStockMaidList())
                 MaxAll(maid);
             EmitEvents = true;
             return true;
@@ -91,7 +91,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             EmitEvents = false;
 
-            foreach (var maid in GameMain.Instance.CharacterMgr.GetStockMaidList())
+            foreach (Maid maid in GameMain.Instance.CharacterMgr.GetStockMaidList())
             {
                 UnlockAllYotogiClass(maid, true);
                 UnlockAllJobClass(maid, true);
@@ -129,7 +129,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         public void MaxCredits()
         {
-            var status = GameMain.Instance.CharacterMgr.status;
+            Status status = GameMain.Instance.CharacterMgr.status;
 
             status.casinoCoin = 999999999;
             status.money = 999999999;
@@ -137,7 +137,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         public void MaxGrade()
         {
-            var status = GameMain.Instance.CharacterMgr.status;
+            Status status = GameMain.Instance.CharacterMgr.status;
 
             status.clubGrade = 5;
             status.baseClubEvaluation = 999;
@@ -146,7 +146,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         public void MaxFacilityGrades()
         {
-            foreach (var facility in GameMain.Instance.FacilityMgr.GetFacilityArray())
+            foreach (Facility facility in GameMain.Instance.FacilityMgr.GetFacilityArray())
             {
                 if (facility == null)
                     continue;
@@ -172,7 +172,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             var data = Trophy.GetAllDatas(false);
 
-            foreach (var trophyData in data)
+            foreach (Trophy.Data trophyData in data)
                 GameMain.Instance.CharacterMgr.status.AddHaveTrophy(trophyData.id);
         }
 
@@ -193,7 +193,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             foreach (var skillList in Skill.skill_data_list)
             foreach (var skillPair in skillList)
             {
-                var skill = maid.status.yotogiSkill.Add(skillPair.Value) ?? maid.status.yotogiSkill.Get(skillPair.Key);
+                YotogiSkillData skill = maid.status.yotogiSkill.Add(skillPair.Value) ?? maid.status.yotogiSkill.Get(skillPair.Key);
                 if (max)
                     skill.expSystem.SetLevel(skill.expSystem.GetMaxLevel());
             }
@@ -201,7 +201,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             foreach (var skillList in Skill.Old.skill_data_list)
             foreach (var skillPair in skillList)
             {
-                var skill = maid.status.yotogiSkill.Add(skillPair.Value) ?? maid.status.yotogiSkill.Get(skillPair.Key);
+                YotogiSkillData skill = maid.status.yotogiSkill.Add(skillPair.Value) ?? maid.status.yotogiSkill.Get(skillPair.Key);
                 if (max)
                     skill.expSystem.SetLevel(skill.expSystem.GetMaxLevel());
             }
@@ -209,7 +209,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         private void UnlockAllJobClass(Maid maid, bool max)
         {
-            foreach (var data in JobClass.GetAllDatas(true))
+            foreach (JobClass.Data data in JobClass.GetAllDatas(true))
             {
                 var job = maid.status.jobClass.Add(data, true) ?? maid.status.jobClass.Get(data.id);
                 if (max)
@@ -219,7 +219,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         private void UnlockAllYotogiClass(Maid maid, bool max)
         {
-            foreach (var data in YotogiClass.GetAllDatas(true))
+            foreach (YotogiClass.Data data in YotogiClass.GetAllDatas(true))
             {
                 var job = maid.status.yotogiClass.Add(data, true) ?? maid.status.yotogiClass.Get(data.id);
                 if (max)
@@ -230,7 +230,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         private void MaxAll(Maid maid)
         {
             GloballyUnlocked = true;
-            var status = maid.status;
+            MaidStatus.Status status = maid.status;
 
             foreach (var setterInfo in maidSetters)
                 if (setterInfo.Value.GetParameters()[0].ParameterType == typeof(int))
@@ -238,14 +238,15 @@ namespace COM3D2.MaidFiddler.Core.Service
                 else if (setterInfo.Value.GetParameters()[0].ParameterType == typeof(long))
                     setterInfo.Value.Invoke(status, new object[] {99999L});
 
-            foreach (var yotogiSkillData in status.yotogiSkill.datas.GetValueArray())
+            foreach (YotogiSkillData yotogiSkillData in status.yotogiSkill.datas.GetValueArray())
                 yotogiSkillData.expSystem.SetLevel(yotogiSkillData.expSystem.GetMaxLevel());
 
-            foreach (var workData in status.workDatas.GetValueArray())
+            foreach (WorkData workData in status.workDatas.GetValueArray())
             {
                 workData.level = 10;
                 workData.playCount = 9999;
             }
+
             GloballyUnlocked = false;
         }
     }

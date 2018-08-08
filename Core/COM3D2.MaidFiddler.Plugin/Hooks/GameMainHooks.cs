@@ -9,9 +9,9 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 
     public static class GameMainHooks
     {
+        public static bool IsDeserializing { get; private set; }
         public static event EventHandler DeserializeStarting;
         public static event EventHandler<DeserializeEventArgs> DeserializeEnded;
-        public static bool IsDeserializing { get; private set; }
 
         public static void OnPreDeserialize()
         {
