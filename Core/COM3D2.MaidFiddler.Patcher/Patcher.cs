@@ -1,6 +1,4 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -12,18 +10,19 @@ namespace COM3D2.MaidFiddler.Patcher
 {
     public static class Patcher
     {
-        private static readonly string PatchesDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        private static readonly string RootDir = Path.Combine(PatchesDir, "..");
-        private static readonly string BinDir = Path.Combine(RootDir, "bin");
+        private static readonly string SybarisDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private static readonly string UnityInjectorDir = Path.Combine(SybarisDir, "UnityInjector");
         private const string HOOK_NAME = "COM3D2.MaidFiddler.Core";
 
         private static AssemblyDefinition HookDefinition;
 
-        public static IEnumerable<string> TargetDLLs => new[] {"Assembly-CSharp.dll"};
+        public static readonly string[] TargetAssemblyNames = new[] {"Assembly-CSharp.dll"};
 
         public static void Patch(AssemblyDefinition ass)
         {
-            HookDefinition = AssemblyLoader.LoadAssembly(Path.Combine(RootDir, $"{HOOK_NAME}.dll"));
+            HookDefinition = AssemblyLoader.LoadAssembly(Path.Combine(UnityInjectorDir, $"{HOOK_NAME}.dll"));
+
+            AppDomain.CurrentDomain.AssemblyResolve += ResolveMaidFiddler;
 
             PatchMaidStatus(ass);
             PatchCharacterMgr(ass);
@@ -32,6 +31,13 @@ namespace COM3D2.MaidFiddler.Patcher
             PatchYotogiSkillSystem(ass);
             PatchPlayerStatus(ass);
             PatchCheats(ass);
+        }
+
+        private static Assembly ResolveMaidFiddler(object sender, ResolveEventArgs args)
+        {
+            string assemblyName = new AssemblyName(args.Name).Name;
+
+            return assemblyName != HOOK_NAME ? null : Assembly.LoadFile(Path.Combine(UnityInjectorDir, $"{HOOK_NAME}.dll"));
         }
 
         public static void PatchCheats(AssemblyDefinition ass)

@@ -1,36 +1,43 @@
 ﻿using System;
 using AsyncIO;
-using BepInEx;
 using COM3D2.MaidFiddler.Core.Utils;
 using NetMQ;
+using UnityInjector;
 using ZeroRpc.Net;
 using ZeroRpc.Net.ServiceProviders;
 using MFService = COM3D2.MaidFiddler.Core.Service.Service;
 
 namespace COM3D2.MaidFiddler.Core
 {
-    [BepInPlugin("horse.coder.com3d2.maidfiddler", "Maid Fiddler for COM3D2", "0.0.1")]
-    public class MaidFiddlerPlugin : BaseUnityPlugin
+    public class MaidFiddlerPlugin : PluginBase
     {
         public const string IP = "127.0.0.1";
-        public const int PORT = 8899;
-        public const string VERSION = "Alpha 0.1";
-        private MFService service;
+        public const int DEFAULT_PORT = 8899;
 
+        internal string Version { get; } = typeof(MaidFiddlerPlugin).Assembly.GetName().Version.ToString();
+
+        private MFService service;
         private Server zeroServer;
 
         public void Awake()
         {
             DontDestroyOnLoad(this);
 
+            if (!int.TryParse(Preferences["Connection"]["port"].Value, out int connectionPort) || connectionPort < 0 || connectionPort > ushort.MaxValue)
+            {
+                connectionPort = DEFAULT_PORT;
+                Preferences["Connection"]["port"].Value = DEFAULT_PORT.ToString();
+                SaveConfig();
+            }
+
             ForceDotNet.Force();
             NetMQConfig.Linger = TimeSpan.Zero;
 
-            Debugger.WriteLine(LogLevel.Info, $"Starting up Maid Fiddler {VERSION}");
+            Debugger.WriteLine(LogLevel.Info, $"Starting up Maid Fiddler {Version}");
 
             service = new MFService(this);
 
-            Debugger.WriteLine(LogLevel.Info, $"Creating a ZeroService at tcp://{IP}:{PORT}");
+            Debugger.WriteLine(LogLevel.Info, $"Creating a ZeroService at tcp://{IP}:{connectionPort}");
 
             zeroServer = new Server(new SimpleWrapperService<MFService>(service), TimeSpan.FromSeconds(15));
 
@@ -38,7 +45,7 @@ namespace COM3D2.MaidFiddler.Core
 
             Debugger.WriteLine(LogLevel.Info, "Starting server!");
 
-            zeroServer.Bind($"tcp://{IP}:{PORT}");
+            zeroServer.Bind($"tcp://{IP}:{connectionPort}");
 
             Debugger.WriteLine(LogLevel.Info, "Started server!");
         }
@@ -54,12 +61,11 @@ namespace COM3D2.MaidFiddler.Core
             }
             catch (Exception)
             {
-                //
+                // Snibbeti snib :--D
             }
 
             Debugger.WriteLine(LogLevel.Info, "Doing cleanup!");
             NetMQConfig.Cleanup(false);
-            Debugger.WriteLine(LogLevel.Info, "Cleanup started!");
         }
     }
 }

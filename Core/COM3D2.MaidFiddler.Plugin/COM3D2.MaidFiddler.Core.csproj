@@ -11,6 +11,8 @@
     <AssemblyName>COM3D2.MaidFiddler.Core</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,8 +44,8 @@
     <Reference Include="AsyncIO, Version=0.1.25.0, Culture=neutral, PublicKeyToken=44a94435bd6f33f8, processorArchitecture=MSIL">
       <HintPath>..\packages\AsyncIO.0.1.26.0\lib\net35\AsyncIO.dll</HintPath>
     </Reference>
-    <Reference Include="BepInEx">
-      <HintPath>..\Libs\BepInEx.dll</HintPath>
+    <Reference Include="ExIni">
+      <HintPath>..\Libs\ExIni.dll</HintPath>
     </Reference>
     <Reference Include="NetMQ, Version=4.0.0.1, Culture=neutral, PublicKeyToken=a6decef4ddc58b3a, processorArchitecture=MSIL">
       <HintPath>..\packages\NetMQ.4.0.0.1\lib\net35\NetMQ.dll</HintPath>
@@ -54,6 +56,9 @@
     <Reference Include="UnityEngine">
       <HintPath>..\Libs\UnityEngine.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityInjector">
+      <HintPath>..\Libs\UnityInjector.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -87,4 +92,12 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+<Target Name="AfterBuild">
+<MakeDir Directories="$(OutputDirectory)/Sybaris/UnityInjector"/>  
+ <Move SourceFiles="$(OutputPath)\$(AssemblyName).dll" DestinationFiles="$(OutputPath)\Sybaris\UnityInjector\$(AssemblyName).dll" />
+ <Move SourceFiles="$(OutputPath)\AsyncIO.dll" DestinationFiles="$(OutputPath)\Sybaris\AsyncIO.dll" />
+ <Move SourceFiles="$(OutputPath)\MsgPack.dll" DestinationFiles="$(OutputPath)\Sybaris\MsgPack.dll" />
+ <Move SourceFiles="$(OutputPath)\NetMQ.dll" DestinationFiles="$(OutputPath)\Sybaris\NetMQ.dll" />
+ <Move SourceFiles="$(OutputPath)\ZeroRpc.Net.dll" DestinationFiles="$(OutputPath)\Sybaris\ZeroRpc.Net.dll" />
+</Target>
 </Project>
