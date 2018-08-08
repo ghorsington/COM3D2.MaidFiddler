@@ -33,6 +33,9 @@ class MaidManager:
     def add_maid(self, maid):
         self.maid_data[maid["guid"]] = maid
 
+    def remove_maid(self, maid_id):
+        del self.maid_data[maid_id]
+
 
 class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
     def __init__(self, group, close_func):

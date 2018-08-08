@@ -22,6 +22,7 @@ class MaidsList(QObject):
         event_poller.on("deserialize_start", self.clear_list)
         event_poller.on("deserialize_done", self.save_changed)
         event_poller.on("maid_added", lambda a: self.add_maid(a["maid"]))
+        event_poller.on("maid_removed", self.on_maid_removed)
         event_poller.on("maid_thumbnail_changed", self.thumb_changed)
         event_poller.on("maid_prop_changed", self.prop_changed)
 
@@ -131,6 +132,17 @@ class MaidsList(QObject):
         pixmap.loadFromData(args["thumb"])
 
         self.maid_list_widgets[args["guid"]].setIcon(QIcon(pixmap))
+
+    def on_maid_removed(self, args):
+        guid = args["maid_id"]
+        if guid not in self.maid_list_widgets:
+            return
+
+        print("Maid removed!")
+
+        self.maid_list.takeItem(self.maid_list.row(self.maid_list_widgets[guid]))
+        del self.maid_list_widgets[guid]
+        self.maid_mgr.remove_maid(guid)
 
 
 class MaidListItem(QListWidgetItem):

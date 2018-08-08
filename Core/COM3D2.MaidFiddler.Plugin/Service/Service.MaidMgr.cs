@@ -19,7 +19,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             Emit("maid_removed", new Dict {["maid_id"] = e.Maid.status.guid});
 
-            AddMaid(e.Maid);
+            RemoveMaid(e.Maid);
         }
 
         private void OnMaidAdded(object sender, MaidChangeEventArgs e)
@@ -31,7 +31,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             Emit("maid_added", new Dict {["maid"] = ReadBasicMaidData(e.Maid)});
 
-            RemoveMaid(e.Maid);
+            AddMaid(e.Maid);
         }
     }
 }
