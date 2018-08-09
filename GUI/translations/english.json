@@ -13,7 +13,10 @@
         "Now with Neigh Service!",
         "Have a bottle of Fosters",
         "Now with horse meat!",
-        "Kept you waiting, huh?"
+        "Kept you waiting, huh?",
+        "After 9 month of development, hopefully it will have been worth the wait",
+        "Waluigi Edition",
+        "vineTrash"
     ],
     "translation": {
         "connect_dialog" : {
@@ -148,7 +151,7 @@
             "currentReason": "Reason (current)",
             "baseReception": "Reception",
             "baseCare": "Care",
-            "baseLovely": "Lovelyness",
+            "baseLovely": "Loveliness",
             "baseElegance": "Elegance",
             "baseCharm": "Charm",
             "baseCooking": "Cooking skill",
@@ -226,7 +229,7 @@
             "Soap": "Soap Maid",
             "Harlem": "Harem Maid",
             "Activesex": "Active",
-            "Abnormalecstasy": "Abnormal Ecstacy",
+            "Abnormalecstasy": "Abnormal Ecstasy",
             "Abnormalsex": "Abnormal Sex",
             "Ecstasybasic": "Basic Ecstasy",
             "Kensinsex": "Kensin sex",
@@ -255,7 +258,7 @@
             "Ecstasyanalbasic": "Ecstasy Anal Basic",
             "Rosyutuhousi": "Rosyutu House",
             "HentaiHard": "Hentai Hard",
-            "Kensinhoushi": "Kensin Housi",
+            "Kensinhoushi": "Kensin Houshi",
             "Hentai": "Hentai",
             "Activehoushi": "Active Houshi",
             "Sikkinsex": "Sikkin Sex",
