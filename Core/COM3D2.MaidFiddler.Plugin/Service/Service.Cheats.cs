@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using COM3D2.MaidFiddler.Core.Hooks;
 using MaidStatus;
+using PlayerStatus;
 using wf;
 using Yotogis;
 using Status = PlayerStatus.Status;
@@ -146,6 +147,10 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         public void MaxFacilityGrades()
         {
+            if(typeof(FacilityManager).GetField("m_FacilityExpArray", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(GameMain.Instance.FacilityMgr) is Dictionary<int, SimpleExperienceSystem> facilityExp)
+                foreach (var exp in facilityExp)
+                    exp.Value.SetLevel(exp.Value.GetMaxLevel());
+
             foreach (Facility facility in GameMain.Instance.FacilityMgr.GetFacilityArray())
             {
                 if (facility == null)
@@ -185,7 +190,14 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             foreach (var itemData in Shop.item_data_dic)
                 if (itemData.Value is Shop.ItemDataEvent itemDataEvent)
+                {
                     GameMain.Instance.CharacterMgr.status.AddHaveItem(itemDataEvent.target_flag_name);
+                }
+                else
+                {
+                    GameMain.Instance.CharacterMgr.status.AddShopLineup(itemData.Value.id);
+                    GameMain.Instance.CharacterMgr.status.SetShopLineupStatus(itemData.Value.id, ShopItemStatus.Purchased);
+                }
         }
 
         private void UnlockAllYotogiSkills(Maid maid, bool max)

@@ -99,7 +99,7 @@ class MaidStatsTab(UiTab):
 
         for line, cb in self.properties.values():
             cb.blockSignals(True)
-            cb.setCheckState(Qt.Checked)
+            cb.setCheckState(Qt.Checked if state else Qt.Unchecked)
             cb.blockSignals(False)
 
     def prop_changed(self, args):

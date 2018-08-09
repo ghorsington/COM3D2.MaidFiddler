@@ -104,7 +104,7 @@ class PlayerTab(UiTab):
     def translate_ui(self):
         self.ui.ui_tabs.setTabText(5, tr(self.ui.tab_player_info))
 
-        for group in self.ui.tab_maid_work.findChildren(QGroupBox):
+        for group in self.ui.tab_player_info.findChildren(QGroupBox):
             group.setTitle(tr(group))
 
         for row in range(0, self.ui.player_params_table.rowCount()):
