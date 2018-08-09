@@ -12,6 +12,7 @@ def event_loop(app):
 
 def close():
     util.APP_RUNNING = False
+    sys.exit(0)
 
 def main():
     # We set switch interval to change how often gevent switches 
