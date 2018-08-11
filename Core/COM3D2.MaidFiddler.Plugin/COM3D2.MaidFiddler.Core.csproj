@@ -36,11 +36,6 @@
       <HintPath>..\Libs\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libs\Assembly-CSharp-firstpass.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="AsyncIO, Version=0.1.25.0, Culture=neutral, PublicKeyToken=44a94435bd6f33f8, processorArchitecture=MSIL">
       <HintPath>..\packages\AsyncIO.0.1.26.0\lib\net35\AsyncIO.dll</HintPath>
     </Reference>
@@ -52,13 +47,15 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="UnityEngine">
       <HintPath>..\Libs\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityInjector">
       <HintPath>..\Libs\UnityInjector.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroRpc.Net">
+      <HintPath>..\Libs\ZeroRpc.Net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -85,19 +82,14 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Libs\zerorpc-dotnet\ZeroRpc.Net\ZeroRpc.Net.csproj">
-      <Project>{22fbbcce-72db-4ee5-a808-d0ebb934a08e}</Project>
-      <Name>ZeroRpc.Net</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-<Target Name="AfterBuild">
-<MakeDir Directories="$(OutputDirectory)/Sybaris/UnityInjector"/>  
- <Move SourceFiles="$(OutputPath)\$(AssemblyName).dll" DestinationFiles="$(OutputPath)\Sybaris\UnityInjector\$(AssemblyName).dll" />
- <Move SourceFiles="$(OutputPath)\AsyncIO.dll" DestinationFiles="$(OutputPath)\Sybaris\AsyncIO.dll" />
- <Move SourceFiles="$(OutputPath)\MsgPack.dll" DestinationFiles="$(OutputPath)\Sybaris\MsgPack.dll" />
- <Move SourceFiles="$(OutputPath)\NetMQ.dll" DestinationFiles="$(OutputPath)\Sybaris\NetMQ.dll" />
- <Move SourceFiles="$(OutputPath)\ZeroRpc.Net.dll" DestinationFiles="$(OutputPath)\Sybaris\ZeroRpc.Net.dll" />
-</Target>
+  <Target Name="AfterBuild">
+    <MakeDir Directories="$(OutputDirectory)/Sybaris/UnityInjector" />
+	<Copy SourceFiles="$(SolutionDir)/Libs/MsgPack.dll" DestinationFiles="$(OutputPath)/Sybaris/MsgPack.dll"/>
+    <Move SourceFiles="$(OutputPath)\$(AssemblyName).dll" DestinationFiles="$(OutputPath)\Sybaris\UnityInjector\$(AssemblyName).dll" />
+    <Move SourceFiles="$(OutputPath)\AsyncIO.dll" DestinationFiles="$(OutputPath)\Sybaris\AsyncIO.dll" />
+    <Move SourceFiles="$(OutputPath)\MsgPack.dll" DestinationFiles="$(OutputPath)\Sybaris\MsgPack.dll" />
+    <Move SourceFiles="$(OutputPath)\NetMQ.dll" DestinationFiles="$(OutputPath)\Sybaris\NetMQ.dll" />
+    <Move SourceFiles="$(OutputPath)\ZeroRpc.Net.dll" DestinationFiles="$(OutputPath)\Sybaris\ZeroRpc.Net.dll" />
+  </Target>
 </Project>

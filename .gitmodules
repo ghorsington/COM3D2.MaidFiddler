@@ -1,6 +1,0 @@
-[submodule "Core/zerorpc-dotnet"]
-	path = Core/Libs/zerorpc-dotnet
-	url = https://github.com/denikson/zerorpc-dotnet.git
-[submodule "Core/Libs/msgpack-cli"]
-	path = Core/Libs/msgpack-cli
-	url = https://github.com/msgpack/msgpack-cli.git
