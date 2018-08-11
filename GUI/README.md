@@ -15,7 +15,7 @@ If you are a developer, you can run the GUI without building it.
 
 Do the following:
 
-1. Install **Python 3.6** (3.4 -- 3.5 will work as well; **3.7 does not work yet**)
+1. Install **Python 3.6** (**3.7 does not work yet**)
 
 2. Clone this repository (if you haven't done so yet) by running
 
