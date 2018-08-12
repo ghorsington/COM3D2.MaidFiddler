@@ -103,6 +103,11 @@ namespace COM3D2.MaidFiddler.Core.Service
             return true;
         }
 
+        public void SetAllYotogiStagesVisible(bool toggle)
+        {
+            MiscHooks.EnableAllStagesVisible = toggle;
+        }
+
         public void SetUnlockRanges(bool value)
         {
             MathUtilHooks.UnlockRange = value;

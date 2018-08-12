@@ -89,6 +89,14 @@ namespace COM3D2.MaidFiddler.Patcher
 
             MethodDefinition enableNoonWork = scheduleApi.GetMethod("EnableNoonWork");
             enableNoonWork.InjectWith(toggleWork, flags: InjectFlags.ModifyReturn);
+
+            /* All backgrounds visible */
+
+            TypeDefinition yotogiStageData = ass.MainModule.GetType("YotogiStage/Data");
+
+            MethodDefinition isYotogiPlayable = yotogiStageData.GetMethod("isYotogiPlayable");
+            
+            isYotogiPlayable.InjectWith(miscHooks.GetMethod("IsStageYotogiPlayable"), flags: InjectFlags.ModifyReturn);
         }
 
         public static void PatchPlayerStatus(AssemblyDefinition ass)

@@ -41,7 +41,8 @@
                 "unlock_stock_items": "Unlock all stock items",
                 "max_credits": "Maximum credits",
                 "max_grade": "Maximum grade an evaluation",
-                "max_facility_grade": "Max grade for all selected facilities"
+                "max_facility_grade": "Max grade for all selected facilities",
+                "all_yotogi_bg_visible": "All Yotogi BGs are selectable"
             },
             "all_maid": {
                 "name": "All maids",

@@ -145,6 +145,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.actionUnlock_all_stock_items.triggered.connect(lambda: self.core.UnlockAllStockItems())
         self.actionMaximum_credits.triggered.connect(lambda: self.core.MaxCredits())
         self.actionMaximum_club_grade_and_evaluation.triggered.connect(lambda: self.core.MaxGrade())
+        self.actiontop_bar_cur_save_all_yotogi_bg_visible.toggled.connect(lambda c: self.core.SetAllYotogiStagesVisible(c))
 
     def closeEvent(self, event):
         self.core.DisconnectEventHander()

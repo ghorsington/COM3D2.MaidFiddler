@@ -1474,6 +1474,7 @@
     <addaction name="actionMaximum_credits"/>
     <addaction name="actionMaximum_club_grade_and_evaluation"/>
     <addaction name="actionMax_facility_grade"/>
+    <addaction name="actiontop_bar_cur_save_all_yotogi_bg_visible"/>
    </widget>
    <widget class="QMenu" name="menuAll_maids">
     <property name="enabled">
@@ -1809,6 +1810,17 @@
   <action name="actionreload_guid">
    <property name="text">
     <string>reload_guid</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_cur_save_all_yotogi_bg_visible">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>top_bar.cur_save.all_yotogi_bg_visible</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_save.all_yotogi_bg_visible</string>
    </property>
   </action>
  </widget>
