@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MaidStatus;
 using Yotogis;
@@ -50,6 +51,11 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             return ScenarioCheckPlayableCondition(out result, ref eventMaids);
         }
 
+        public static bool GetNTRLockPostfix(bool ntrLocked)
+        {
+            return false;
+        }
+
         public static bool PrefixCreateDatas(out Dictionary<int, YotogiSkillListManager.Data> result,
                                              Status status,
                                              bool specialConditionCheck,
@@ -66,6 +72,9 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             {
                 Skill.Data skill = idSkillPair.Value;
 
+                if (specialConditionCheck && skill.specialConditionType != type)
+                    continue;
+
                 YotogiSkillData skillData = skillSystem.Get(skill.id);
                 if (skillData == null)
                 {
@@ -76,13 +85,19 @@ namespace COM3D2.MaidFiddler.Core.Hooks
                 var data = new YotogiSkillListManager.Data
                 {
                         skillData = skill,
-                        conditionDatas = new[] {new KeyValuePair<string, bool>("なし", true)},
+                        conditionDatas = new KeyValuePair<string, bool>[0], //new[] {new KeyValuePair<string, bool>("なし", true)},
                         maidStatusSkillData = skillData
                 };
                 result.Add(skill.id, data);
             }
 
             return true;
+        }
+
+        public static bool IsExecStage(out bool result)
+        {
+            result = true;
+            return EnableYotogiSkills;
         }
 
         public static bool PrefixCreateDatasOld(out Dictionary<int, YotogiSkillListManager.Data> result, Status status)
@@ -108,7 +123,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
                 var data = new YotogiSkillListManager.Data
                 {
                         skillDataOld = skill,
-                        conditionDatas = new[] {new KeyValuePair<string, bool>("なし", true)},
+                        conditionDatas = new KeyValuePair<string, bool>[0], //new[] {new KeyValuePair<string, bool>("なし", true)},
                         maidStatusSkillData = skillData
                 };
                 result.Add(skill.id, data);

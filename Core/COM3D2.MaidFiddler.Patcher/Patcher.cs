@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -38,7 +39,11 @@ namespace COM3D2.MaidFiddler.Patcher
 
             /* Enable all Yotogi skills */
             TypeDefinition yotogiSkillListManager = ass.MainModule.GetType("YotogiSkillListManager");
+            TypeDefinition yotogiSkillSelectManager = ass.MainModule.GetType("YotogiSkillSelectManager");
+            TypeDefinition yotogiOldSkillSelectManager = ass.MainModule.GetType("YotogiOldSkillSelectManager");
+            TypeDefinition yotogiSkillData = ass.MainModule.GetType("Yotogis.Skill/Data");
             TypeDefinition maidStatus = ass.MainModule.GetType("MaidStatus.Status");
+            TypeDefinition freeSkillSelect = ass.MainModule.GetType("FreeSkillSelect");
 
             MethodDefinition createDatas = yotogiSkillListManager.GetMethod("CreateDatas");
             createDatas.InjectWith(miscHooks.GetMethod("PrefixCreateDatas"),
@@ -50,6 +55,24 @@ namespace COM3D2.MaidFiddler.Patcher
 
             MethodDefinition getYotogiSkillSystem = maidStatus.GetMethod("get_yotogiSkill");
             getYotogiSkillSystem.InjectWith(miscHooks.GetMethod("GetYotogiSkill"), flags: InjectFlags.ModifyReturn);
+
+            MethodDefinition checkNtrPostfix = miscHooks.GetMethod("GetNTRLockPostfix");
+
+            void PatchNTRCheck(MethodDefinition target)
+            {
+                ILProcessor il = target.Body.GetILProcessor();
+
+                Instruction ins =
+                        target.Body.Instructions.FirstOrDefault(i => i.OpCode == OpCodes.Callvirt && i.Operand is MethodReference mref && mref.Name == "get_lockNTRPlay");
+
+                il.InsertAfter(ins, il.Create(OpCodes.Call, ass.MainModule.ImportReference(checkNtrPostfix)));
+            }
+
+            PatchNTRCheck(yotogiSkillSelectManager.GetMethod("Awake"));
+            PatchNTRCheck(yotogiOldSkillSelectManager.GetMethod("Awake"));
+            PatchNTRCheck(freeSkillSelect.GetMethod("CreateCategory"));
+
+            yotogiSkillData.GetMethod("IsExecStage").InjectWith(miscHooks.GetMethod("IsExecStage"), flags: InjectFlags.ModifyReturn);
 
             /* Enable all Yotogi commands */
 
