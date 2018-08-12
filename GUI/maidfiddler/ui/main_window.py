@@ -130,6 +130,13 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         print("Connection closed!")
         self.close()
         self.maids_list.clear_list()
+
+        for menu_action in self.findChildren(QAction):
+            if len(menu_action.objectName()) != 0 and menu_action.isCheckable():
+                menu_action.blockSignals(True)
+                menu_action.setChecked(False)
+                menu_action.blockSignals(False)
+
         self.connect()
 
     def init_events(self):
