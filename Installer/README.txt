@@ -5,6 +5,11 @@ Project page: https://github.com/denikson/COM3D2.MaidFiddler
 
 Maid Fiddler is a real-time game manipulation tool for COM3D2.
 
+Changelog:
+
+* 1.0
+  - Initial release!
+
 
 ---------------------------------
 The MIT License (MIT)
