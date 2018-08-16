@@ -13,6 +13,7 @@ from maidfiddler.ui.maids_list import MaidsList
 
 from maidfiddler.ui.connect_dialog import ConnectDialog
 from maidfiddler.ui.error_dialog import ErrorDialog
+from maidfiddler.ui.about_dialog import AboutDialog
 
 from maidfiddler.util.translation import load_translation, tr, get_random_title, get_language_name
 from maidfiddler.util.config import CONFIG, save_config
@@ -60,6 +61,8 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.connect_dialog = ConnectDialog(self)
         self.close_func = close_func
         self.event_poller = EventPoller(group)
+
+        self.about_dialog = AboutDialog()
 
         self.maid_list_widgets = {}
         self.maid_mgr = MaidManager()
@@ -170,6 +173,12 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.actionMaximum_credits.triggered.connect(lambda: self.core.MaxCredits())
         self.actionMaximum_club_grade_and_evaluation.triggered.connect(lambda: self.core.MaxGrade())
         self.actiontop_bar_cur_save_all_yotogi_bg_visible.toggled.connect(lambda c: self.core.SetAllYotogiStagesVisible(c))
+
+        self.actionAbout.triggered.connect(self.show_about)
+
+    def show_about(self):
+        self.about_dialog.reload()
+        self.about_dialog.exec()
 
     def closeEvent(self, event):
         self.core.DisconnectEventHander()

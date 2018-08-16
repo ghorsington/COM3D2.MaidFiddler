@@ -23,6 +23,14 @@
         "It's not NTR if a computer program does it!"
     ],
     "translation": {
+        "about_dialog": {
+            "title": "About Maid Fiddler",
+            "info": "Maid Fiddler for COM3D2",
+            "version": "Version:",
+            "contributors": "Contributors:",
+            "site": "Website:",
+            "close": "Close"
+        },
         "error_dialog": {
             "title": "Waaaaaaaaaa!",
             "info": "Oh no! An error occurred!\nRestart Maid Fiddler to continue!\n\nPlease send the below error report to the developer!"
