@@ -14,7 +14,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         private void OnMaidBanished(object sender, MaidChangeEventArgs e)
         {
-            if (!HasEventHandler || IsDeserializing)
+            if (IsDeserializing)
                 return;
 
             Emit("maid_removed", new Dict {["maid_id"] = e.Maid.status.guid});
@@ -24,7 +24,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         private void OnMaidAdded(object sender, MaidChangeEventArgs e)
         {
-            if (!HasEventHandler || IsDeserializing)
+            if (IsDeserializing)
                 return;
 
             Debugger.WriteLine(LogLevel.Info, $"Got maid: {e.Maid}");
