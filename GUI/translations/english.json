@@ -23,6 +23,10 @@
         "It's not NTR if a computer program does it!"
     ],
     "translation": {
+        "error_dialog": {
+            "title": "Waaaaaaaaaa!",
+            "info": "Oh no! An error occurred!\nRestart Maid Fiddler to continue!\n\nPlease send the below error report to the developer!"
+        },
         "connect_dialog" : {
             "info": "Before using Maid Fiddler, you must connect the tool to the game!\n\n1. Open COM3D2\n2. Wait until main menu is loaded\n3. Click \"Connect\"\n\nPlease input a port number here:",
             "title": "Connect to COM3D2",

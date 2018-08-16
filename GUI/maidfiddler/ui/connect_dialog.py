@@ -1,10 +1,13 @@
 import PyQt5.uic as uic
 import sys
 import zerorpc
+from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QPushButton, QLabel
+from PyQt5.QtCore import Qt
 import maidfiddler.util.util as util
 from maidfiddler.util.translation import tr, tr_str
 from maidfiddler.util.config import CONFIG, save_config
+from maidfiddler.ui.resources import APP_ICON
 
 (ui_class, ui_base) = uic.loadUiType(
     open(util.get_resource_path("templates/connect_dialog.ui")))
@@ -13,11 +16,18 @@ class ConnectDialog(ui_class, ui_base):
     def __init__(self, main_window):
         super(ConnectDialog, self).__init__()
         self.setupUi(self)
+
+        icon = QPixmap()
+        icon.loadFromData(APP_ICON)
+        self.setWindowIcon(QIcon(icon))
+
         self.main_window = main_window
         self.client = None
 
         self.connect_button.clicked.connect(self.try_connect)
         self.close_button.clicked.connect(self.closeEvent)
+
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
 
     def reload(self):
         self.connect_button.setEnabled(True)

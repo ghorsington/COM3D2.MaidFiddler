@@ -12,9 +12,13 @@ from maidfiddler.ui.tabs import *
 from maidfiddler.ui.maids_list import MaidsList
 
 from maidfiddler.ui.connect_dialog import ConnectDialog
+from maidfiddler.ui.error_dialog import ErrorDialog
 
 from maidfiddler.util.translation import load_translation, tr, get_random_title, get_language_name
 from maidfiddler.util.config import CONFIG, save_config
+
+from maidfiddler.ui.resources import APP_ICON
+
 
 UI_MainWindow = uic.loadUiType(
     open(util.get_resource_path("templates/maid_fiddler.ui")))
@@ -42,6 +46,13 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         print("Initializing UI")
         super(MainWindow, self).__init__()
         self.setupUi(self)
+
+        sys.excepthook = self.display_error_box
+
+        icon = QPixmap()
+        icon.loadFromData(APP_ICON)
+        self.setWindowIcon(QIcon(icon))
+
         self.ui_tabs.setEnabled(False)
         self.menuSelected_maid.setEnabled(False)
 
@@ -66,6 +77,12 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
         self.init_events()
         self.init_translations()
+
+    def display_error_box(self, t, val, traceback):
+        print("Trying to show error dialog")
+        dialog = ErrorDialog(t, val, traceback)
+        dialog.exec()
+        sys.exit(0)
 
     def connect(self):
         self.connect_dialog.reload()
