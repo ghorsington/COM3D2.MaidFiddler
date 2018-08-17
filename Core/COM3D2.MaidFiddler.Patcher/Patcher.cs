@@ -6,6 +6,7 @@ using System.Reflection;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Inject;
+using FieldAttributes = Mono.Cecil.FieldAttributes;
 
 namespace COM3D2.MaidFiddler.Patcher
 {
@@ -340,6 +341,11 @@ namespace COM3D2.MaidFiddler.Patcher
             maid.GetMethod("ThumShot").InjectWith(maidStatusHooks.GetMethod("OnThumShot"),
                                                   flags: InjectFlags.PassInvokingInstance,
                                                   codeOffset: -1);
+
+            maid.GetMethod("DeserializeOldData").InjectWith(maidStatusHooks.GetMethod("OnOldDataDeserializeStart"), flags: InjectFlags.PassInvokingInstance);
+            maid.GetMethod("DeserializeOldData").InjectWith(maidStatusHooks.GetMethod("OnOldDataDeserialized"), codeOffset: -1, flags: InjectFlags.PassInvokingInstance);
+
+            maid.Fields.Add(new FieldDefinition("mf_oldGuid", FieldAttributes.Public, ass.MainModule.ImportReference(typeof(string)))); 
         }
     }
 }

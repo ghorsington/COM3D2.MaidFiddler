@@ -38,6 +38,10 @@ class MaidManager:
     def add_maid(self, maid):
         self.maid_data[maid["guid"]] = maid
 
+    def update_guid(self, old, new):
+        self.maid_data[new] = self.maid_data[old]
+        del self.maid_data[old]
+
     def remove_maid(self, maid_id):
         del self.maid_data[maid_id]
 

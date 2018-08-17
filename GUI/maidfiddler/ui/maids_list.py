@@ -25,6 +25,7 @@ class MaidsList(QObject):
         event_poller.on("maid_removed", self.on_maid_removed)
         event_poller.on("maid_thumbnail_changed", self.thumb_changed)
         event_poller.on("maid_prop_changed", self.prop_changed)
+        event_poller.on("old_maid_deserialized", self.fix_maid_data)
 
         self.maid_list.currentItemChanged.connect(self.maid_selected)
 
@@ -112,10 +113,27 @@ class MaidsList(QObject):
         thumb = QPixmap()
         thumb.loadFromData(thumb_image)
 
-        item = MaidListItem(QIcon(thumb), f"{maid['firstName']} {maid['lastName']}", maid["guid"])
+        item = MaidListItem(QIcon(thumb), self.get_display_name(maid), maid["guid"])
 
         self.maid_list_widgets[maid["guid"]] = item
         self.maid_list.addItem(self.maid_list_widgets[maid["guid"]])
+
+    def fix_maid_data(self, args):
+        self.maid_mgr.update_guid(args["old_guid"], args["new_guid"])
+
+        item = self.maid_list_widgets[args["old_guid"]]
+        del self.maid_list_widgets[args["old_guid"]]
+
+        text = self.get_display_name(args)
+        item.text = text
+        item.setText(text)
+        item.guid = args["new_guid"]
+
+        thumb = QPixmap()
+        thumb.loadFromData(args["thumbnail"])
+        item.setIcon(QIcon(thumb))
+
+        self.maid_list_widgets[args["new_guid"]] = item
 
     def reload_maids(self):
         self.clear_list()
@@ -143,6 +161,9 @@ class MaidsList(QObject):
         self.maid_list.takeItem(self.maid_list.row(self.maid_list_widgets[guid]))
         del self.maid_list_widgets[guid]
         self.maid_mgr.remove_maid(guid)
+
+    def get_display_name(self, maid):
+        return f"{maid['firstName']} {maid['lastName']}"
 
 
 class MaidListItem(QListWidgetItem):

@@ -498,6 +498,21 @@ namespace COM3D2.MaidFiddler.Core.Service
             Emit($"yotogi_skill_{args.Event}", new Dict {["guid"] = args.Maid.status.guid, ["skill_id"] = args.SkillId});
         }
 
+        private void OnOldMaidDeserialized(object sender, OldMaidDeserializedEventArgs e)
+        {
+            maidLockList[e.Maid.status.guid] = maidLockList[e.OldGuid];
+            maidLockList.Remove(e.OldGuid);
+
+            Emit("old_maid_deserialized", new Dict
+            {
+                    ["old_guid"] = e.OldGuid,
+                    ["new_guid"] = e.Maid.status.guid,
+                    ["firstName"] = e.Maid.status.firstName,
+                    ["lastName"] = e.Maid.status.lastName,
+                    ["thumbnail"] = e.Maid.GetThumIcon()?.EncodeToPNG()
+            });
+        }
+
         private void InitMaidStatus()
         {
             maidSetters = new Dictionary<string, MethodInfo>();
@@ -520,6 +535,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             MaidStatusHooks.PropertyChanged += OnPropertyChange;
             MaidStatusHooks.WorkDataChanged += OnMaidStatusHooksOnWorkDataChanged;
             MaidStatusHooks.PropFeatureChanged += OnPropFeatureChanged;
+            MaidStatusHooks.OldMaidDeserialized += OnOldMaidDeserialized;
             MaidStatusHooks.ProprtyShouldChange += CheckPropertyShouldChange;
             YotogiSkillHooks.SkillInfoChanged += OnYotogiSkillHooksOnSkillInfoChanged;
 
