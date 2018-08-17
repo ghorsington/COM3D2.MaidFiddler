@@ -96,12 +96,16 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         
         self.core = self.connect_dialog.client
         self.connect_dialog.client = None
+        game_data = self.connect_dialog.game_data
+        self.connect_dialog.game_data = None
 
         open_port = self.core.GetAvailableTcpPort()
         print(f"Got open TCP port: {open_port}")
         self.event_poller.start(open_port, self.core)
 
-        self.load_ui()
+        for tab in self.tabs:
+            tab.game_data = game_data
+
         self.maids_list.reload_maids()
         self.player_tab.reload_player_props()
         
@@ -189,11 +193,3 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.event_poller.stop()
         self.core.close()
         self.core = None
-
-    def load_ui(self):
-        print("Getting game information!")
-        game_data = self.core.GetGameInfo()
-        print("Got game info! Intializing the UI...")
-
-        for tab in self.tabs:
-            tab.game_data = game_data

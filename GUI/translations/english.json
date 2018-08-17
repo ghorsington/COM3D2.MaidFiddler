@@ -41,6 +41,7 @@
             "status" : {
                 "wait": "Waiting to connect...",
                 "connect": "Trying to connect to tcp://{}:{}",
+                "dl_info": "Connected! Downloading game information...",
                 "fail": "Failed to connect because: {}"
             },
             "connect": "Connect",

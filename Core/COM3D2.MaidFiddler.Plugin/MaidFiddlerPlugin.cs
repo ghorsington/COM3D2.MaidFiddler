@@ -40,7 +40,7 @@ namespace COM3D2.MaidFiddler.Core
 
             Debugger.WriteLine(LogLevel.Info, $"Creating a ZeroService at tcp://{IP}:{connectionPort}");
 
-            zeroServer = new Server(new SimpleWrapperService<MFService>(service), TimeSpan.FromSeconds(15));
+            zeroServer = new Server(new SimpleWrapperService<MFService>(service));
 
             zeroServer.Error += (sender, args) => { Debugger.WriteLine(LogLevel.Error, $"ZeroService error: {args.Info.ToString()}"); };
 

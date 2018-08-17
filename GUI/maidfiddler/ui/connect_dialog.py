@@ -23,6 +23,7 @@ class ConnectDialog(ui_class, ui_base):
 
         self.main_window = main_window
         self.client = None
+        self.game_data = None
 
         self.connect_button.clicked.connect(self.try_connect)
         self.close_button.clicked.connect(self.closeEvent)
@@ -58,6 +59,10 @@ class ConnectDialog(ui_class, ui_base):
         try:
             self.client.connect(f"tcp://{util.GAME_ADDRESS}:{self.port.value()}")
             self.client._zerorpc_ping()
+
+            self.status_label.setStyleSheet("color: green;")
+            self.status_label.setText(tr_str("connect_dialog.status.dl_info"))
+            self.game_data = self.client.GetGameInfo()
         except Exception as ex:
             self.status_label.setStyleSheet("color: red;")
             self.status_label.setText(tr_str("connect_dialog.status.fail").format(str(ex)))
