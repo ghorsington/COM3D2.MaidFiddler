@@ -424,7 +424,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             foreach (int id in maid.status.yotogiSkill.oldDatas.GetKeyArray())
             {
-                YotogiSkillData yotogiSkill = maid.status.yotogiSkill.datas[id];
+                YotogiSkillData yotogiSkill = maid.status.yotogiSkill.oldDatas[id];
                 yotogiSkills[yotogiSkill.data.id] = new Dict
                 {
                         ["level"] = yotogiSkill.level,
