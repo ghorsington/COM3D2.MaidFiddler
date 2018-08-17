@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using COM3D2.MaidFiddler.Core.Hooks;
@@ -12,6 +13,9 @@ namespace COM3D2.MaidFiddler.Core.Service
 {
     public partial class Service
     {
+        private static readonly HashSet<string> maxBlacklist =
+                new HashSet<string>(StringComparer.InvariantCultureIgnoreCase) {"employmentDay", "popularRank"};
+
         public bool ToggleAllParametersLockActive(bool toggle)
         {
             if (selectedMaid == null)
@@ -152,7 +156,8 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         public void MaxFacilityGrades()
         {
-            if(typeof(FacilityManager).GetField("m_FacilityExpArray", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(GameMain.Instance.FacilityMgr) is Dictionary<int, SimpleExperienceSystem> facilityExp)
+            if (typeof(FacilityManager).GetField("m_FacilityExpArray", BindingFlags.NonPublic | BindingFlags.Instance)
+                                       ?.GetValue(GameMain.Instance.FacilityMgr) is Dictionary<int, SimpleExperienceSystem> facilityExp)
                 foreach (var exp in facilityExp)
                     exp.Value.SetLevel(exp.Value.GetMaxLevel());
 
@@ -250,10 +255,23 @@ namespace COM3D2.MaidFiddler.Core.Service
             MaidStatus.Status status = maid.status;
 
             foreach (var setterInfo in maidSetters)
+            {
+                if (maxBlacklist.Contains(setterInfo.Key))
+                    continue;
+
+                object val = null;
+
                 if (setterInfo.Value.GetParameters()[0].ParameterType == typeof(int))
-                    setterInfo.Value.Invoke(status, new object[] {99999});
+                    val = 99999;
                 else if (setterInfo.Value.GetParameters()[0].ParameterType == typeof(long))
-                    setterInfo.Value.Invoke(status, new object[] {99999L});
+                    val = 99999L;
+
+                if (setterInfo.Key.Equals("studyRate", StringComparison.InvariantCultureIgnoreCase))
+                    val = 0;
+
+                if (val != null)
+                    setterInfo.Value.Invoke(status, new[] {val});
+            }
 
             foreach (YotogiSkillData yotogiSkillData in status.yotogiSkill.datas.GetValueArray())
                 yotogiSkillData.expSystem.SetLevel(yotogiSkillData.expSystem.GetMaxLevel());
