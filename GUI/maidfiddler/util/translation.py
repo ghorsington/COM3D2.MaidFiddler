@@ -28,7 +28,7 @@ def load_translation(name):
     if not os.path.isfile(path):
         return
     
-    with open(path, "r", encoding="utf-8") as tl_file:
+    with open(path, "r", encoding="utf-8-sig") as tl_file:
         current_translation = json.load(tl_file)
 
     if "translation" not in current_translation:
@@ -46,7 +46,7 @@ def get_language_name(path):
         return None
     
     try:
-        with open(path, "r", encoding="utf-8") as tl_file:
+        with open(path, "r", encoding="utf-8-sig") as tl_file:
             tl = json.load(tl_file)
         return tl["info"]["language"]
     except:
