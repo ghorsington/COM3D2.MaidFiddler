@@ -338,7 +338,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         private Dict ReadMaidData(Maid maid)
         {
-            if (maid == null)
+            if (maid == null || maid.status == null)
                 return null;
 
             var result = new Dict();
@@ -356,9 +356,9 @@ namespace COM3D2.MaidFiddler.Core.Service
             props["cur_seikeiken"] = (int) maid.status.seikeiken;
             props["init_seikeiken"] = (int) maid.status.initSeikeiken;
             props["contract"] = (int) maid.status.contract;
-            props["personal"] = maid.status.personal.id;
-            props["current_job_class_id"] = maid.status.selectedJobClass.data.id;
-            props["current_yotogi_class_id"] = maid.status.selectedYotogiClass.data.id;
+            props["personal"] = maid.status.personal?.id ?? 0;
+            props["current_job_class_id"] = maid.status.selectedJobClass?.data?.id ?? 0;
+            props["current_yotogi_class_id"] = maid.status.selectedYotogiClass?.data?.id ?? 0;
             props["first_name_call"] = maid.status.isFirstNameCall;
             props["is_leader"] = maid.status.leader;
             props["active_noon_work_id"] = maid.status.noonWorkId;
@@ -368,11 +368,10 @@ namespace COM3D2.MaidFiddler.Core.Service
             var workLevels = new Dictionary<int, object>();
             var workPlayCounts = new Dictionary<int, object>();
 
-            foreach (int id in maid.status.workDatas.GetKeyArray())
+            foreach (var data in maid.status.workDatas.GetValueArray())
             {
-                WorkData data = maid.status.workDatas[id];
-                workLevels[id] = data.level;
-                workPlayCounts[id] = data.playCount;
+                workLevels[data.id] = data.level;
+                workPlayCounts[data.id] = data.playCount;
             }
 
             result["work_levels"] = workLevels;
@@ -393,45 +392,33 @@ namespace COM3D2.MaidFiddler.Core.Service
             var jobData = new Dict();
             result["job_class_data"] = jobData;
 
-            foreach (int id in maid.status.jobClass.datas.GetKeyArray())
-            {
-                var classData = maid.status.jobClass.datas[id];
+            foreach (var classData in maid.status.jobClass.datas.GetValueArray())
                 jobData[classData.data.id.ToString()] = new Dict {["level"] = classData.level, ["cur_exp"] = classData.cur_exp};
-            }
 
             var yotogiData = new Dict();
             result["yotogi_class_data"] = yotogiData;
 
-            foreach (int id in maid.status.yotogiClass.datas.GetKeyArray())
-            {
-                var classData = maid.status.yotogiClass.datas[id];
+            foreach (var classData in maid.status.yotogiClass.datas.GetValueArray())
                 yotogiData[classData.data.id.ToString()] = new Dict {["level"] = classData.level, ["cur_exp"] = classData.cur_exp};
-            }
 
             var yotogiSkills = new Dictionary<int, object>();
             result["yotogi_skill_data"] = yotogiSkills;
 
-            foreach (int id in maid.status.yotogiSkill.datas.GetKeyArray())
-            {
-                YotogiSkillData yotogiSkill = maid.status.yotogiSkill.datas[id];
+            foreach (YotogiSkillData yotogiSkill in maid.status.yotogiSkill.datas.GetValueArray())
                 yotogiSkills[yotogiSkill.data.id] = new Dict
                 {
                         ["level"] = yotogiSkill.level,
                         ["cur_exp"] = yotogiSkill.currentExp,
                         ["play_count"] = yotogiSkill.playCount
                 };
-            }
 
-            foreach (int id in maid.status.yotogiSkill.oldDatas.GetKeyArray())
-            {
-                YotogiSkillData yotogiSkill = maid.status.yotogiSkill.oldDatas[id];
-                yotogiSkills[yotogiSkill.data.id] = new Dict
+            foreach (YotogiSkillData yotogiSkill in maid.status.yotogiSkill.oldDatas.GetValueArray())
+                yotogiSkills[yotogiSkill.oldData.id] = new Dict
                 {
                         ["level"] = yotogiSkill.level,
                         ["cur_exp"] = yotogiSkill.currentExp,
                         ["play_count"] = yotogiSkill.playCount
                 };
-            }
 
             result["feature_ids"] = maid.status.features.GetValueArray().Select(f => f.id).ToArray();
             result["propensity_ids"] = maid.status.propensitys.GetValueArray().Select(f => f.id).ToArray();

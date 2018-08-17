@@ -62,7 +62,10 @@ class ConnectDialog(ui_class, ui_base):
 
             self.status_label.setStyleSheet("color: green;")
             self.status_label.setText(tr_str("connect_dialog.status.dl_info"))
-            self.game_data = self.client.GetGameInfo()
+            try:
+                self.game_data = self.client.GetGameInfo()
+            except zerorpc.RemoteError as e:
+                self.main_window.display_error_box(type(e), e, e.__traceback__)
         except Exception as ex:
             self.status_label.setStyleSheet("color: red;")
             self.status_label.setText(tr_str("connect_dialog.status.fail").format(str(ex)))
