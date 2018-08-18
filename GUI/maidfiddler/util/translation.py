@@ -1,6 +1,7 @@
 import json
 import os
 from maidfiddler.util.util import BASE_DIR
+from maidfiddler.util.config import CONFIG
 import random
 
 current_translation = {}
@@ -15,9 +16,17 @@ def tr_str(original):
     cur = current_translation["translation"]
     for arg in parts:
         if arg not in cur:
-            return original
+            return get_original(original, parts)
         cur = cur[arg]
     return cur
+
+MINIFY = None
+def get_original(s, parts):
+    global MINIFY
+    if MINIFY is None:
+        print("Fetching MINIFY")
+        MINIFY = CONFIG.getboolean("Developer", "minify-untranslated-tags", fallback=True)
+    return s if not MINIFY else parts[-1]
 
 def load_translation(name):
     global current_translation

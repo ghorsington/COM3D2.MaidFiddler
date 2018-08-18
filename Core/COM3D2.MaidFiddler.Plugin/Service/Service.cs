@@ -23,6 +23,8 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         public static int GameVersion => (int) typeof(Misc).GetField(nameof(Misc.GAME_VERSION)).GetValue(null);
 
+        public string Version => typeof(Service).Assembly.GetName().Version.ToString();
+
         public int GetAvailableTcpPort()
         {
             using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))

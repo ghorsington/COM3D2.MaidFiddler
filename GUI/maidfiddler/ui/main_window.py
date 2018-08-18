@@ -67,6 +67,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.event_poller = EventPoller(group)
 
         self.about_dialog = AboutDialog()
+        self.core_version = "?"
 
         self.maid_list_widgets = {}
         self.maid_mgr = MaidManager()
@@ -102,6 +103,8 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.connect_dialog.client = None
         game_data = self.connect_dialog.game_data
         self.connect_dialog.game_data = None
+
+        self.core_version = self.core.get_Version()
 
         open_port = self.core.GetAvailableTcpPort()
         print(f"Got open TCP port: {open_port}")
@@ -185,8 +188,8 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.actionAbout.triggered.connect(self.show_about)
 
     def show_about(self):
-        self.about_dialog.reload()
-        self.about_dialog.exec()
+        self.about_dialog.reload(self.core_version)
+        self.about_dialog.open()
 
     def closeEvent(self, event):
         self.core.DisconnectEventHander()

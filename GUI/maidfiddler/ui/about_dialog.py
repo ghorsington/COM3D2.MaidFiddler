@@ -16,7 +16,7 @@ class AboutDialog(ui_class, ui_base):
         self.close_button.clicked.connect(self.accept)
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
 
-    def reload(self):
+    def reload(self, core_version):
         icon = QPixmap()
         icon.loadFromData(APP_ICON)
         self.setWindowIcon(QIcon(icon))
@@ -31,7 +31,7 @@ class AboutDialog(ui_class, ui_base):
         self.setWindowTitle(tr_str("about_dialog.title"))
 
         self.version_label.setText(tr(self.version_label))
-        self.version.setText(info.VERSION)
+        self.version.setText(f"GUI: {info.VERSION}\nCore: {core_version}")
 
         self.contributors_label.setText(tr(self.contributors_label))
         self.contributors.setText("\n".join(info.CONTRIBUTORS))
