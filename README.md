@@ -1,19 +1,18 @@
-> ⚠️ **Work in progress** ⚠️
-> 
-> This tool is not ready!  
-> If you are developer, feel free to contribute/fork though.
-
 # Maid Fiddler COM3D2 Edition
 *Now with 5% more horses*
 
 Maid Fiddler COM3D2 is a real-time value editor for COM3D2.  
 This initially started as a [plug-in for CM3D2](https://github.com/denikson/CM3D2.MaidFiddler), but is now being rewritten for COM3D2.
 
-## Beta status
+## [Latest releases](https://github.com/denikson/COM3D2.MaidFiddler/releases)
 
-This tool is in a early development stage. Everything is subject to change!
+## [Help and documentation](https://github.com/denikson/COM3D2.MaidFiddler/wiki)
 
-Currently the GUI version is working, but no prebuilt binaries are available for now.
+## Early version status
+
+This tool is in a very early release status! Expect bugs!
+
+If you find any errors/bugs, please report them by [creating a new issue](https://github.com/denikson/COM3D2.MaidFiddler/issues/new/choose).
 
 If you are a developer, you can build Maid Fiddler directly from source code. Refer to instructions in `Core` and `GUI` folders.
 
