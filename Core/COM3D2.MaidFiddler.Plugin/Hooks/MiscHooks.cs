@@ -155,6 +155,8 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             foreach (var skillDataPair in skills)
             {
                 YotogiSkillData data = enabledSkillSystem.Add(skillDataPair.Value);
+                if (data == null)
+                    continue;
                 data.expSystem.SetLevel(data.expSystem.GetMaxLevel());
                 data.playCount = 9999;
             }
@@ -163,6 +165,8 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             foreach (var skillDataPair in skills)
             {
                 YotogiSkillData data = enabledSkillSystem.Add(skillDataPair.Value);
+                if (data == null)
+                    continue;
                 data.expSystem.SetLevel(data.expSystem.GetMaxLevel());
                 data.playCount = 9999;
             }
