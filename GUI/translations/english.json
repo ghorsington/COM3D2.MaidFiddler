@@ -212,7 +212,10 @@
         "personality": {
             "Muku": "Pure",
             "Majime": "Serious",
-            "Rindere": "Rindere"
+            "Rindere": "Rindere",
+            "Pure": "Innocent",
+            "Pride": "Tsundere",
+            "Cool": "Mature"
         },
         "relations": {
             "Contact": "Contact",
@@ -294,7 +297,7 @@
             "clubGrade": "Club grade",
             "clubName": "Club name",
             "days": "Total days",
-            "isOldPlayer": "Is player old (skip tutorial)",
+            "isOldPlayer": "Is player old (allow maid transfer)",
             "lockNTRPlay": "NTR lock enabled",
             "lockUserDraftMaid": "Lock maid draft",
             "money": "Money",
