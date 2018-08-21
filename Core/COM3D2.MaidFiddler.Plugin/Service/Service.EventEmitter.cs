@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using COM3D2.MaidFiddler.Core.Rpc;
+using COM3D2.MaidFiddler.Core.IPC;
 using COM3D2.MaidFiddler.Core.Utils;
 using UnityEngine;
 using Dict = System.Collections.Generic.Dictionary<string, object>;
@@ -8,7 +8,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 {
     public partial class Service
     {
-        public PipedEventServer eventServer;
+        public PipeEventEmitter eventServer;
         private Coroutine emitLoop;
 
         private bool EmitEvents { get; set; } = true;
@@ -35,7 +35,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         private void InitEventEmitter()
         {
             Debugger.WriteLine(LogLevel.Info, "Creating event emitter");
-            eventServer = new PipedEventServer("MaidFildderEventEmitter");
+            eventServer = new PipeEventEmitter("MaidFildderEventEmitter");
             emitLoop = parent.StartCoroutine(EmitLoop());
         }
 

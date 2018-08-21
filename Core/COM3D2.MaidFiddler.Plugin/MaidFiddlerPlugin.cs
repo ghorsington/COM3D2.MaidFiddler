@@ -1,5 +1,5 @@
 ﻿using System;
-using COM3D2.MaidFiddler.Core.Rpc;
+using COM3D2.MaidFiddler.Core.IPC;
 using COM3D2.MaidFiddler.Core.Utils;
 using UnityInjector;
 using MFService = COM3D2.MaidFiddler.Core.Service.Service;
@@ -8,7 +8,7 @@ namespace COM3D2.MaidFiddler.Core
 {
     public class MaidFiddlerPlugin : PluginBase
     {
-        private PipeServer<MFService> pipeServer;
+        private PipeService<MFService> pipeServer;
         private MFService service;
 
         internal string Version { get; } = typeof(MaidFiddlerPlugin).Assembly.GetName().Version.ToString();
@@ -24,7 +24,7 @@ namespace COM3D2.MaidFiddler.Core
 
             Debugger.WriteLine(LogLevel.Info, "Starting server!");
 
-            pipeServer = new PipeServer<MFService>(service, "MaidFiddlerService");
+            pipeServer = new PipeService<MFService>(service, "MaidFiddlerService");
             pipeServer.ConnectionLost += OnConnectionLost;
             pipeServer.Run();
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MsgPack.Serialization;
 
-namespace COM3D2.MaidFiddler.Core.Rpc
+namespace COM3D2.MaidFiddler.Core.IPC
 {
     public interface IMessageData { }
 

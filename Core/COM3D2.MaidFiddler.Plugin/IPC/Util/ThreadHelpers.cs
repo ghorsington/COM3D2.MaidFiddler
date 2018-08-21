@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace COM3D2.MaidFiddler.Core.Rpc.Util
+namespace COM3D2.MaidFiddler.Core.IPC.Util
 {
     public static class ThreadHelpers
     {

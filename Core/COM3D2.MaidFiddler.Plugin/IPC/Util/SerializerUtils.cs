@@ -1,6 +1,6 @@
 ﻿using MsgPack.Serialization;
 
-namespace COM3D2.MaidFiddler.Core.Rpc.Util
+namespace COM3D2.MaidFiddler.Core.IPC.Util
 {
     public static class SerializerUtils
     {

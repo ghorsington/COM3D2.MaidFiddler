@@ -5,12 +5,12 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using COM3D2.MaidFiddler.Core.Rpc.Util;
+using COM3D2.MaidFiddler.Core.IPC.Util;
 using COM3D2.MaidFiddler.Core.Utils;
 
-namespace COM3D2.MaidFiddler.Core.Rpc
+namespace COM3D2.MaidFiddler.Core.IPC
 {
-    public class PipeServer<T> : IDisposable where T : IDisposable
+    public class PipeService<T> : IDisposable where T : IDisposable
     {
         private ulong currentID;
         private uint loopThreadId;
@@ -19,7 +19,7 @@ namespace COM3D2.MaidFiddler.Core.Rpc
         private bool running;
         private readonly T service;
 
-        public PipeServer(T service, string name)
+        public PipeService(T service, string name)
         {
             this.service = service;
             pipeStream = new NamedPipeServerStream(name, PipeDirection.InOut);
@@ -37,9 +37,9 @@ namespace COM3D2.MaidFiddler.Core.Rpc
             service.Dispose();
             if (IsConnected)
                 pipeStream.Disconnect();
-            Debugger.WriteLine(LogLevel.Info, "PipeServer: Closing server...");
+            Debugger.WriteLine(LogLevel.Info, "PipeService: Closing server...");
             pipeStream.Close();
-            Debugger.WriteLine(LogLevel.Info, "PipeServer: Closed!");
+            Debugger.WriteLine(LogLevel.Info, "PipeService: Closed!");
             Stop();
         }
 
@@ -138,27 +138,27 @@ namespace COM3D2.MaidFiddler.Core.Rpc
         private void RunInternal()
         {
             loopThreadId = ThreadHelpers.GetCurrentThreadId();
-            Debugger.WriteLine(LogLevel.Info, $"PipeServer: Got server ID: {loopThreadId}");
+            Debugger.WriteLine(LogLevel.Info, $"PipeService: Got server ID: {loopThreadId}");
 
             var bw = new BinaryWriter(pipeStream);
             var br = new BinaryReader(pipeStream);
 
             while (running)
             {
-                Debugger.WriteLine(LogLevel.Info, "PipeServer: Waiting for connection");
+                Debugger.WriteLine(LogLevel.Info, "PipeService: Waiting for connection");
                 try
                 {
                     pipeStream.WaitForConnection();
                 }
                 catch (Exception)
                 {
-                    Debugger.WriteLine(LogLevel.Info, "PipeServer: Aborting waiting!");
+                    Debugger.WriteLine(LogLevel.Info, "PipeService: Aborting waiting!");
                     ((IDisposable) bw).Dispose();
                     ((IDisposable) br).Dispose();
                     return;
                 }
 
-                Debugger.WriteLine(LogLevel.Info, "PipeServer: Connected!");
+                Debugger.WriteLine(LogLevel.Info, "PipeService: Connected!");
                 IsConnected = true;
                 pipeStream.Flush();
 
@@ -226,8 +226,7 @@ namespace COM3D2.MaidFiddler.Core.Rpc
         private void Error(Exception e, BinaryWriter writer, ulong increment = 0)
         {
             currentID += increment;
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine(e);
+            Debugger.WriteLine(LogLevel.Error, $"Remote error: {e}");
             var err = new Message
             {
                     ID = currentID,

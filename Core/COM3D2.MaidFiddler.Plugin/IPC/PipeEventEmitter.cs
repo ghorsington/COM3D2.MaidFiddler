@@ -3,27 +3,27 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
-using COM3D2.MaidFiddler.Core.Rpc.Util;
+using COM3D2.MaidFiddler.Core.IPC.Util;
 using COM3D2.MaidFiddler.Core.Utils;
 
-namespace COM3D2.MaidFiddler.Core.Rpc
+namespace COM3D2.MaidFiddler.Core.IPC
 {
-    public class PipedEventServer : IDisposable
+    public class PipeEventEmitter : IDisposable
     {
         private BinaryReader br;
 
         private readonly BinaryWriter bw;
-        private readonly Thread waitForConnectionThread;
         private int currentCache;
         private readonly List<Dictionary<string, object>>[] eventCaches;
         private ulong id;
         private readonly NamedPipeServerStream pipeStream;
         private bool waiterRunning;
         private readonly AutoResetEvent waitForConnectionEvent;
+        private readonly Thread waitForConnectionThread;
 
         private uint waitThreadId;
 
-        public PipedEventServer(string name)
+        public PipeEventEmitter(string name)
         {
             pipeStream = new NamedPipeServerStream(name, PipeDirection.InOut);
             bw = new BinaryWriter(pipeStream);
