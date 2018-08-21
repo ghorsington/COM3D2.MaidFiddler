@@ -368,7 +368,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             var workLevels = new Dictionary<int, object>();
             var workPlayCounts = new Dictionary<int, object>();
 
-            foreach (var data in maid.status.workDatas.GetValueArray())
+            foreach (WorkData data in maid.status.workDatas.GetValueArray())
             {
                 workLevels[data.id] = data.level;
                 workPlayCounts[data.id] = data.playCount;
@@ -503,14 +503,15 @@ namespace COM3D2.MaidFiddler.Core.Service
             maidLockList[e.Maid.status.guid] = maidLockList[e.OldGuid];
             maidLockList.Remove(e.OldGuid);
 
-            Emit("old_maid_deserialized", new Dict
-            {
-                    ["old_guid"] = e.OldGuid,
-                    ["new_guid"] = e.Maid.status.guid,
-                    ["firstName"] = e.Maid.status.firstName,
-                    ["lastName"] = e.Maid.status.lastName,
-                    ["thumbnail"] = e.Maid.GetThumIcon()?.EncodeToPNG()
-            });
+            Emit("old_maid_deserialized",
+                 new Dict
+                 {
+                         ["old_guid"] = e.OldGuid,
+                         ["new_guid"] = e.Maid.status.guid,
+                         ["firstName"] = e.Maid.status.firstName,
+                         ["lastName"] = e.Maid.status.lastName,
+                         ["thumbnail"] = e.Maid.GetThumIcon()?.EncodeToPNG()
+                 });
         }
 
         private void InitMaidStatus()

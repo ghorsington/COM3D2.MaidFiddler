@@ -1,13 +1,11 @@
 import PyQt5.uic as uic
-import zerorpc
 import sys
 import os
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QCheckBox, QSpinBox, QWidget, QHBoxLayout, QListWidgetItem, QMenu, QAction, QDialog
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QListWidgetItem, QMenu, QAction, QDialog, QApplication
 
 import maidfiddler.util.util as util
-from maidfiddler.util.eventpoller import EventPoller
 from maidfiddler.ui.tabs import *
 from maidfiddler.ui.maids_list import MaidsList
 
@@ -19,12 +17,14 @@ from maidfiddler.util.translation import load_translation, tr, get_random_title,
 from maidfiddler.util.config import CONFIG, save_config
 
 from maidfiddler.ui.resources import APP_ICON
+from maidfiddler.util.pipes import PipedEventHandler, PipeRpcCaller
 
 
 UI_MainWindow = uic.loadUiType(
     open(util.get_resource_path("templates/maid_fiddler.ui")))
 
 BASE_TITLE = "Maid Fiddler COM3D2"
+
 
 class MaidManager:
     def __init__(self):
@@ -47,7 +47,9 @@ class MaidManager:
 
 
 class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
-    def __init__(self, group, close_func):
+    connection_lost = pyqtSignal()
+
+    def __init__(self, close_func):
         print("Initializing UI")
         super(MainWindow, self).__init__()
         self.setupUi(self)
@@ -61,10 +63,13 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.ui_tabs.setEnabled(False)
         self.menuSelected_maid.setEnabled(False)
 
-        self.core = None
-        self.connect_dialog = ConnectDialog(self)
+        self.connection_lost.connect(self.on_connection_close)
+
+        self.core = PipeRpcCaller(self.connection_lost)
+        self.event_poller = PipedEventHandler(
+            "MaidFildderEventEmitter", self.connection_lost)
+        self.connect_dialog = ConnectDialog(self, self.core)
         self.close_func = close_func
-        self.event_poller = EventPoller(group)
 
         self.about_dialog = AboutDialog()
         self.core_version = "?"
@@ -90,32 +95,33 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         print("Trying to show error dialog")
         dialog = ErrorDialog(t, val, traceback)
         dialog.exec()
-        sys.exit(0)
+        QApplication.instance().exit()
 
     def connect(self):
         self.connect_dialog.reload()
 
         result = self.connect_dialog.exec()
         if result != QDialog.Accepted:
+            QApplication.instance().exit()
             sys.exit(0)
-        
-        self.core = self.connect_dialog.client
-        self.connect_dialog.client = None
+            return
+
+        self.event_poller.start_polling()
+
         game_data = self.connect_dialog.game_data
+        if game_data is None:
+            self.on_connection_close()
+            return
         self.connect_dialog.game_data = None
 
         self.core_version = self.core.get_Version()
-
-        open_port = self.core.GetAvailableTcpPort()
-        print(f"Got open TCP port: {open_port}")
-        self.event_poller.start(open_port, self.core)
 
         for tab in self.tabs:
             tab.game_data = game_data
 
         self.maids_list.reload_maids()
         self.player_tab.reload_player_props()
-        
+
         # Reload translations to translate updated UI
         for tab in self.tabs:
             tab.translate_ui()
@@ -157,7 +163,9 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         for tab in self.tabs:
             tab.translate_ui()
 
-    def on_connection_close(self, args=None):
+    def on_connection_close(self):
+        if not self.core.is_connected():
+            return
         print("Connection closed!")
         self.close()
         self.maids_list.clear_list()
@@ -171,19 +179,23 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.connect()
 
     def init_events(self):
-        self.event_poller.on("connection_closed", self.on_connection_close)
-
         self.maids_list.init_events(self.event_poller)
 
         for tab in self.tabs:
             tab.init_events(self.event_poller)
         # Game-related
-        self.actionMax_facility_grade.triggered.connect(lambda: self.core.MaxFacilityGrades())
-        self.actionUnlock_all_trohpies.triggered.connect(lambda: self.core.UnlockAllTrophies())
-        self.actionUnlock_all_stock_items.triggered.connect(lambda: self.core.UnlockAllStockItems())
-        self.actionMaximum_credits.triggered.connect(lambda: self.core.MaxCredits())
-        self.actionMaximum_club_grade_and_evaluation.triggered.connect(lambda: self.core.MaxGrade())
-        self.actiontop_bar_cur_save_all_yotogi_bg_visible.toggled.connect(lambda c: self.core.SetAllYotogiStagesVisible(c))
+        self.actionMax_facility_grade.triggered.connect(
+            lambda: self.core.MaxFacilityGrades())
+        self.actionUnlock_all_trohpies.triggered.connect(
+            lambda: self.core.UnlockAllTrophies())
+        self.actionUnlock_all_stock_items.triggered.connect(
+            lambda: self.core.UnlockAllStockItems())
+        self.actionMaximum_credits.triggered.connect(
+            lambda: self.core.MaxCredits())
+        self.actionMaximum_club_grade_and_evaluation.triggered.connect(
+            lambda: self.core.MaxGrade())
+        self.actiontop_bar_cur_save_all_yotogi_bg_visible.toggled.connect(
+            lambda c: self.core.SetAllYotogiStagesVisible(c))
 
         self.actionAbout.triggered.connect(self.show_about)
 
@@ -192,11 +204,10 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.about_dialog.open()
 
     def closeEvent(self, event):
-        self.core.DisconnectEventHander()
         self.close()
         self.close_func()
 
     def close(self):
-        self.event_poller.stop()
         self.core.close()
-        self.core = None
+        if self.event_poller.running:
+            self.event_poller.stop_polling()

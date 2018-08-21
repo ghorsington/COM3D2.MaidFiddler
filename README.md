@@ -21,9 +21,6 @@ If you are a developer, you can build Maid Fiddler directly from source code. Re
 
 Contains the core plug-in that is put in the game itself. Uses Sybaris and UnityInjector to get patched into the game.
 
-#### Terminal
-
-A simple terminal written in Python that allows to directly control the core plug-in.
 
 #### GUI
 

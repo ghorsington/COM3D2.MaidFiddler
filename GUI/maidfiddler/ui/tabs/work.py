@@ -41,7 +41,8 @@ class WorkTab(UiTab):
         noon_work_header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
 
         for (i, work_data) in enumerate(noon_work):
-            self.ui.cur_noon_work_combo.addItem(work_data["name"], work_data["id"])
+            self.ui.cur_noon_work_combo.addItem(
+                work_data["name"], work_data["id"])
             self.work_day_names.append(f"work_noon.{work_data['name']}")
             self.noon_work_id_index[work_data["id"]] = i
 
@@ -71,7 +72,8 @@ class WorkTab(UiTab):
                        if data["work_type"] == "Yotogi"]
 
         for (i, work_data) in enumerate(yotogi_work):
-            self.ui.cur_night_work_combo.addItem(work_data["name"], work_data["id"])
+            self.ui.cur_night_work_combo.addItem(
+                work_data["name"], work_data["id"])
             self.night_work_id_index[work_data["id"]] = i
             self.work_yotogi_names.append(f"work_yotogi.{work_data['name']}")
 
@@ -79,8 +81,10 @@ class WorkTab(UiTab):
         self.ui.cur_night_work_combo.blockSignals(False)
 
     def init_events(self, event_poller):
-        self.ui.cur_noon_work_combo.currentIndexChanged.connect(lambda: self.core.SetNoonWorkActive(self.ui.cur_noon_work_combo.currentData(Qt.UserRole)))
-        self.ui.cur_night_work_combo.currentIndexChanged.connect(lambda: self.core.SetNightWorkActive(self.ui.cur_night_work_combo.currentData(Qt.UserRole)))
+        self.ui.cur_noon_work_combo.currentIndexChanged.connect(
+            lambda: self.core.SetNoonWorkActive(self.ui.cur_noon_work_combo.currentData(Qt.UserRole)))
+        self.ui.cur_night_work_combo.currentIndexChanged.connect(
+            lambda: self.core.SetNightWorkActive(self.ui.cur_night_work_combo.currentData(Qt.UserRole)))
         event_poller.on("work_data_changed", self.work_data_changed)
 
     def work_data_changed(self, args):
@@ -90,11 +94,13 @@ class WorkTab(UiTab):
 
     def change_level(self):
         level = self.sender()
-        self.core.SetWorkLevelActiveMaid(level.property("work_id"), level.value())
+        self.core.SetWorkLevelActiveMaid(
+            level.property("work_id"), level.value())
 
     def change_play_count(self):
         count = self.sender()
-        self.core.SetWorkPlayCountActive(count.property("work_id"), count.value())
+        self.core.SetWorkPlayCountActive(
+            count.property("work_id"), count.value())
 
     def on_maid_selected(self):
         if self.maid_mgr.selected_maid is None:
@@ -112,14 +118,16 @@ class WorkTab(UiTab):
 
         self.ui.cur_noon_work_combo.blockSignals(True)
         if maid["properties"]["active_noon_work_id"] in self.noon_work_id_index:
-            self.ui.cur_noon_work_combo.setCurrentIndex(self.noon_work_id_index[maid["properties"]["active_noon_work_id"]])
+            self.ui.cur_noon_work_combo.setCurrentIndex(
+                self.noon_work_id_index[maid["properties"]["active_noon_work_id"]])
         self.ui.cur_noon_work_combo.blockSignals(False)
 
         self.ui.cur_night_work_combo.blockSignals(True)
         if maid["properties"]["active_night_work_id"] in self.night_work_id_index:
-            self.ui.cur_night_work_combo.setCurrentIndex(self.night_work_id_index[maid["properties"]["active_night_work_id"]])
+            self.ui.cur_night_work_combo.setCurrentIndex(
+                self.night_work_id_index[maid["properties"]["active_night_work_id"]])
         self.ui.cur_night_work_combo.blockSignals(False)
-    
+
     def translate_ui(self):
         self.ui.ui_tabs.setTabText(3, tr(self.ui.tab_maid_work))
 

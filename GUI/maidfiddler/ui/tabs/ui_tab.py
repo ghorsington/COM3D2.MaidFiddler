@@ -1,5 +1,6 @@
 from PyQt5.QtCore import Qt, QObject
 
+
 class UiTab(QObject):
     def __init__(self, ui):
         QObject.__init__(self)

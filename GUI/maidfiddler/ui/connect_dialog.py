@@ -1,19 +1,19 @@
 import PyQt5.uic as uic
-import sys
-import zerorpc
+import time
+import threading
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtWidgets import QPushButton, QLabel
+from PyQt5.QtWidgets import QPushButton, QLabel, QApplication
 from PyQt5.QtCore import Qt
 import maidfiddler.util.util as util
 from maidfiddler.util.translation import tr, tr_str
-from maidfiddler.util.config import CONFIG, save_config
 from maidfiddler.ui.resources import APP_ICON
 
 (ui_class, ui_base) = uic.loadUiType(
     open(util.get_resource_path("templates/connect_dialog.ui")))
 
+
 class ConnectDialog(ui_class, ui_base):
-    def __init__(self, main_window):
+    def __init__(self, main_window, core):
         super(ConnectDialog, self).__init__()
         self.setupUi(self)
 
@@ -22,19 +22,16 @@ class ConnectDialog(ui_class, ui_base):
         self.setWindowIcon(QIcon(icon))
 
         self.main_window = main_window
-        self.client = None
+        self.core = core
         self.game_data = None
+        self.worker = None
+        self.run_connect = False
 
-        self.connect_button.clicked.connect(self.try_connect)
         self.close_button.clicked.connect(self.closeEvent)
 
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
 
     def reload(self):
-        self.connect_button.setEnabled(True)
-        self.port.setEnabled(True)
-        self.port.setValue(CONFIG.getint("Connection", "port", fallback=8899))
-
         for label in self.findChildren(QLabel):
             label.setText(tr(label))
 
@@ -44,38 +41,42 @@ class ConnectDialog(ui_class, ui_base):
         self.setWindowTitle(tr_str("connect_dialog.title"))
         self.status_label.setStyleSheet("color: black;")
         self.status_label.setText(tr_str("connect_dialog.status.wait"))
-        self.client = None
+
+    def showEvent(self, evt):
+        self.try_connect()
 
     def closeEvent(self, evt):
-        sys.exit(0)
+        self.run_connect = False
+        self.worker.join()
+        self.reject()
+
+    def connected(self):
+        self.status_label.setStyleSheet("color: green;")
+        self.status_label.setText(tr_str("connect_dialog.status.dl_info"))
+        self.game_data, err = self.core.try_invoke("GetGameInfo")
+        if not err:
+            self.run_connect = False
+            self.accept()
+        else:
+            self.status_label.setStyleSheet("color: orange;")
+            self.status_label.setText(tr_str("connect_dialog.status.connect"))
+        return not err
+
+    def begin_connect(self):
+        while self.run_connect:
+            time.sleep(1)
+            try:
+                self.core.connect("MaidFiddlerService")
+                if self.connected():
+                    print("Connected!")
+                    return
+            except:
+                print("Failed to connect! Retrying in a second!")
 
     def try_connect(self):
-        self.connect_button.setEnabled(False)
-        self.port.setEnabled(False)
-        self.client = zerorpc.Client()
         self.status_label.setStyleSheet("color: orange;")
-        self.status_label.setText(tr_str("connect_dialog.status.connect").format(util.GAME_ADDRESS, self.port.value()))
-        
-        try:
-            self.client.connect(f"tcp://{util.GAME_ADDRESS}:{self.port.value()}")
-            self.client._zerorpc_ping()
+        self.status_label.setText(tr_str("connect_dialog.status.connect"))
 
-            self.status_label.setStyleSheet("color: green;")
-            self.status_label.setText(tr_str("connect_dialog.status.dl_info"))
-            try:
-                self.game_data = self.client.GetGameInfo()
-            except zerorpc.RemoteError as e:
-                self.main_window.display_error_box(type(e), e, e.__traceback__)
-        except Exception as ex:
-            self.status_label.setStyleSheet("color: red;")
-            self.status_label.setText(tr_str("connect_dialog.status.fail").format(str(ex)))
-            self.client.close()
-            self.client = None
-            self.connect_button.setEnabled(True)
-            self.port.setEnabled(True)
-            return
-        
-        CONFIG["Connection"]["port"] = str(self.port.value())
-        save_config()
-        self.accept()
-
+        self.worker = threading.Thread(target=self.begin_connect)
+        self.run_connect = True
+        self.worker.start()

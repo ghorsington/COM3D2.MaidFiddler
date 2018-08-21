@@ -1,8 +1,9 @@
-from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QDoubleSpinBox , QSpinBox , QCheckBox, QWidget, QHBoxLayout, QGroupBox
-from PyQt5.QtCore import Qt, QObject
+from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QDoubleSpinBox, QSpinBox, QCheckBox, QWidget, QHBoxLayout, QGroupBox
+from PyQt5.QtCore import Qt
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import NumberElement, TextElement
 from maidfiddler.util.translation import tr
+
 
 class MaidStatsTab(UiTab):
     def __init__(self, ui):
@@ -11,7 +12,7 @@ class MaidStatsTab(UiTab):
         self.properties = {}
         self.bonus_properties = {}
         self.type_generators = {
-            "int" : lambda: NumberElement(QSpinBox()),
+            "int": lambda: NumberElement(QSpinBox()),
             "double": lambda: NumberElement(QDoubleSpinBox()),
             "string": lambda: TextElement(QLineEdit())
         }
@@ -54,7 +55,8 @@ class MaidStatsTab(UiTab):
             widget.setLayout(hbox)
 
             self.ui.maid_params_lockable_table.setItem(i, 0, name)
-            self.ui.maid_params_lockable_table.setCellWidget(i, 1, line.qt_element)
+            self.ui.maid_params_lockable_table.setCellWidget(
+                i, 1, line.qt_element)
             self.ui.maid_params_lockable_table.setCellWidget(i, 2, widget)
 
             line.qt_element.setProperty("prop_name", maid_prop)
@@ -91,8 +93,10 @@ class MaidStatsTab(UiTab):
     def init_events(self, event_poller):
         event_poller.on("maid_prop_changed", self.prop_changed)
 
-        self.ui.actiontop_bar_cur_maid_lock_all.triggered.connect(lambda: self.toggle_locks(True))
-        self.ui.actiontop_bar_cur_maid_unlock_all_2.triggered.connect(lambda: self.toggle_locks(False))
+        self.ui.actiontop_bar_cur_maid_lock_all.triggered.connect(
+            lambda: self.toggle_locks(True))
+        self.ui.actiontop_bar_cur_maid_unlock_all_2.triggered.connect(
+            lambda: self.toggle_locks(False))
 
     def toggle_locks(self, state):
         self.core.ToggleAllParametersLockActive(state)
@@ -124,7 +128,7 @@ class MaidStatsTab(UiTab):
         element = self.sender()
         prop = element.property("prop_name")
         n_state = self.core.ToggleActiveMaidLock(prop, state == Qt.Checked)
-        
+
         element.blockSignals(True)
         element.setCheckState(Qt.Checked if n_state else Qt.Unchecked)
         element.blockSignals(False)
@@ -137,14 +141,15 @@ class MaidStatsTab(UiTab):
 
         for name, widgets in self.properties.items():
             widgets[0].set_value(maid["properties"][name])
-            widgets[1].setCheckState(Qt.Checked if maid["prop_locks"][name] else Qt.Unchecked)
+            widgets[1].setCheckState(
+                Qt.Checked if maid["prop_locks"][name] else Qt.Unchecked)
 
         for name, widget in self.bonus_properties.items():
             widget.setValue(maid["bonus_properties"][name])
 
     def translate_ui(self):
         self.ui.ui_tabs.setTabText(1, tr(self.ui.tab_maid_stats))
-        
+
         for group in self.ui.tab_maid_stats.findChildren(QGroupBox):
             group.setTitle(tr(group))
 

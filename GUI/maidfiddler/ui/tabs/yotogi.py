@@ -3,12 +3,13 @@ from PyQt5.QtCore import Qt
 from .ui_tab import UiTab
 from maidfiddler.util.translation import tr, tr_str
 
+
 class YotogiTab(UiTab):
     def __init__(self, ui):
         UiTab.__init__(self, ui)
 
         self.skill_elements = {}
-    
+
     def update_ui(self):
         self.skill_elements.clear()
         self.ui.yotogi_skills_table.clearContents()
@@ -48,7 +49,7 @@ class YotogiTab(UiTab):
             hbox.setAlignment(Qt.AlignCenter)
             hbox.setContentsMargins(0, 0, 0, 0)
             widget.setLayout(hbox)
-            
+
             checkbox.setProperty("id", skill["id"])
             line_level.setProperty("id", skill["id"])
             line_exp.setProperty("id", skill["id"])
@@ -60,7 +61,8 @@ class YotogiTab(UiTab):
             self.ui.yotogi_skills_table.setCellWidget(i, 3, line_exp)
             self.ui.yotogi_skills_table.setCellWidget(i, 4, line_play_count)
 
-            self.skill_elements[skill["id"]] = (checkbox, line_level, line_exp, line_play_count)
+            self.skill_elements[skill["id"]] = (
+                checkbox, line_level, line_exp, line_play_count)
 
             checkbox.stateChanged.connect(self.toggle_skill)
             line_level.valueChanged.connect(self.set_level)
@@ -71,13 +73,16 @@ class YotogiTab(UiTab):
         event_poller.on("yotogi_skill_add", self.on_skill_add)
         event_poller.on("yotogi_skill_remove", self.on_skill_remove)
 
-        self.ui.actiontop_bar_cur_maid_unlock_yotogi_skills.triggered.connect(self.update_if_success(lambda: self.core.UnlockAllYotogiSkillsActive(False)))
-        self.ui.actiontop_bar_cur_maid_max_yotogi_skills.triggered.connect(self.update_if_success(lambda: self.core.UnlockAllYotogiSkillsActive(True)))
+        self.ui.actiontop_bar_cur_maid_unlock_yotogi_skills.triggered.connect(
+            self.update_if_success(lambda: self.core.UnlockAllYotogiSkillsActive(False)))
+        self.ui.actiontop_bar_cur_maid_max_yotogi_skills.triggered.connect(
+            self.update_if_success(lambda: self.core.UnlockAllYotogiSkillsActive(True)))
 
     def update_if_success(self, work):
         def handler():
             if work():
-                self.maid_mgr.selected_maid = self.core.GetMaidData(self.maid_mgr.selected_maid["guid"])
+                self.maid_mgr.selected_maid = self.core.GetMaidData(
+                    self.maid_mgr.selected_maid["guid"])
                 self.on_maid_selected()
         return handler
 
@@ -99,7 +104,7 @@ class YotogiTab(UiTab):
         play_count.blockSignals(True)
         play_count.setValue(0)
         play_count.blockSignals(False)
-    
+
     def on_skill_remove(self, args):
         (cb, level, exp, play_count) = self.skill_elements[args["skill_id"]]
 
@@ -121,11 +126,13 @@ class YotogiTab(UiTab):
 
     def toggle_skill(self, state):
         cb = self.sender()
-        self.core.ToggleYotogiSkillActive(cb.property("id"), state == Qt.Checked)
+        self.core.ToggleYotogiSkillActive(
+            cb.property("id"), state == Qt.Checked)
 
     def set_level(self):
         level = self.sender()
-        self.core.SetYotogiSkillLevelActive(level.property("id"), level.value())
+        self.core.SetYotogiSkillLevelActive(
+            level.property("id"), level.value())
 
     def set_exp(self):
         exp = self.sender()
@@ -133,7 +140,8 @@ class YotogiTab(UiTab):
 
     def set_play_count(self):
         play_count = self.sender()
-        self.core.SetYotogiSkillPlayCountActive(play_count.property("id"), play_count.value())
+        self.core.SetYotogiSkillPlayCountActive(
+            play_count.property("id"), play_count.value())
 
     def on_maid_selected(self):
         if self.maid_mgr.selected_maid is None:
@@ -174,4 +182,3 @@ class YotogiTab(UiTab):
         for row in range(0, self.ui.yotogi_skills_table.rowCount()):
             name = self.ui.yotogi_skills_table.item(row, 1)
             name.setText(tr(name))
-

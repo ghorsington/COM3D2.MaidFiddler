@@ -9,6 +9,7 @@ import app_info as info
 (ui_class, ui_base) = uic.loadUiType(
     open(util.get_resource_path("templates/about_dialog.ui")))
 
+
 class AboutDialog(ui_class, ui_base):
     def __init__(self):
         super(AboutDialog, self).__init__()
@@ -23,7 +24,7 @@ class AboutDialog(ui_class, ui_base):
 
         self.description_label.setText(tr(self.description_label))
         self.close_button.setText(tr(self.close_button))
-        
+
         about_icon = QPixmap()
         about_icon.loadFromData(APP_ICON)
         self.icon_label.setPixmap(about_icon.scaled(32, 32))

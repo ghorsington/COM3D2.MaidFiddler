@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using MaidStatus;
 using Yotogis;
@@ -12,8 +11,8 @@ namespace COM3D2.MaidFiddler.Core.Hooks
         public static bool EnableAllCommands { get; set; }
         public static bool EnableAllScenarios { get; set; }
         public static bool EnableAllScheduleItems { get; set; }
-        public static bool EnableYotogiSkills { get; set; }
         public static bool EnableAllStagesVisible { get; set; }
+        public static bool EnableYotogiSkills { get; set; }
 
         public static bool IsStageYotogiPlayable(out bool result)
         {

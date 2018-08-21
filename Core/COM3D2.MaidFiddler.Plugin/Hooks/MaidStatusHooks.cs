@@ -42,8 +42,8 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 
     public class OldMaidDeserializedEventArgs : EventArgs
     {
-        public string OldGuid { get; internal set; }
         public Maid Maid { get; internal set; }
+        public string OldGuid { get; internal set; }
     }
 
     public static class MaidStatusHooks
@@ -53,7 +53,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
         public static event EventHandler<MaidEventArgs> ThumbnailChanged;
         public static event EventHandler<PropFeatureChangeEventArgs> PropFeatureChanged;
         public static event EventHandler<WorkDataChangeEventArgs> WorkDataChanged;
-        public static event EventHandler<OldMaidDeserializedEventArgs> OldMaidDeserialized; 
+        public static event EventHandler<OldMaidDeserializedEventArgs> OldMaidDeserialized;
 
         public static bool OnPropertySetPrefix(string propName, Status status)
         {
@@ -78,11 +78,13 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 
         public static void OnOldDataDeserialized(Maid maid)
         {
-            OldMaidDeserialized?.Invoke(null, new OldMaidDeserializedEventArgs
-            {
-                    Maid = maid,
-                    OldGuid = typeof(Maid).GetField("mf_oldGuid", BindingFlags.Public | BindingFlags.Instance)?.GetValue(maid) as string
-            });
+            OldMaidDeserialized?.Invoke(null,
+                                        new OldMaidDeserializedEventArgs
+                                        {
+                                                Maid = maid,
+                                                OldGuid = typeof(Maid).GetField("mf_oldGuid", BindingFlags.Public | BindingFlags.Instance)
+                                                                      ?.GetValue(maid) as string
+                                        });
         }
 
         public static void OnThumShot(Maid maid)

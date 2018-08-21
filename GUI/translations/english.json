@@ -36,15 +36,14 @@
             "info": "Oh no! An error occurred!\nRestart Maid Fiddler to continue!\n\nPlease send the below error report to the developer!"
         },
         "connect_dialog" : {
-            "info": "Before using Maid Fiddler, you must connect the tool to the game!\n\n1. Open COM3D2\n2. Wait until main menu is loaded\n3. Click \"Connect\"\n\nIf you configured a different port number, insert it here:",
-            "title": "Connect to COM3D2",
+            "title": "Connecting to COM3D2",
+            "info": "Welcome to Maid Fiddler!\n\nPlease wait while the GUI connects to COM3D2.",
             "status" : {
                 "wait": "Waiting to connect...",
-                "connect": "Trying to connect to tcp://{}:{}",
+                "connect": "Connecting to the game (retrying every 1 second)",
                 "dl_info": "Connected! Downloading game information...",
                 "fail": "Failed to connect because: {}"
             },
-            "connect": "Connect",
             "close": "Close Maid Fiddler"
         },
         "top_bar": {

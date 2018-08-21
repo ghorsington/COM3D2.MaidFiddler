@@ -4,20 +4,20 @@ from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import NumberElement, TextElement, CheckboxElement
 from maidfiddler.util.translation import tr, tr_str
 
+
 class PlayerTab(UiTab):
     def __init__(self, ui):
         UiTab.__init__(self, ui)
 
         self.properties = {}
         self.type_generators = {
-            "int" : lambda: NumberElement(QSpinBox()),
+            "int": lambda: NumberElement(QSpinBox()),
             "double": lambda: NumberElement(QDoubleSpinBox()),
             "string": lambda: TextElement(QLineEdit()),
-            "bool" : lambda: CheckboxElement(QCheckBox())
+            "bool": lambda: CheckboxElement(QCheckBox())
         }
-    
+
     def update_ui(self):
-        #self.ui.player_params_table.clear()
         self.properties.clear()
         self.ui.player_params_table.clearContents()
 
@@ -78,7 +78,8 @@ class PlayerTab(UiTab):
 
     def commit_lock(self):
         sender = self.sender()
-        self.core.TogglePlayerStatusLock(sender.property("prop_name"), sender.checkState() == Qt.Checked)
+        self.core.TogglePlayerStatusLock(sender.property(
+            "prop_name"), sender.checkState() == Qt.Checked)
 
     def on_player_prop_change(self, args):
         self.properties[args["prop_name"]][0].set_value(args["value"])
@@ -87,10 +88,10 @@ class PlayerTab(UiTab):
         if not args["success"]:
             return
         self.reload_player_props()
-    
+
     def reload_player_props(self):
         data = self.core.GetAllPlayerData()
-        
+
         locked_vals = set(data["locked_props"])
 
         for prop, value in data["props"].items():
@@ -98,7 +99,8 @@ class PlayerTab(UiTab):
             el.set_value(value)
 
             cb.blockSignals(True)
-            cb.setCheckState(Qt.Checked if prop in locked_vals else Qt.Unchecked)
+            cb.setCheckState(
+                Qt.Checked if prop in locked_vals else Qt.Unchecked)
             cb.blockSignals(False)
 
     def translate_ui(self):

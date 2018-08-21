@@ -1,38 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
+using COM3D2.MaidFiddler.Core.Rpc;
+using COM3D2.MaidFiddler.Core.Utils;
 using UnityEngine;
-using ZeroRpc.Net;
 using Dict = System.Collections.Generic.Dictionary<string, object>;
 
 namespace COM3D2.MaidFiddler.Core.Service
 {
     public partial class Service
     {
-        private Client client;
-        private int currentCache;
+        public PipedEventServer eventServer;
         private Coroutine emitLoop;
 
-        private readonly List<Dict>[] eventCaches = new List<Dict>[2];
-
         private bool EmitEvents { get; set; } = true;
-
-        private bool HasEventHandler => client != null;
-
-        public void SubscribeToEventHandler(string address)
-        {
-            Unsubscribe();
-
-            eventCaches[0] = new List<Dict>();
-            eventCaches[1] = new List<Dict>();
-            currentCache = 0;
-
-            emitLoop = parent.StartCoroutine(EmitLoop());
-
-            client = new Client(TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(30));
-            client.Connect(address);
-            Console.WriteLine($"Subscribed to event handler on {address}");
-        }
 
         public void DisconnectEventHander()
         {
@@ -44,49 +23,26 @@ namespace COM3D2.MaidFiddler.Core.Service
             while (true)
             {
                 yield return new WaitForFixedUpdate();
-
-                if (eventCaches[currentCache].Count != 0)
-                {
-                    int cache = currentCache;
-                    currentCache = 1 - currentCache;
-                    client?.InvokeAsync("emit", new object[] {eventCaches[cache].ToArray()});
-                    eventCaches[cache].Clear();
-                }
+                eventServer.EmitEvents();
             }
-        }
-
-        internal void StopEventEmitter()
-        {
-            if (client == null)
-                return;
-
-            client.InvokeAsync("dispose_handler");
-            Unsubscribe();
         }
 
         internal void Unsubscribe()
         {
-            if (client == null)
-                return;
-            parent.StopCoroutine(emitLoop);
-            emitLoop = null;
+            eventServer.Disconnect();
+        }
 
-            try
-            {
-                client.Dispose();
-            }
-            catch (Exception)
-            {
-                // Boop!
-            }
-
-            client = null;
+        private void InitEventEmitter()
+        {
+            Debugger.WriteLine(LogLevel.Info, "Creating event emitter");
+            eventServer = new PipedEventServer("MaidFildderEventEmitter");
+            emitLoop = parent.StartCoroutine(EmitLoop());
         }
 
         private void Emit(string eventName, Dict arguments)
         {
-            if (client != null && EmitEvents)
-                eventCaches[currentCache].Add(new Dict {["event_name"] = eventName, ["args"] = arguments});
+            if (eventServer.IsConnected && EmitEvents)
+                eventServer.AddEvent(eventName, arguments);
         }
     }
 }

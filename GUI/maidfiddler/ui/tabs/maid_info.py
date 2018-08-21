@@ -1,8 +1,7 @@
-from PyQt5.QtCore import Qt, QObject
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QGroupBox, QLabel
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import TextElement, ComboElement, NumberElement, PlainTextElement
-from zerorpc import RemoteError
 from maidfiddler.util.translation import tr, tr_str
 
 
@@ -105,7 +104,8 @@ class MaidInfoTab(UiTab):
             self.ui.yotogi_class_combo.addItem(
                 yotogi_class["name"], yotogi_class["id"])
             yotogi_classes[yotogi_class["id"]] = i
-            self.yotogi_classes_names.append(f"yotogi_class.{yotogi_class['name']}")
+            self.yotogi_classes_names.append(
+                f"yotogi_class.{yotogi_class['name']}")
 
         self.ui.yotogi_class_combo.view().setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
 
@@ -126,8 +126,6 @@ class MaidInfoTab(UiTab):
             self.commit_prop_changes("relation"))
         self.ui.employment_day_box.valueChanged.connect(
             self.commit_prop_changes("employmentDay"))
-        # self.ui.user_comment_text.currentIndexChanged.connect(
-        #     self.commit_prop_changes("freeComment"))
         self.ui.personality_combo.currentIndexChanged.connect(
             lambda: self.core.SetPersonalActive(self.properties["personal"].value()))
         self.ui.contract_combo.currentIndexChanged.connect(
@@ -140,7 +138,7 @@ class MaidInfoTab(UiTab):
             lambda: self.core.SetCurrentJobClassActive(self.properties["current_job_class_id"].value()))
         self.ui.yotogi_class_combo.currentIndexChanged.connect(
             lambda: self.core.SetCurrentYotogiClassActive(self.properties["current_yotogi_class_id"].value()))
-        
+
         event_poller.on("maid_prop_changed", self.prop_changed)
 
     def commit_prop_changes(self, prop):

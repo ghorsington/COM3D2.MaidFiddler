@@ -17,7 +17,7 @@ class FeaturePropensityTab(UiTab):
         self.ui.feature_list.blockSignals(True)
         self.ui.propensity_list.blockSignals(True)
         self.ui.feature_list.clear()
-        self.ui.propensity_list.clear();
+        self.ui.propensity_list.clear()
 
         # Feature list
         for feature in self.game_data["feature_list"]:
@@ -55,26 +55,30 @@ class FeaturePropensityTab(UiTab):
 
     def on_feature_click(self, item):
         feature_id = item.data(Qt.UserRole)
-        self.core.ToggleActiveMaidFeature(feature_id, item.checkState() == Qt.Checked)
-    
+        self.core.ToggleActiveMaidFeature(
+            feature_id, item.checkState() == Qt.Checked)
+
     def on_propensity_click(self, item):
         propensity_id = item.data(Qt.UserRole)
-        self.core.ToggleActiveMaidPropensity(propensity_id, item.checkState() == Qt.Checked)
+        self.core.ToggleActiveMaidPropensity(
+            propensity_id, item.checkState() == Qt.Checked)
 
     def on_feature_change(self, args):
         self.ui.feature_list.blockSignals(True)
-        self.features[args["id"]].setCheckState(Qt.Checked if args["selected"] else Qt.Unchecked)
+        self.features[args["id"]].setCheckState(
+            Qt.Checked if args["selected"] else Qt.Unchecked)
         self.ui.feature_list.blockSignals(False)
 
     def on_propensity_change(self, args):
         self.ui.propensity_list.blockSignals(True)
-        self.propensities[args["id"]].setCheckState(Qt.Checked if args["selected"] else Qt.Unchecked)
+        self.propensities[args["id"]].setCheckState(
+            Qt.Checked if args["selected"] else Qt.Unchecked)
         self.ui.propensity_list.blockSignals(False)
 
     def on_maid_selected(self):
         if self.maid_mgr.selected_maid is None:
             return
-        
+
         maid = self.maid_mgr.selected_maid
 
         self.ui.feature_list.blockSignals(True)
@@ -97,10 +101,14 @@ class FeaturePropensityTab(UiTab):
         for group in self.ui.tab_feature_propensity.findChildren(QGroupBox):
             group.setTitle(tr(group))
 
+        self.ui.feature_list.blockSignals(True)
         for i in range(0, self.ui.feature_list.count()):
             item = self.ui.feature_list.item(i)
             item.setText(tr(item))
+        self.ui.feature_list.blockSignals(False)
 
+        self.ui.propensity_list.blockSignals(True)
         for i in range(0, self.ui.propensity_list.count()):
             item = self.ui.propensity_list.item(i)
             item.setText(tr(item))
+        self.ui.propensity_list.blockSignals(False)

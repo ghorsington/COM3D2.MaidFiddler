@@ -1,10 +1,6 @@
 import sys
 import os
 
-APP_RUNNING = True
-GAME_ADDRESS = "127.0.0.1"
-CLIENT_ADDRESS = "127.0.0.1"
-
 BASE_DIR = ""
 
 if getattr(sys, "frozen", False):
