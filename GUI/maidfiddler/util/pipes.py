@@ -144,6 +144,8 @@ class PipedEventHandler:
             f = None
             f = open(f"\\\\.\\pipe\\{self.name}", "r+b", 0)
 
+            print("Connected event handler!")
+
             while self.running:
                 n = struct.unpack("I", f.read(4))[0]
                 data = f.read(n)
