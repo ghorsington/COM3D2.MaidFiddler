@@ -53,7 +53,12 @@ class ConnectDialog(ui_class, ui_base):
     def connected(self):
         self.status_label.setStyleSheet("color: green;")
         self.status_label.setText(tr_str("connect_dialog.status.dl_info"))
-        self.game_data, err = self.core.try_invoke("GetGameInfo")
+        print("Got connection! Trying to get game data!")
+        try:
+            self.game_data, err = self.core.try_invoke("GetGameInfo")
+        except Exception as e:
+            err = True
+            print("Got error while calling GetGameInfo: {e}")
         if not err:
             self.run_connect = False
             self.accept()
@@ -70,8 +75,8 @@ class ConnectDialog(ui_class, ui_base):
                 if self.connected():
                     print("Connected!")
                     return
-            except:
-                print("Failed to connect! Retrying in a second!")
+            except Exception as e:
+                print(f"Failed to connect because {e}! Retrying in a second!")
 
     def try_connect(self):
         self.status_label.setStyleSheet("color: orange;")

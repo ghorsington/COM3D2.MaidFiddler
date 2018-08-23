@@ -13,9 +13,29 @@ Note that this GUI is still in **beta**. All main features are complete, but not
 
 If you are a developer, you can run the GUI without building it.
 
+### Requirements
+
+* Python 3.6+
+* [Universal CRT](https://support.microsoft.com/fi-fi/help/2999226/update-for-universal-c-runtime-in-windows)
+    - Mainly, the following DLLs are needed:  
+
+        ```
+        api-ms-win-crt-convert-l1-1-0.dll
+        api-ms-win-crt-environment-l1-1-0.dll
+        api-ms-win-crt-filesystem-l1-1-0.dll
+        api-ms-win-crt-heap-l1-1-0.dll
+        api-ms-win-crt-locale-l1-1-0.dll
+        api-ms-win-crt-math-l1-1-0.dll
+        api-ms-win-crt-runtime-l1-1-0.dll
+        api-ms-win-crt-stdio-l1-1-0.dll
+        api-ms-win-crt-string-l1-1-0.dll
+        api-ms-win-crt-time-l1-1-0.dll
+        api-ms-win-crt-utility-l1-1-0.dll
+        ```
+
 Do the following:
 
-1. Install **Python 3.6** (**3.7 does not work yet**)
+1. Install **Python 3.6**
 
 2. Clone this repository (if you haven't done so yet) by running
 

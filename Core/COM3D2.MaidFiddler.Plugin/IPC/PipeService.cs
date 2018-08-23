@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Threading;
 using COM3D2.MaidFiddler.Core.IPC.Util;
 using COM3D2.MaidFiddler.Core.Utils;
@@ -22,7 +23,7 @@ namespace COM3D2.MaidFiddler.Core.IPC
         public PipeService(T service, string name)
         {
             this.service = service;
-            pipeStream = new NamedPipeServerStream(name, PipeDirection.InOut);
+            pipeStream = PipeFactory.CreatePipe(name);
             messageThread = new Thread(RunInternal);
             Methods = new Dictionary<string, MethodData>();
             InitService();

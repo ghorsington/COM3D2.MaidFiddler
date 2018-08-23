@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -60,6 +61,7 @@
     <Compile Include="Hooks\MiscHooks.cs" />
     <Compile Include="Hooks\PlayerStatusHooks.cs" />
     <Compile Include="Hooks\YotogiSkillHooks.cs" />
+    <Compile Include="IPC\PipeFactory.cs" />
     <Compile Include="MaidFiddlerPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IPC\Util\ArgumentUnpacker.cs" />

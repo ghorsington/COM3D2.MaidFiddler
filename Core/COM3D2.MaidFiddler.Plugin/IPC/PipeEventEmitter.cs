@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
+using System.Security.AccessControl;
 using System.Threading;
 using COM3D2.MaidFiddler.Core.IPC.Util;
 using COM3D2.MaidFiddler.Core.Utils;
@@ -25,7 +26,7 @@ namespace COM3D2.MaidFiddler.Core.IPC
 
         public PipeEventEmitter(string name)
         {
-            pipeStream = new NamedPipeServerStream(name, PipeDirection.InOut);
+            pipeStream = PipeFactory.CreatePipe(name);
             bw = new BinaryWriter(pipeStream);
             br = new BinaryReader(pipeStream);
             eventCaches = new List<Dictionary<string, object>>[2];
@@ -126,10 +127,12 @@ namespace COM3D2.MaidFiddler.Core.IPC
             while (waiterRunning)
             {
                 waitForConnectionEvent.WaitOne();
+                Debugger.WriteLine(LogLevel.Info, "EventEmitter: Waiting for connection");
                 try
                 {
                     pipeStream.WaitForConnection();
                     IsConnected = true;
+                    Debugger.WriteLine(LogLevel.Info, "EventEmitter: Connected!");
                 }
                 catch (Exception)
                 {
