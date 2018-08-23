@@ -1,9 +1,6 @@
 ﻿using System;
 using System.IO.Pipes;
-using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
-using System.Security.Permissions;
 using COM3D2.MaidFiddler.Core.Utils;
 using Microsoft.Win32.SafeHandles;
 
@@ -13,7 +10,6 @@ namespace COM3D2.MaidFiddler.Core.IPC
     {
         private const int PIPE_ACCESS_DUPLEX = 0x00000003;
         private const int PIPE_TYPE_BYTE = 0x00000000;
-        private const int SDDL_REVISION_1 = 1;
 
         public static NamedPipeServerStream CreatePipe(string name)
         {
@@ -57,9 +53,10 @@ namespace COM3D2.MaidFiddler.Core.IPC
 
         private sealed class SafeSecurityDescriptor : SafeHandleZeroOrMinusOneIsInvalid
         {
+            private const int SDDL_REVISION_1 = 1;
+
             public SafeSecurityDescriptor() : base(true) { }
 
-            [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
             public SafeSecurityDescriptor(IntPtr existingHandle, bool ownsHandle) : base(ownsHandle)
             {
                 SetHandle(existingHandle);
@@ -86,7 +83,6 @@ namespace COM3D2.MaidFiddler.Core.IPC
             }
 
             [DllImport("Advapi32.dll", CharSet = CharSet.Auto, SetLastError = true, BestFitMapping = false)]
-            [ResourceExposure(ResourceScope.None)]
             private static extern bool ConvertStringSecurityDescriptorToSecurityDescriptor(
                     string StringSecurityDescriptor,
                     int StringSDRevision,
@@ -94,8 +90,6 @@ namespace COM3D2.MaidFiddler.Core.IPC
                     IntPtr SecurityDescriptorSize);
 
             [DllImport("kernel32.dll")]
-            [ResourceExposure(ResourceScope.None)]
-            [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
             private static extern IntPtr LocalFree(IntPtr hMem);
         }
     }
