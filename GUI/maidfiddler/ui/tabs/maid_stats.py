@@ -1,11 +1,13 @@
 from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QDoubleSpinBox, QSpinBox, QCheckBox, QWidget, QHBoxLayout, QGroupBox
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import NumberElement, TextElement
 from maidfiddler.util.translation import tr
 
 
 class MaidStatsTab(UiTab):
+    maid_props_changed_signal = pyqtSignal(dict)
+
     def __init__(self, ui):
         UiTab.__init__(self, ui)
 
@@ -91,7 +93,8 @@ class MaidStatsTab(UiTab):
             self.bonus_properties[maid_prop] = line
 
     def init_events(self, event_poller):
-        event_poller.on("maid_prop_changed", self.prop_changed)
+        self.maid_props_changed_signal.connect(self.prop_changed)
+        event_poller.on("maid_prop_changed", self.maid_props_changed_signal)
 
         self.ui.actiontop_bar_cur_maid_lock_all.triggered.connect(
             lambda: self.toggle_locks(True))

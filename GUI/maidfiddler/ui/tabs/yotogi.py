@@ -1,10 +1,13 @@
 from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QCheckBox, QSpinBox, QWidget, QHBoxLayout
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from .ui_tab import UiTab
 from maidfiddler.util.translation import tr, tr_str
 
 
 class YotogiTab(UiTab):
+    on_skill_add_signal = pyqtSignal(dict)
+    on_skill_remove_signal = pyqtSignal(dict)
+
     def __init__(self, ui):
         UiTab.__init__(self, ui)
 
@@ -70,8 +73,10 @@ class YotogiTab(UiTab):
             line_play_count.valueChanged.connect(self.set_play_count)
 
     def init_events(self, event_poller):
-        event_poller.on("yotogi_skill_add", self.on_skill_add)
-        event_poller.on("yotogi_skill_remove", self.on_skill_remove)
+        self.on_skill_add_signal.connect(self.on_skill_add)
+        self.on_skill_remove_signal.connect(self.on_skill_remove)
+        event_poller.on("yotogi_skill_add", self.on_skill_add_signal)
+        event_poller.on("yotogi_skill_remove", self.on_skill_remove_signal)
 
         self.ui.actiontop_bar_cur_maid_unlock_yotogi_skills.triggered.connect(
             self.update_if_success(lambda: self.core.UnlockAllYotogiSkillsActive(False)))

@@ -1,11 +1,13 @@
 from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QCheckBox, QSpinBox, QWidget, QHBoxLayout, QGroupBox, QLabel
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import NumberElement
 from maidfiddler.util.translation import tr, tr_str
 
 
 class WorkTab(UiTab):
+    work_data_changed_signal = pyqtSignal(dict)
+
     def __init__(self, ui):
         UiTab.__init__(self, ui)
 
@@ -85,7 +87,9 @@ class WorkTab(UiTab):
             lambda: self.core.SetNoonWorkActive(self.ui.cur_noon_work_combo.currentData(Qt.UserRole)))
         self.ui.cur_night_work_combo.currentIndexChanged.connect(
             lambda: self.core.SetNightWorkActive(self.ui.cur_night_work_combo.currentData(Qt.UserRole)))
-        event_poller.on("work_data_changed", self.work_data_changed)
+        
+        self.work_data_changed_signal.connect(self.work_data_changed)
+        event_poller.on("work_data_changed", self.work_data_changed_signal)
 
     def work_data_changed(self, args):
         (level, play_count) = self.work_elements[args["id"]]

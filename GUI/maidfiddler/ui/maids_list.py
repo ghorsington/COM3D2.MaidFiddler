@@ -1,10 +1,18 @@
-from PyQt5.QtCore import QObject
+from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QListWidgetItem
 from maidfiddler.ui.resources import NO_THUMBNAIL
 
 
 class MaidsList(QObject):
+    deserialize_start_signal = pyqtSignal(dict)
+    deserialize_done_signal = pyqtSignal(dict)
+    maid_added_signal = pyqtSignal(dict)
+    maid_removed_signal = pyqtSignal(dict)
+    maid_thumbnail_changed_signal = pyqtSignal(dict)
+    maid_prop_changed_signal = pyqtSignal(dict)
+    old_maid_deserialized_signal = pyqtSignal(dict)
+
     def __init__(self, ui):
         QObject.__init__(self)
         self.ui = ui
@@ -19,14 +27,25 @@ class MaidsList(QObject):
     def maid_mgr(self):
         return self.ui.maid_mgr
 
+    def do_add_maid(self, args):
+        self.add_maid(a["maid"])
+
     def init_events(self, event_poller):
-        event_poller.on("deserialize_start", self.clear_list)
-        event_poller.on("deserialize_done", self.save_changed)
-        event_poller.on("maid_added", lambda a: self.add_maid(a["maid"]))
-        event_poller.on("maid_removed", self.on_maid_removed)
-        event_poller.on("maid_thumbnail_changed", self.thumb_changed)
-        event_poller.on("maid_prop_changed", self.prop_changed)
-        event_poller.on("old_maid_deserialized", self.fix_maid_data)
+        self.deserialize_start_signal.connect(self.clear_list)
+        self.deserialize_done_signal.connect(self.save_changed)
+        self.maid_added_signal.connect(self.do_add_maid)
+        self.maid_removed_signal.connect(self.on_maid_removed)
+        self.maid_thumbnail_changed_signal.connect(self.thumb_changed)
+        self.maid_prop_changed_signal.connect(self.prop_changed)
+        self.old_maid_deserialized_signal.connect(self.fix_maid_data)
+
+        event_poller.on("deserialize_start", self.deserialize_start_signal)
+        event_poller.on("deserialize_done", self.deserialize_done_signal)
+        event_poller.on("maid_added", self.maid_added_signal)
+        event_poller.on("maid_removed", self.maid_removed_signal)
+        event_poller.on("maid_thumbnail_changed", self.maid_thumbnail_changed_signal)
+        event_poller.on("maid_prop_changed", self.maid_prop_changed_signal)
+        event_poller.on("old_maid_deserialized", self.old_maid_deserialized_signal)
 
         self.maid_list.currentItemChanged.connect(self.maid_selected)
 

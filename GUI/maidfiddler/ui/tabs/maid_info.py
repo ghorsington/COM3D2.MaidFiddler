@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QGroupBox, QLabel
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import TextElement, ComboElement, NumberElement, PlainTextElement
@@ -6,6 +6,8 @@ from maidfiddler.util.translation import tr, tr_str
 
 
 class MaidInfoTab(UiTab):
+    maid_prop_changed_signal = pyqtSignal(dict)
+
     def __init__(self, ui):
         UiTab.__init__(self, ui)
         self.personality_names = []
@@ -139,7 +141,8 @@ class MaidInfoTab(UiTab):
         self.ui.yotogi_class_combo.currentIndexChanged.connect(
             lambda: self.core.SetCurrentYotogiClassActive(self.properties["current_yotogi_class_id"].value()))
 
-        event_poller.on("maid_prop_changed", self.prop_changed)
+        self.maid_prop_changed_signal.connect(self.prop_changed)
+        event_poller.on("maid_prop_changed", self.maid_prop_changed_signal)
 
     def commit_prop_changes(self, prop):
         def handler():

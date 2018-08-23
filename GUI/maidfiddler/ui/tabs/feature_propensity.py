@@ -1,10 +1,13 @@
 from PyQt5.QtWidgets import QListWidgetItem, QGroupBox
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from .ui_tab import UiTab
 from maidfiddler.util.translation import tr, tr_str
 
 
 class FeaturePropensityTab(UiTab):
+    feature_changed_signal = pyqtSignal(dict)
+    propensity_changed_signal = pyqtSignal(dict)
+
     def __init__(self, ui):
         UiTab.__init__(self, ui)
 
@@ -50,8 +53,11 @@ class FeaturePropensityTab(UiTab):
         self.ui.feature_list.itemChanged.connect(self.on_feature_click)
         self.ui.propensity_list.itemChanged.connect(self.on_propensity_click)
 
-        event_poller.on("feature_changed", self.on_feature_change)
-        event_poller.on("propensity_changed", self.on_propensity_change)
+        self.feature_changed_signal.connect(self.on_feature_change)
+        self.propensity_changed_signal.connect(self.on_propensity_change)
+
+        event_poller.on("feature_changed", self.feature_changed_signal)
+        event_poller.on("propensity_changed", self.propensity_changed_signal)
 
     def on_feature_click(self, item):
         feature_id = item.data(Qt.UserRole)

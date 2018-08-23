@@ -158,7 +158,7 @@ class PipedEventHandler:
                             f"Event {evt_args['event_name']}")
                         if evt_args["event_name"] in self.event_handlers:
                             for handler in self.event_handlers[evt_args["event_name"]]:
-                                handler(evt_args["args"])
+                                handler.emit(evt_args["args"])
 
             f.close()
         except:

@@ -1,11 +1,14 @@
 from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QCheckBox, QWidget, QHBoxLayout, QLineEdit, QSpinBox, QDoubleSpinBox, QGroupBox
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import NumberElement, TextElement, CheckboxElement
 from maidfiddler.util.translation import tr, tr_str
 
 
 class PlayerTab(UiTab):
+    update_player_props_signal = pyqtSignal(dict)
+    on_player_prop_change_signal = pyqtSignal(dict)
+
     def __init__(self, ui):
         UiTab.__init__(self, ui)
 
@@ -64,8 +67,10 @@ class PlayerTab(UiTab):
             checkbox.stateChanged.connect(self.commit_lock)
 
     def init_events(self, event_poller):
-        event_poller.on("deserialize_done", self.update_player_props)
-        event_poller.on("player_prop_changed", self.on_player_prop_change)
+        self.update_player_props_signal.connect(self.update_player_props)
+        self.on_player_prop_change_signal.connect(self.on_player_prop_change)
+        event_poller.on("deserialize_done", self.update_player_props_signal)
+        event_poller.on("player_prop_changed", self.on_player_prop_change_signal)
 
     def commit_prop(self):
         sender = self.sender()
