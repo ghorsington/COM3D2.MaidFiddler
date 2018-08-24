@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Maid Fiddler"
-#define MyAppVersion "1.0.0.0"
+#define MyAppVersion "1.0.0.0-pre3"
 #define MyAppURL "https://github.com/denikson/COM3D2.MaidFiddler"
 #define MyAppExeName "maid_fiddler_qt.exe"
 
@@ -55,13 +55,24 @@ begin
   HelperDirPage := CreateInputDirPage(wpSelectDir, 
    'Select COM3D2 directory',
    'Where is COM3D2 located?',
-   'Maid Fiddler''s core plugin will be installed into the following COM3D2 location.', False, '');
+   'Please give the location of COM3D2 (NOT SYBARIS):', False, '');
    HelperDirPage.Add('');
 
    if RegQueryStringValue(HKEY_CURRENT_USER, 'Software\KISS\カスタムオーダーメイド3D2', 'InstallPath', COM3D2Location) then
    begin
      HelperDirPage.Values[0] := COM3D2Location;
    end; 
+end;
+
+function NextButtonClick(CurPageID: Integer) : Boolean;
+begin
+  if (CurPageID = HelperDirPage.ID) and (not DirExists(HelperDirPage.Values[0] + '\Sybaris')) then
+  begin
+    MsgBox('No Sybaris folder found in the given COM3D2 directory!'#13#10'Check that you have Sybaris 2 installed in the given directory.', mbError, MB_OK);
+    Result := False;
+  end
+  else
+    Result := True;
 end;
 
 function GetInstallLocation(Param : String) : String;
