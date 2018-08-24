@@ -54,9 +54,9 @@ namespace COM3D2.MaidFiddler.Core.IPC
                     IsConnected = false;
                 }
 
-                Debugger.WriteLine(LogLevel.Info, "Closing Event Emitter...");
+                Debugger.Debug(LogLevel.Info, "Closing Event Emitter...");
                 pipeStream.Close();
-                Debugger.WriteLine(LogLevel.Info, "Closed Event Emitter!");
+                Debugger.Debug(LogLevel.Info, "Closed Event Emitter!");
 
                 if (waitThreadId != 0)
                 {
@@ -94,7 +94,7 @@ namespace COM3D2.MaidFiddler.Core.IPC
             if (!IsConnected || eventCaches[currentCache].Count == 0)
                 return;
 
-            Debugger.WriteLine(LogLevel.Info, "Emitting events!");
+            Debugger.Debug(LogLevel.Info, "Emitting events!");
             int cur = currentCache;
             currentCache = 1 - currentCache;
 
@@ -110,7 +110,7 @@ namespace COM3D2.MaidFiddler.Core.IPC
             }
             catch (EndOfStreamException e)
             {
-                Debugger.WriteLine(LogLevel.Info, "EventEmitter: Connection closed on event emmitter!");
+                Debugger.Debug(LogLevel.Info, "EventEmitter: Connection closed on event emmitter!");
                 pipeStream.Disconnect();
                 IsConnected = false;
                 ConnectionLost?.Invoke(null, EventArgs.Empty);
@@ -122,7 +122,7 @@ namespace COM3D2.MaidFiddler.Core.IPC
         private void RunWaitForConnection()
         {
             waitThreadId = ThreadHelpers.GetCurrentThreadId();
-            Debugger.WriteLine(LogLevel.Info, $"Wait Thread ID: {waitThreadId}");
+            Debugger.Debug(LogLevel.Info, $"Wait Thread ID: {waitThreadId}");
 
             while (waiterRunning)
             {

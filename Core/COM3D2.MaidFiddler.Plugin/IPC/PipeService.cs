@@ -38,9 +38,9 @@ namespace COM3D2.MaidFiddler.Core.IPC
             service.Dispose();
             if (IsConnected)
                 pipeStream.Disconnect();
-            Debugger.WriteLine(LogLevel.Info, "PipeService: Closing server...");
+            Debugger.Debug(LogLevel.Info, "PipeService: Closing server...");
             pipeStream.Close();
-            Debugger.WriteLine(LogLevel.Info, "PipeService: Closed!");
+            Debugger.Debug(LogLevel.Info, "PipeService: Closed!");
             Stop();
         }
 
@@ -139,7 +139,7 @@ namespace COM3D2.MaidFiddler.Core.IPC
         private void RunInternal()
         {
             loopThreadId = ThreadHelpers.GetCurrentThreadId();
-            Debugger.WriteLine(LogLevel.Info, $"PipeService: Got server ID: {loopThreadId}");
+            Debugger.Debug(LogLevel.Info, $"PipeService: Got server ID: {loopThreadId}");
 
             var bw = new BinaryWriter(pipeStream);
             var br = new BinaryReader(pipeStream);

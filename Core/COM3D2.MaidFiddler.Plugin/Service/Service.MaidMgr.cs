@@ -27,7 +27,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             if (IsDeserializing)
                 return;
 
-            Debugger.WriteLine(LogLevel.Info, $"Got maid: {e.Maid}");
+            Debugger.Debug(LogLevel.Info, $"Got maid: {e.Maid}");
 
             Emit("maid_added", new Dict {["maid"] = ReadBasicMaidData(e.Maid)});
 

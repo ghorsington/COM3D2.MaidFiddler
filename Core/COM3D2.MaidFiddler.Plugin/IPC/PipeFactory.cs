@@ -16,18 +16,18 @@ namespace COM3D2.MaidFiddler.Core.IPC
             var sa = new SecurityAttributes();
             sa.Length = Marshal.SizeOf(typeof(SecurityAttributes));
             sa.Inheritable = true;
-            Debugger.WriteLine(LogLevel.Info, $"Created SA: {sa}");
+            Debugger.Debug(LogLevel.Info, $"Created SA: {sa}");
 
             // Create a YOLO security descriptor to get around Access Denied problems
             // This is a pipe for a game; nothing of value to steal
             SafeSecurityDescriptor securityDescriptor = SafeSecurityDescriptor.FromSDDL("D:(A;OICI;GA;;;WD)");
-            Debugger.WriteLine(LogLevel.Info, $"Got security descriptor: {securityDescriptor}");
+            Debugger.Debug(LogLevel.Info, $"Got security descriptor: {securityDescriptor}");
 
             sa.SecurityDescriptor = securityDescriptor.DangerousGetHandle();
 
             IntPtr pipeHandle = CreateNamedPipe($@"\\.\pipe\{name}", PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE, 1, 64 * 1024, 64 * 1024, 0, sa);
 
-            Debugger.WriteLine(LogLevel.Info, $"Created pipe: {pipeHandle.ToString("X")}");
+            Debugger.Debug(LogLevel.Info, $"Created pipe: {pipeHandle.ToString("X")}");
             securityDescriptor.Dispose();
 
             return new NamedPipeServerStream(PipeDirection.InOut, false, false, new SafePipeHandle(pipeHandle, true));
@@ -84,10 +84,10 @@ namespace COM3D2.MaidFiddler.Core.IPC
 
             [DllImport("Advapi32.dll", CharSet = CharSet.Auto, SetLastError = true, BestFitMapping = false)]
             private static extern bool ConvertStringSecurityDescriptorToSecurityDescriptor(
-                    string StringSecurityDescriptor,
-                    int StringSDRevision,
+                    string stringSecurityDescriptor,
+                    int stringSdRevision,
                     out SafeSecurityDescriptor pSecurityDescriptor,
-                    IntPtr SecurityDescriptorSize);
+                    IntPtr securityDescriptorSize);
 
             [DllImport("kernel32.dll")]
             private static extern IntPtr LocalFree(IntPtr hMem);

@@ -46,13 +46,13 @@ namespace COM3D2.MaidFiddler.Core.Service
                 IsDeserializing = true;
                 SelectActiveMaid(null);
                 maidLockList.Clear();
-                Debugger.WriteLine(LogLevel.Info, "Deserialize start!");
+                Debugger.Debug(LogLevel.Info, "Deserialize start!");
                 Emit("deserialize_start", new Dict());
             };
 
             GameMainHooks.DeserializeEnded += (sender, args) =>
             {
-                Debugger.WriteLine(LogLevel.Info, "Deserialize end!");
+                Debugger.Debug(LogLevel.Info, "Deserialize end!");
                 IsDeserializing = false;
                 Emit("deserialize_done", new Dict {["success"] = args.Success});
                 if (args.Success)

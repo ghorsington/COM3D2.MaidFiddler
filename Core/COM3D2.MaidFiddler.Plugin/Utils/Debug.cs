@@ -42,7 +42,6 @@ namespace COM3D2.MaidFiddler.Core.Utils
             }
         }
 
-        [Conditional("DEBUG")]
         public static void WriteLine(string s)
         {
             Console.ForegroundColor = TAG_COLOR;
@@ -51,7 +50,6 @@ namespace COM3D2.MaidFiddler.Core.Utils
             Console.WriteLine(s);
         }
 
-        [Conditional("DEBUG")]
         public static void WriteLine(LogLevel level, string s)
         {
             Console.ForegroundColor = level.Color;
@@ -61,6 +59,14 @@ namespace COM3D2.MaidFiddler.Core.Utils
         }
 
         [Conditional("DEBUG")]
+        public static void Debug(LogLevel level, string s)
+        {
+            Console.ForegroundColor = level.Color;
+            Console.Write($"{TAG}[{level.Tag}]: ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine(s);
+        }
+
         public static void WriteLine()
         {
             Console.WriteLine();
