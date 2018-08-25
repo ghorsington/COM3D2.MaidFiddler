@@ -185,14 +185,17 @@ namespace COM3D2.MaidFiddler.Core.IPC
                         {
                             try
                             {
+                                Debugger.Debug(LogLevel.Info, $"Got invoke request: {call.Method}");
                                 object response = Invoke(call.Method, ArgumentUnpacker.Unpack(call.Args));
 
                                 var responseMsg = new Message {ID = currentID, Data = new Response {Result = response}};
 
                                 var responseData = SerializerUtils.Serialize(responseMsg);
 
+                                Debugger.Debug(LogLevel.Info, $"Writing {responseData.Length} bytes of response");
                                 bw.Write((uint) responseData.Length);
                                 bw.Write(responseData);
+                                Debugger.Debug(LogLevel.Info, "Response sent!");
                             }
                             catch (Exception e)
                             {
