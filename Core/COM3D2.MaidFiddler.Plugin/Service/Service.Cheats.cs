@@ -112,6 +112,11 @@ namespace COM3D2.MaidFiddler.Core.Service
             MiscHooks.EnableAllStagesVisible = toggle;
         }
 
+        public void SetEnableAllDances(bool value)
+        {
+            MiscHooks.EnableAllDances = value;
+        }
+
         public void SetUnlockRanges(bool value)
         {
             MathUtilHooks.UnlockRange = value;

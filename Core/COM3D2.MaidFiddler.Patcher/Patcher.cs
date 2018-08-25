@@ -121,6 +121,15 @@ namespace COM3D2.MaidFiddler.Patcher
             MethodDefinition isYotogiPlayable = yotogiStageData.GetMethod("isYotogiPlayable");
             
             isYotogiPlayable.InjectWith(miscHooks.GetMethod("IsStageYotogiPlayable"), flags: InjectFlags.ModifyReturn);
+
+            /* All songs always visible */
+
+            TypeDefinition danceSelect = ass.MainModule.GetType("DanceSelect");
+
+            MethodDefinition getAllRelease = danceSelect.GetMethod("get_m_AllRelease");
+
+            getAllRelease.InjectWith(miscHooks.GetMethod("GetAllDanceRelease"), flags: InjectFlags.ModifyReturn);
+
         }
 
         public static void PatchPlayerStatus(AssemblyDefinition ass)

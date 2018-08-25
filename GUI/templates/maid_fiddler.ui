@@ -589,8 +589,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>684</width>
-               <height>679</height>
+               <width>155</width>
+               <height>186</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -861,8 +861,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>684</width>
-               <height>679</height>
+               <width>155</width>
+               <height>190</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1063,8 +1063,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>684</width>
-               <height>679</height>
+               <width>463</width>
+               <height>181</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -1342,8 +1342,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>684</width>
-               <height>679</height>
+               <width>175</width>
+               <height>116</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -1475,6 +1475,7 @@
     <addaction name="actionMaximum_club_grade_and_evaluation"/>
     <addaction name="actionMax_facility_grade"/>
     <addaction name="actiontop_bar_cur_save_all_yotogi_bg_visible"/>
+    <addaction name="actiontop_bar_cur_save_all_dances_visible"/>
    </widget>
    <widget class="QMenu" name="menuAll_maids">
     <property name="enabled">
@@ -1821,6 +1822,20 @@
    </property>
    <property name="whatsThis">
     <string>top_bar.cur_save.all_yotogi_bg_visible</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_cur_save_all_dances_visible">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>top_bar.cur_save.all_dances_visible</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_save.all_dances_visible</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
    </property>
   </action>
  </widget>
