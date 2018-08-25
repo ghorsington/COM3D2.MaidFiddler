@@ -215,7 +215,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             foreach (var skillList in Skill.skill_data_list)
             foreach (var skillPair in skillList)
             {
-                YotogiSkillData skill = maid.status.yotogiSkill.Add(skillPair.Value) ?? maid.status.yotogiSkill.Get(skillPair.Key);
+                YotogiSkillData skill = maid.status.yotogiSkill.Get(skillPair.Key) ?? maid.status.yotogiSkill.Add(skillPair.Value);
                 if (max)
                     skill.expSystem.SetLevel(skill.expSystem.GetMaxLevel());
             }
@@ -223,7 +223,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             foreach (var skillList in Skill.Old.skill_data_list)
             foreach (var skillPair in skillList)
             {
-                YotogiSkillData skill = maid.status.yotogiSkill.Add(skillPair.Value) ?? maid.status.yotogiSkill.Get(skillPair.Key);
+                YotogiSkillData skill = maid.status.yotogiSkill.Get(skillPair.Key) ?? maid.status.yotogiSkill.Add(skillPair.Value);
                 if (max)
                     skill.expSystem.SetLevel(skill.expSystem.GetMaxLevel());
             }
@@ -233,7 +233,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             foreach (JobClass.Data data in JobClass.GetAllDatas(true))
             {
-                var job = maid.status.jobClass.Add(data, true) ?? maid.status.jobClass.Get(data.id);
+                var job = maid.status.jobClass.Get(data.id) ?? maid.status.jobClass.Add(data, true);
                 if (max)
                     job?.expSystem.SetLevel(job.expSystem.GetMaxLevel());
             }
@@ -243,7 +243,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             foreach (YotogiClass.Data data in YotogiClass.GetAllDatas(true))
             {
-                var job = maid.status.yotogiClass.Add(data, true) ?? maid.status.yotogiClass.Get(data.id);
+                var job = maid.status.yotogiClass.Get(data.id) ?? maid.status.yotogiClass.Add(data, true);
                 if (max)
                     job?.expSystem.SetLevel(job.expSystem.GetMaxLevel());
             }
