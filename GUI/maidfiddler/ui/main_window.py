@@ -48,13 +48,15 @@ class MaidManager:
 
 class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
     connection_lost = pyqtSignal()
+    error_occurred = pyqtSignal(dict)
 
     def __init__(self, close_func):
         print("Initializing UI")
         super(MainWindow, self).__init__()
         self.setupUi(self)
 
-        sys.excepthook = self.display_error_box
+        self.error_occurred.connect(self.display_error_box)
+        sys.excepthook = lambda t, v, tr: self.error_occurred.emit({"t": t, "val": v, "traceback": tr})
 
         icon = QPixmap()
         icon.loadFromData(APP_ICON)
@@ -91,13 +93,12 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.init_events()
         self.init_translations()
 
-    def display_error_box(self, t, val, traceback):
+    def display_error_box(self, data):
         print("Trying to show error dialog")
-        dialog = ErrorDialog(t, val, traceback)
+        dialog = ErrorDialog(data["t"], data["val"], data["traceback"])
         dialog.exec()
         self.close()
         QApplication.instance().exit()
-        sys.exit(0)
 
     def connect(self):
         self.connect_dialog.reload()
