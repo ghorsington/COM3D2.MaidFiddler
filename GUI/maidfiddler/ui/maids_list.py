@@ -28,7 +28,7 @@ class MaidsList(QObject):
         return self.ui.maid_mgr
 
     def do_add_maid(self, args):
-        self.add_maid(a["maid"])
+        self.add_maid(args["maid"])
 
     def init_events(self, event_poller):
         self.deserialize_start_signal.connect(self.clear_list)
