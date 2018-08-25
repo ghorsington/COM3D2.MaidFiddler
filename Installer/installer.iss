@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Maid Fiddler"
-#define MyAppVersion "1.0.0.0-pre3"
+#define MyAppVersion "1.0.0.0"
 #define MyAppURL "https://github.com/denikson/COM3D2.MaidFiddler"
 #define MyAppExeName "maid_fiddler_qt.exe"
 
