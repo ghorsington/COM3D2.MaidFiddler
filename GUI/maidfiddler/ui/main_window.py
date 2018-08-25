@@ -95,7 +95,9 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         print("Trying to show error dialog")
         dialog = ErrorDialog(t, val, traceback)
         dialog.exec()
+        self.close()
         QApplication.instance().exit()
+        sys.exit(0)
 
     def connect(self):
         self.connect_dialog.reload()
