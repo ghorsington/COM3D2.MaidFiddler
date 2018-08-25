@@ -5,7 +5,7 @@ namespace COM3D2.MaidFiddler.Core.Utils
 {
     public struct LogLevel
     {
-        public static LogLevel Info = new LogLevel("INFO", ConsoleColor.Blue);
+        public static LogLevel Info = new LogLevel("INFO", ConsoleColor.DarkCyan);
 
         public static LogLevel Warning = new LogLevel("WARNING", ConsoleColor.Yellow);
 
