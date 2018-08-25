@@ -86,5 +86,6 @@
     <MakeDir Directories="$(OutputDirectory)/Sybaris/UnityInjector" />
     <Move SourceFiles="$(OutputPath)\$(AssemblyName).dll" DestinationFiles="$(OutputPath)\Sybaris\UnityInjector\$(AssemblyName).dll" />
     <Move SourceFiles="$(OutputPath)\MsgPack.dll" DestinationFiles="$(OutputPath)\Sybaris\MsgPack.dll" />
+	<Move SourceFiles="$(OutputPath)\Mono.Cecil.Inject.dll" DestinationFiles="$(OutputPath)\Sybaris\Mono.Cecil.Inject.dll" />
   </Target>
 </Project>
