@@ -2,6 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Maid Fiddler"
+#define MyAppPub "NeighTools"
 #define MyAppVersion "1.0.0.0"
 #define MyAppURL "https://github.com/denikson/COM3D2.MaidFiddler"
 #define MyAppExeName "maid_fiddler_qt.exe"
@@ -17,6 +18,7 @@ AppVersion={#MyAppVersion}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
+AppPublisher={#MyAppPub}
 DefaultDirName={userpf}\MaidFiddlerGUI
 DefaultGroupName={#MyAppName}
 InfoBeforeFile=README.txt
