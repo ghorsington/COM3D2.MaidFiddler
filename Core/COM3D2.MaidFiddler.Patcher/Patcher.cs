@@ -66,7 +66,7 @@ namespace COM3D2.MaidFiddler.Patcher
                 Instruction ins =
                         target.Body.Instructions.FirstOrDefault(i => i.OpCode == OpCodes.Callvirt && i.Operand is MethodReference mref && mref.Name == "get_lockNTRPlay");
 
-                il.InsertAfter(ins, il.Create(OpCodes.Call, ass.MainModule.ImportReference(checkNtrPostfix)));
+                il.InsertAfter(ins, il.Create(OpCodes.Call, ass.MainModule.Import(checkNtrPostfix)));
             }
 
             PatchNTRCheck(yotogiSkillSelectManager.GetMethod("Awake"));
@@ -230,7 +230,7 @@ namespace COM3D2.MaidFiddler.Patcher
 
             deserialize.InjectWith(gameMainHooks.GetMethod("OnPreDeserialize"));
 
-            MethodReference onPostDeserialize = ass.MainModule.ImportReference(gameMainHooks.GetMethod("OnPostDeserialize"));
+            MethodReference onPostDeserialize = ass.MainModule.Import(gameMainHooks.GetMethod("OnPostDeserialize"));
 
             ILProcessor il = deserialize.Body.GetILProcessor();
 
@@ -354,7 +354,7 @@ namespace COM3D2.MaidFiddler.Patcher
             maid.GetMethod("DeserializeOldData").InjectWith(maidStatusHooks.GetMethod("OnOldDataDeserializeStart"), flags: InjectFlags.PassInvokingInstance);
             maid.GetMethod("DeserializeOldData").InjectWith(maidStatusHooks.GetMethod("OnOldDataDeserialized"), codeOffset: -1, flags: InjectFlags.PassInvokingInstance);
 
-            maid.Fields.Add(new FieldDefinition("mf_oldGuid", FieldAttributes.Public, ass.MainModule.ImportReference(typeof(string)))); 
+            maid.Fields.Add(new FieldDefinition("mf_oldGuid", FieldAttributes.Public, ass.MainModule.Import(typeof(string)))); 
         }
     }
 }
