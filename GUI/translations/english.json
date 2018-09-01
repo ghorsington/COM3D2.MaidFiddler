@@ -67,7 +67,8 @@
                     "schedule_events": "Make all schedule events visible",
                     "scenes": "Make all scenarios visible",
                     "yotogi_skills": "Make all yotogi skills selectable",
-                    "yotogi_commands": "Make all yotogi commands selectable"
+                    "yotogi_commands": "Make all yotogi commands selectable",
+                    "ntr_skills": "Always display NTR yotogi skills"
                 }
             },
             "cur_maid": {

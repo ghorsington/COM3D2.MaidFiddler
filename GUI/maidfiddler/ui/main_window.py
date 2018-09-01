@@ -200,6 +200,8 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
             lambda c: self.core.SetAllYotogiStagesVisible(c))
         self.actiontop_bar_cur_save_all_dances_visible.toggled.connect(
             lambda c: self.core.SetEnableAllDances(c))
+        self.actiontop_bar_all_maid_unlock_ntr_skills.toggled.connect(
+            lambda c: self.core.SetAllNTRSkillsVisible(c))
 
         self.actionAbout.triggered.connect(self.show_about)
 

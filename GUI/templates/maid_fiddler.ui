@@ -589,8 +589,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>155</width>
-               <height>186</height>
+               <width>684</width>
+               <height>679</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -861,8 +861,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>155</width>
-               <height>190</height>
+               <width>684</width>
+               <height>679</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1063,8 +1063,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>463</width>
-               <height>181</height>
+               <width>684</width>
+               <height>679</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -1342,8 +1342,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>175</width>
-               <height>116</height>
+               <width>684</width>
+               <height>679</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -1498,6 +1498,7 @@
      <addaction name="actionUnlock_all_scenarios"/>
      <addaction name="actionAll_unlock_yotogi_skills"/>
      <addaction name="actionAll_unlock_yotogi_commands"/>
+     <addaction name="actiontop_bar_all_maid_unlock_ntr_skills"/>
     </widget>
     <addaction name="actionMax_all_maids"/>
     <addaction name="actiontop_bar_all_maid_unlock_max_stats"/>
@@ -1836,6 +1837,17 @@
    </property>
    <property name="shortcutContext">
     <enum>Qt::WindowShortcut</enum>
+   </property>
+  </action>
+  <action name="actiontop_bar_all_maid_unlock_ntr_skills">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>top_bar.all_maid.unlock.ntr_skills</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.all_maid.unlock.ntr_skills</string>
    </property>
   </action>
  </widget>
