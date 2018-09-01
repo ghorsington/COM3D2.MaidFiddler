@@ -85,6 +85,7 @@ namespace COM3D2.MaidFiddler.Core.IPC
 
         public void Disconnect()
         {
+            Debugger.Debug(LogLevel.Info, "EventEmitter: Disconnecting!");
             pipeStream.Disconnect();
             IsConnected = false;
         }
@@ -110,7 +111,8 @@ namespace COM3D2.MaidFiddler.Core.IPC
             }
             catch (EndOfStreamException e)
             {
-                Debugger.Debug(LogLevel.Info, "EventEmitter: Connection closed on event emmitter!");
+                Debugger.Debug(LogLevel.Info, "EventEmitter: Connection closed on event emitter!");
+                Debugger.Debug(LogLevel.Info, $"Inner exception (harmless): {e.Message}");
                 pipeStream.Disconnect();
                 IsConnected = false;
                 ConnectionLost?.Invoke(null, EventArgs.Empty);
