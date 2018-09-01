@@ -7,6 +7,17 @@ Maid Fiddler is a real-time game manipulation tool for COM3D2.
 
 Changelog:
 
+* 1.0.2.0
+  - Remove lower limit on stats
+  - Add Russian translation to the bundle
+  - Add "Always display NTR skills" option
+  - Address potential crashes when using "Unlock all yotogi skills" option
+  - Address GUI not launching in some rare cases
+* 1.0.1.0
+  - Fix remote error causing GUI to freeze
+  - Fix typo in GUI script
+  - Bundle Cecil.Inject alongsite plugin
+  - Add "all dances selectable" cheat
 * 1.0.0.0
   - Initial release!
 
