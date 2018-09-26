@@ -3,7 +3,7 @@
 
 #define MyAppName "Maid Fiddler"
 #define MyAppPub "NeighTools"
-#define MyAppVersion "1.0.0.0"
+#define MyAppVersion "1.0.2.0"
 #define MyAppURL "https://github.com/denikson/COM3D2.MaidFiddler"
 #define MyAppExeName "maid_fiddler_qt.exe"
 
@@ -68,7 +68,7 @@ end;
 
 function NextButtonClick(CurPageID: Integer) : Boolean;
 begin
-  if (CurPageID = HelperDirPage.ID) and (not DirExists(HelperDirPage.Values[0] + '\Sybaris')) then
+  if (CurPageID = HelperDirPage.ID) and (not DirExists(AddBackslash(HelperDirPage.Values[0]) + 'Sybaris')) then
   begin
     MsgBox('No Sybaris folder found in the given COM3D2 directory!'#13#10'Check that you have Sybaris 2 installed in the given directory.', mbError, MB_OK);
     Result := False;
