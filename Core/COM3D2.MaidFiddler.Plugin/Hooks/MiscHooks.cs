@@ -72,16 +72,14 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             if (!EnableYotogiSkills)
                 return false;
 
-            YotogiSkillSystem skillSystem = CreateDummySkillSystem();
+            YotogiSkillSystem skillSystem = CreateDummySkillSystem(status);
 
             foreach (var skillDatas in Skill.skill_data_list)
             foreach (var idSkillPair in skillDatas)
             {
                 Skill.Data skill = idSkillPair.Value;
 
-                //skill.IsExecPersonal()
-
-                if (specialConditionCheck && skill.specialConditionType != type)
+                if (!skill.IsExecPersonal(status.personal) || specialConditionCheck && skill.specialConditionType != type)
                     continue;
 
                 YotogiSkillData skillData = skillSystem.Get(skill.id);
@@ -115,7 +113,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             if (!EnableYotogiSkills)
                 return false;
 
-            YotogiSkillSystem skillSystem = CreateDummySkillSystem();
+            YotogiSkillSystem skillSystem = CreateDummySkillSystem(status);
 
             foreach (var skillDatas in Skill.Old.skill_data_list)
             foreach (var idSkillPair in skillDatas)
@@ -141,12 +139,12 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             return true;
         }
 
-        public static bool GetYotogiSkill(out YotogiSkillSystem skillData)
+        public static bool GetYotogiSkill(Status status, out YotogiSkillSystem skillData)
         {
             skillData = null;
             if (!EnableYotogiSkills || GameMainHooks.IsDeserializing)
                 return false;
-            skillData = CreateDummySkillSystem();
+            skillData = CreateDummySkillSystem(status);
             return true;
         }
 
@@ -156,13 +154,15 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             return EnableAllCommands;
         }
 
-        private static YotogiSkillSystem CreateDummySkillSystem()
+        private static YotogiSkillSystem CreateDummySkillSystem(Status status)
         {
-            YotogiSkillSystem enabledSkillSystem = new YotogiSkillSystem(null);
+            YotogiSkillSystem enabledSkillSystem = new YotogiSkillSystem(status);
 
             foreach (var skills in Skill.skill_data_list)
             foreach (var skillDataPair in skills)
             {
+                if (!skillDataPair.Value.IsExecPersonal(status.personal))
+                    continue;
                 YotogiSkillData data = enabledSkillSystem.Get(skillDataPair.Value.id) ?? enabledSkillSystem.Add(skillDataPair.Value);
                 data.expSystem.SetLevel(data.expSystem.GetMaxLevel());
                 data.playCount = 9999;

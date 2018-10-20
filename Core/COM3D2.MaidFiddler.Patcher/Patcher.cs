@@ -55,7 +55,7 @@ namespace COM3D2.MaidFiddler.Patcher
                                       flags: InjectFlags.ModifyReturn | InjectFlags.PassParametersVal);
 
             MethodDefinition getYotogiSkillSystem = maidStatus.GetMethod("get_yotogiSkill");
-            getYotogiSkillSystem.InjectWith(miscHooks.GetMethod("GetYotogiSkill"), flags: InjectFlags.ModifyReturn);
+            getYotogiSkillSystem.InjectWith(miscHooks.GetMethod("GetYotogiSkill"), flags: InjectFlags.ModifyReturn | InjectFlags.PassInvokingInstance);
 
             MethodDefinition checkNtrPostfix = miscHooks.GetMethod("GetNTRLockPostfix");
 
