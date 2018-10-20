@@ -1,9 +1,11 @@
 import PyQt5.uic as uic
 import sys
 import os
+import threading
+import time
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QListWidgetItem, QMenu, QAction, QDialog, QApplication, QMessageBox, QCheckBox
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QListWidgetItem, QMenu, QAction, QDialog, QApplication, QMessageBox, QCheckBox, QPushButton
 
 import maidfiddler.util.util as util
 from maidfiddler.ui.tabs import *
@@ -140,14 +142,30 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.just_launched = False
         warning_box = QMessageBox(self)
         warning_box.setIcon(QMessageBox.Warning)
+        
         dont_show_cb = QCheckBox(tr_str("warning_dialog.dont_show_again"))
         dont_show_cb.setCheckable(True)
         dont_show_cb.blockSignals(True)
+        
+        confirm_button = QPushButton()
+        ok_text = tr_str("warning_dialog.ok")
+        confirm_button.setText(ok_text)
+        confirm_button.setEnabled(False)
+
         warning_box.addButton(dont_show_cb, QMessageBox.ResetRole)
-        warning_box.addButton(QMessageBox.Ok)
+        warning_box.addButton(confirm_button, QMessageBox.AcceptRole)
         warning_box.setTextFormat(Qt.RichText)
         warning_box.setText(tr_str("warning_dialog.warning"))
         warning_box.setWindowTitle(tr_str("warning_dialog.title"))
+
+        def button_timer():
+            for i in range(5, -1, -1):
+                time.sleep(1)
+                confirm_button.setText(f"{ok_text} ({i})")
+            confirm_button.setText(ok_text)
+            confirm_button.setEnabled(True)
+
+        threading._start_new_thread(button_timer, ())
         warning_box.exec()
 
         if dont_show_cb.checkState() == Qt.Checked:
