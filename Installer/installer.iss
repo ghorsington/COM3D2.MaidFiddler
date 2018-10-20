@@ -2,7 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Maid Fiddler"
-#define MyAppVersion "1.0.0.0"
+#define MyAppPub "NeighTools"
+#define MyAppVersion "1.0.2.0"
 #define MyAppURL "https://github.com/denikson/COM3D2.MaidFiddler"
 #define MyAppExeName "maid_fiddler_qt.exe"
 
@@ -17,6 +18,7 @@ AppVersion={#MyAppVersion}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
+AppPublisher={#MyAppPub}
 DefaultDirName={userpf}\MaidFiddlerGUI
 DefaultGroupName={#MyAppName}
 InfoBeforeFile=README.txt
@@ -66,7 +68,7 @@ end;
 
 function NextButtonClick(CurPageID: Integer) : Boolean;
 begin
-  if (CurPageID = HelperDirPage.ID) and (not DirExists(HelperDirPage.Values[0] + '\Sybaris')) then
+  if (CurPageID = HelperDirPage.ID) and (not DirExists(AddBackslash(HelperDirPage.Values[0]) + 'Sybaris')) then
   begin
     MsgBox('No Sybaris folder found in the given COM3D2 directory!'#13#10'Check that you have Sybaris 2 installed in the given directory.', mbError, MB_OK);
     Result := False;

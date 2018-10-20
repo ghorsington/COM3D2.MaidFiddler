@@ -43,6 +43,7 @@ class NumberElement(UiElement):
         UiElement.__init__(self, qt_element)
 
         self.qt_element.setMaximum(2**31 - 1)
+        self.qt_element.setMinimum(-2**31)
 
     def value(self):
         return self.qt_element.value()

@@ -107,6 +107,11 @@ namespace COM3D2.MaidFiddler.Core.Service
             return true;
         }
 
+        public void SetAllNTRSkillsVisible(bool toggle)
+        {
+            MiscHooks.DisplayNTRSkills = toggle;
+        }
+
         public void SetAllYotogiStagesVisible(bool toggle)
         {
             MiscHooks.EnableAllStagesVisible = toggle;

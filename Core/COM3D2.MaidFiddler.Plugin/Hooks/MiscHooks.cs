@@ -7,13 +7,14 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 {
     public static class MiscHooks
     {
-        private static YotogiSkillSystem enabledSkillSystem;
+        //private static YotogiSkillSystem enabledSkillSystem;
         public static bool EnableAllCommands { get; set; }
         public static bool EnableAllScenarios { get; set; }
         public static bool EnableAllScheduleItems { get; set; }
         public static bool EnableAllStagesVisible { get; set; }
         public static bool EnableYotogiSkills { get; set; }
         public static bool EnableAllDances { get; set; }
+        public static bool DisplayNTRSkills { get; set; }
 
         public static bool GetAllDanceRelease(out bool result)
         {
@@ -59,7 +60,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 
         public static bool GetNTRLockPostfix(bool ntrLocked)
         {
-            return false;
+            return !DisplayNTRSkills && ntrLocked;
         }
 
         public static bool PrefixCreateDatas(out Dictionary<int, YotogiSkillListManager.Data> result,
@@ -71,7 +72,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             if (!EnableYotogiSkills)
                 return false;
 
-            YotogiSkillSystem skillSystem = enabledSkillSystem ?? CreateDummySkillSystem();
+            YotogiSkillSystem skillSystem = CreateDummySkillSystem();
 
             foreach (var skillDatas in Skill.skill_data_list)
             foreach (var idSkillPair in skillDatas)
@@ -91,7 +92,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
                 var data = new YotogiSkillListManager.Data
                 {
                         skillData = skill,
-                        conditionDatas = new KeyValuePair<string, bool>[0], //new[] {new KeyValuePair<string, bool>("なし", true)},
+                        conditionDatas = new KeyValuePair<string, bool>[0],
                         maidStatusSkillData = skillData
                 };
                 result.Add(skill.id, data);
@@ -112,7 +113,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             if (!EnableYotogiSkills)
                 return false;
 
-            YotogiSkillSystem skillSystem = enabledSkillSystem ?? CreateDummySkillSystem();
+            YotogiSkillSystem skillSystem = CreateDummySkillSystem();
 
             foreach (var skillDatas in Skill.Old.skill_data_list)
             foreach (var idSkillPair in skillDatas)
@@ -129,7 +130,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
                 var data = new YotogiSkillListManager.Data
                 {
                         skillDataOld = skill,
-                        conditionDatas = new KeyValuePair<string, bool>[0], //new[] {new KeyValuePair<string, bool>("なし", true)},
+                        conditionDatas = new KeyValuePair<string, bool>[0],
                         maidStatusSkillData = skillData
                 };
                 result.Add(skill.id, data);
@@ -143,7 +144,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             skillData = null;
             if (!EnableYotogiSkills || GameMainHooks.IsDeserializing)
                 return false;
-            skillData = enabledSkillSystem ?? CreateDummySkillSystem();
+            skillData = CreateDummySkillSystem();
             return true;
         }
 
@@ -155,14 +156,12 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 
         private static YotogiSkillSystem CreateDummySkillSystem()
         {
-            enabledSkillSystem = new YotogiSkillSystem(null);
+            YotogiSkillSystem enabledSkillSystem = new YotogiSkillSystem(null);
 
             foreach (var skills in Skill.skill_data_list)
             foreach (var skillDataPair in skills)
             {
-                YotogiSkillData data = enabledSkillSystem.Add(skillDataPair.Value);
-                if (data == null)
-                    continue;
+                YotogiSkillData data = enabledSkillSystem.Get(skillDataPair.Value.id) ?? enabledSkillSystem.Add(skillDataPair.Value);
                 data.expSystem.SetLevel(data.expSystem.GetMaxLevel());
                 data.playCount = 9999;
             }
@@ -170,9 +169,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             foreach (var skills in Skill.Old.skill_data_list)
             foreach (var skillDataPair in skills)
             {
-                YotogiSkillData data = enabledSkillSystem.Add(skillDataPair.Value);
-                if (data == null)
-                    continue;
+                YotogiSkillData data = enabledSkillSystem.Get(skillDataPair.Value.id) ?? enabledSkillSystem.Add(skillDataPair.Value);
                 data.expSystem.SetLevel(data.expSystem.GetMaxLevel());
                 data.playCount = 9999;
             }

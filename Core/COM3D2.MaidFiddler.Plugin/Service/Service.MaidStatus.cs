@@ -386,8 +386,8 @@ namespace COM3D2.MaidFiddler.Core.Service
             var bonusProps = new Dict();
             result["bonus_properties"] = bonusProps;
 
-            foreach (FieldInfo fieldInfo in maid.status.bonusStatus.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public))
-                bonusProps[fieldInfo.Name] = fieldInfo.GetValue(maid.status.bonusStatus);
+            foreach (FieldInfo fieldInfo in bonusStatusFields)
+                bonusProps[fieldInfo.Name] = fieldInfo.GetValue(bonusStatusField.GetValue(maid.status));
 
             var jobData = new Dict();
             result["job_class_data"] = jobData;
@@ -514,8 +514,18 @@ namespace COM3D2.MaidFiddler.Core.Service
                  });
         }
 
+
+        private FieldInfo bonusStatusField;
+        private FieldInfo[] bonusStatusFields;
+
         private void InitMaidStatus()
         {
+            bonusStatusField = typeof(Status).GetField("bonusStatus",
+                                                       BindingFlags.NonPublic
+                                                       | BindingFlags.Public
+                                                       | BindingFlags.Instance);
+            bonusStatusFields = typeof(BonusStatus).GetFields(BindingFlags.Instance | BindingFlags.Public);
+
             maidSetters = new Dictionary<string, MethodInfo>();
             maidGetters = new Dictionary<string, MethodInfo>();
 

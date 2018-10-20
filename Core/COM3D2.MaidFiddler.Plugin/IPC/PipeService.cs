@@ -151,9 +151,10 @@ namespace COM3D2.MaidFiddler.Core.IPC
                 {
                     pipeStream.WaitForConnection();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     Debugger.WriteLine(LogLevel.Info, "PipeService: Aborting waiting!");
+                    Debugger.WriteLine(LogLevel.Info, $"Inner error (harmless): {e.Message}");
                     ((IDisposable) bw).Dispose();
                     ((IDisposable) br).Dispose();
                     return;
@@ -218,6 +219,8 @@ namespace COM3D2.MaidFiddler.Core.IPC
                     }
                     catch (EndOfStreamException e)
                     {
+                        Debugger.Debug(LogLevel.Info, "PipeService: Connection lost! Resetting!");
+                        Debugger.Debug(LogLevel.Info, $"Inner error (harmless): {e.Message}");
                         pipeStream.Flush();
                         pipeStream.Disconnect();
                         IsConnected = false;
