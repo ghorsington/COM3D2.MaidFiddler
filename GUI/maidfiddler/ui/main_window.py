@@ -1,9 +1,9 @@
 import PyQt5.uic as uic
 import sys
 import os
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QListWidgetItem, QMenu, QAction, QDialog, QApplication
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QListWidgetItem, QMenu, QAction, QDialog, QApplication, QMessageBox, QCheckBox
 
 import maidfiddler.util.util as util
 from maidfiddler.ui.tabs import *
@@ -13,7 +13,7 @@ from maidfiddler.ui.connect_dialog import ConnectDialog
 from maidfiddler.ui.error_dialog import ErrorDialog
 from maidfiddler.ui.about_dialog import AboutDialog
 
-from maidfiddler.util.translation import load_translation, tr, get_random_title, get_language_name
+from maidfiddler.util.translation import load_translation, tr, get_random_title, get_language_name, tr_str
 from maidfiddler.util.config import CONFIG, save_config
 
 from maidfiddler.ui.resources import APP_ICON
@@ -49,6 +49,9 @@ class MaidManager:
 class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
     connection_lost = pyqtSignal()
     error_occurred = pyqtSignal(dict)
+    tabs = []
+    maid_list_widgets = {}
+    just_launched = True
 
     def __init__(self, close_func):
         print("Initializing UI")
@@ -76,9 +79,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.about_dialog = AboutDialog()
         self.core_version = "?"
 
-        self.maid_list_widgets = {}
         self.maid_mgr = MaidManager()
-        self.tabs = []
 
         self.tabs.append(MaidInfoTab(self))
         self.tabs.append(MaidStatsTab(self))
@@ -128,6 +129,30 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         # Reload translations to translate updated UI
         for tab in self.tabs:
             tab.translate_ui()
+
+        # Finally, display a warning message if there is a need
+        self.display_warning()
+
+    def display_warning(self):
+        if not CONFIG.getboolean("Options", "show_startup_warning", fallback=True) or not self.just_launched:
+            return
+        
+        self.just_launched = False
+        warning_box = QMessageBox(self)
+        warning_box.setIcon(QMessageBox.Warning)
+        dont_show_cb = QCheckBox(tr_str("warning_dialog.dont_show_again"))
+        dont_show_cb.setCheckable(True)
+        dont_show_cb.blockSignals(True)
+        warning_box.addButton(dont_show_cb, QMessageBox.ResetRole)
+        warning_box.addButton(QMessageBox.Ok)
+        warning_box.setTextFormat(Qt.RichText)
+        warning_box.setText(tr_str("warning_dialog.warning"))
+        warning_box.setWindowTitle(tr_str("warning_dialog.title"))
+        warning_box.exec()
+
+        if dont_show_cb.checkState() == Qt.Checked:
+            CONFIG["Options"]["show_startup_warning"] = "no"
+            save_config()
 
     def init_translations(self):
         tl_path = os.path.join(util.BASE_DIR, "translations")
