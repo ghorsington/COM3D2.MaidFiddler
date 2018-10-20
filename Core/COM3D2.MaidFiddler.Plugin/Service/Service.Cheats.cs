@@ -41,6 +41,27 @@ namespace COM3D2.MaidFiddler.Core.Service
             return true;
         }
 
+        public bool FixYotogiSkillsActive()
+        {
+            if (selectedMaid == null)
+                return false;
+
+            EmitEvents = false;
+            FixYotogiSkills(selectedMaid);
+            EmitEvents = true;
+
+            return true;
+        }
+
+        public bool FixYotogiSkillsAll()
+        {
+            EmitEvents = false;
+            foreach (Maid maid in GameMain.Instance.CharacterMgr.GetStockMaidList())
+                FixYotogiSkills(maid);
+            EmitEvents = true;
+            return true;
+        }
+
         public bool MaxAllForAllMaids()
         {
             EmitEvents = false;
@@ -218,6 +239,16 @@ namespace COM3D2.MaidFiddler.Core.Service
                     GameMain.Instance.CharacterMgr.status.AddShopLineup(itemData.Value.id);
                     GameMain.Instance.CharacterMgr.status.SetShopLineupStatus(itemData.Value.id, ShopItemStatus.Purchased);
                 }
+        }
+
+        private void FixYotogiSkills(Maid maid)
+        {
+            foreach (int i in maid.status.yotogiSkill.datas.GetKeyArray())
+            {
+                var skillData = Skill.Get(i);
+                if(!skillData.IsExecPersonal(maid.status.personal))
+                    maid.status.yotogiSkill.Remove(i);
+            }
         }
 
         private void UnlockAllYotogiSkills(Maid maid, bool max)

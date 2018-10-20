@@ -79,6 +79,8 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             {
                 Skill.Data skill = idSkillPair.Value;
 
+                //skill.IsExecPersonal()
+
                 if (specialConditionCheck && skill.specialConditionType != type)
                     continue;
 

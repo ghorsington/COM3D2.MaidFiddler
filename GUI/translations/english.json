@@ -75,7 +75,8 @@
                     "yotogi_skills": "Make all yotogi skills selectable",
                     "yotogi_commands": "Make all yotogi commands selectable",
                     "ntr_skills": "Always display NTR yotogi skills"
-                }
+                },
+                "fix_yotogi_skills": "Remove invalid yotogi skills"
             },
             "cur_maid": {
                 "name": "Selected maid",
@@ -95,7 +96,8 @@
                     "all": "All of the above"
                 },
                 "lock_all": "Lock all stats",
-                "unlock_all": "Unlock all stats"
+                "unlock_all": "Unlock all stats",
+                "fix_yotogi_skills": "Remove invalid yotogi skills"
             },
             "misc": {
                 "name": "Other",

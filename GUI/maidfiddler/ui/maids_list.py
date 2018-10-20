@@ -64,6 +64,8 @@ class MaidsList(QObject):
             self.do_and_reselect(lambda: self.core.MaxAllForAllMaids()))
         self.ui.actiontop_bar_all_maid_unlock_max_stats.triggered.connect(
             self.do_and_reselect(lambda: self.core.UnlockAllForAllMaids()))
+        self.ui.actiontop_bar_all_maid_fix_yotogi_skills.triggered.connect(
+            self.do_and_reselect(lambda: self.core.FixYotogiSkillsAll()))
 
         # "Unlock all" for current maid (easier to have here)
         self.ui.actiontop_bar_cur_maid_unlock_all.triggered.connect(

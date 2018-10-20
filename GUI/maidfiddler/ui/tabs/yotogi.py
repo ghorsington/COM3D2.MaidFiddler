@@ -82,6 +82,8 @@ class YotogiTab(UiTab):
             self.update_if_success(lambda: self.core.UnlockAllYotogiSkillsActive(False)))
         self.ui.actiontop_bar_cur_maid_max_yotogi_skills.triggered.connect(
             self.update_if_success(lambda: self.core.UnlockAllYotogiSkillsActive(True)))
+        self.ui.actiontop_bar_cur_maid_fix_yotogi_skills.triggered.connect(
+            self.update_if_success(lambda: self.core.FixYotogiSkillsActive()))
 
     def update_if_success(self, work):
         def handler():

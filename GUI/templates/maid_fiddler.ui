@@ -589,8 +589,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>684</width>
-               <height>679</height>
+               <width>155</width>
+               <height>186</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -861,8 +861,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>684</width>
-               <height>679</height>
+               <width>155</width>
+               <height>190</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1063,8 +1063,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>684</width>
-               <height>679</height>
+               <width>463</width>
+               <height>181</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -1342,8 +1342,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>684</width>
-               <height>679</height>
+               <width>175</width>
+               <height>116</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -1504,6 +1504,7 @@
     <addaction name="actiontop_bar_all_maid_unlock_max_stats"/>
     <addaction name="actionUnlock_value_ranges"/>
     <addaction name="menutop_bar_all_maid_unlocks"/>
+    <addaction name="actiontop_bar_all_maid_fix_yotogi_skills"/>
    </widget>
    <widget class="QMenu" name="menuSelected_maid">
     <property name="enabled">
@@ -1550,6 +1551,7 @@
     <addaction name="menutop_bar_cur_maid_set_max"/>
     <addaction name="actiontop_bar_cur_maid_lock_all"/>
     <addaction name="actiontop_bar_cur_maid_unlock_all_2"/>
+    <addaction name="actiontop_bar_cur_maid_fix_yotogi_skills"/>
    </widget>
    <widget class="QMenu" name="menuMisc">
     <property name="whatsThis">
@@ -1848,6 +1850,22 @@
    </property>
    <property name="whatsThis">
     <string>top_bar.all_maid.unlock.ntr_skills</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_cur_maid_fix_yotogi_skills">
+   <property name="text">
+    <string>top_bar.cur_maid.fix_yotogi_skills</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.cur_maid.fix_yotogi_skills</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_all_maid_fix_yotogi_skills">
+   <property name="text">
+    <string>top_bar.all_maid.fix_yotogi_skills</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.all_maid.fix_yotogi_skills</string>
    </property>
   </action>
  </widget>
