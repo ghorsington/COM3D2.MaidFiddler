@@ -7,6 +7,11 @@ Maid Fiddler is a real-time game manipulation tool for COM3D2.
 
 Changelog:
 
+* 1.0.3.0
+  - Fix GUI not working if the computer didn't have UCRT installed
+  - Fix "all skills visible" trying to enable even personality-restricted skills
+  - Add "remove invalid skills" option that removes personality-restricted skills from maid
+  - Add warning to encourage more careful use of Maid Fiddler
 * 1.0.2.0
   - Remove lower limit on stats
   - Add Russian translation to the bundle
