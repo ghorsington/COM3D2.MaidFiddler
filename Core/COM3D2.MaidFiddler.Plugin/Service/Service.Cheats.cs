@@ -43,7 +43,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         public bool FixYotogiSkillsActive()
         {
-            if (selectedMaid == null)
+            if (selectedMaid == null || MiscHooks.EnableYotogiSkills)
                 return false;
 
             EmitEvents = false;
@@ -55,6 +55,9 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         public bool FixYotogiSkillsAll()
         {
+            if (MiscHooks.EnableYotogiSkills)
+                return false;
+
             EmitEvents = false;
             foreach (Maid maid in GameMain.Instance.CharacterMgr.GetStockMaidList())
                 FixYotogiSkills(maid);

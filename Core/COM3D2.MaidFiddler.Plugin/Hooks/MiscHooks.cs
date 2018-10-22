@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MaidStatus;
 using Yotogis;
@@ -15,6 +16,9 @@ namespace COM3D2.MaidFiddler.Core.Hooks
         public static bool EnableYotogiSkills { get; set; }
         public static bool EnableAllDances { get; set; }
         public static bool DisplayNTRSkills { get; set; }
+
+        public static event EventHandler DummySkillTreeCreationStart;
+        public static event EventHandler DummySkillTreeCreationEnd;
 
         public static bool GetAllDanceRelease(out bool result)
         {
@@ -156,6 +160,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
 
         private static YotogiSkillSystem CreateDummySkillSystem(Status status)
         {
+            DummySkillTreeCreationStart?.Invoke(null, EventArgs.Empty);
             YotogiSkillSystem enabledSkillSystem = new YotogiSkillSystem(status);
 
             foreach (var skills in Skill.skill_data_list)
@@ -176,6 +181,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
                 data.playCount = 9999;
             }
 
+            DummySkillTreeCreationEnd?.Invoke(null, EventArgs.Empty);
             return enabledSkillSystem;
         }
     }
