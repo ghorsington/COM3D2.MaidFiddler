@@ -22,8 +22,8 @@ namespace COM3D2.MaidFiddler.Core.Service
             InitGameMain();
             InitEventEmitter();
 
-            //MiscHooks.DummySkillTreeCreationStart += (s, args) => EmitEvents = false;
-            //MiscHooks.DummySkillTreeCreationEnd += (s, args) => EmitEvents = true;
+            MiscHooks.DummySkillTreeCreationStart += (s, args) => EmitEvents = false;
+            MiscHooks.DummySkillTreeCreationEnd += (s, args) => EmitEvents = true;
         }
 
         public static int GameVersion => (int) typeof(Misc).GetField(nameof(Misc.GAME_VERSION)).GetValue(null);
