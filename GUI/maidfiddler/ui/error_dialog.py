@@ -2,6 +2,7 @@ import PyQt5.uic as uic
 import traceback
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication
 import maidfiddler.util.util as util
 from maidfiddler.util.translation import tr, tr_str
 from maidfiddler.ui.resources import APP_ICON, ERR_ICON
@@ -19,9 +20,13 @@ class ErrorDialog(ui_class, ui_base):
         self.traceback = tb
         self.t = t
 
-        self.close_button.clicked.connect(self.accept)
+        self.close_button.clicked.connect(self.stop)
 
         self.load()
+
+    def stop(self):
+        QApplication.instance().exit()
+        self.accept()
 
     def load(self):
         icon = QPixmap()
