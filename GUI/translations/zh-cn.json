@@ -34,6 +34,12 @@
             "site": "网站:",
             "close": "关闭"
         },
+        "warning_dialog": {
+            "title": "A message of warning",
+            "warning": "Before using Maid Fiddler, understand that this tool <b>can destroy your save</b> if you are not careful!<br><br>Make sure that<ol><li>You make a backup of your save file</li><li>You don't use Maid Fiddler during the intro (first three in-game days)</li><li>You understand that using Maid Fiddler can cause the game to skip story, softlock or even crash</li></ol><br><b>By clicking OK you accept that you understand all this.</b>",
+            "dont_show_again": "Don't show this message again",
+            "ok": "OK"
+        },
         "error_dialog": {
             "title": "哇哇哇!",
             "info": "喔不会吧! 发生错误了!\n重新启动 Maid Fiddler 来继续游戏!\n\n请传送以下的错误报告给开发人员!"
