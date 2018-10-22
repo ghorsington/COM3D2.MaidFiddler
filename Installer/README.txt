@@ -7,6 +7,8 @@ Maid Fiddler is a real-time game manipulation tool for COM3D2.
 
 Changelog:
 
+* 1.0.3.1
+  - Fix game crashing when enabling "all skills visible"
 * 1.0.3.0
   - Fix GUI not working if the computer didn't have UCRT installed
   - Fix "all skills visible" trying to enable even personality-restricted skills
