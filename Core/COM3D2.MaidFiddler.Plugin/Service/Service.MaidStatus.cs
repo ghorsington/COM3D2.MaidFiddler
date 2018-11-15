@@ -427,6 +427,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             result["maid_thumbnail"] = thum?.EncodeToPNG();
 
             result["guid"] = maid.status.guid;
+            result["main_maid"] = maid.status.mainChara;
 
             return result;
         }

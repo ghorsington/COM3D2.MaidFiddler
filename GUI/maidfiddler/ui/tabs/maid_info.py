@@ -162,6 +162,8 @@ class MaidInfoTab(UiTab):
 
         maid = self.maid_mgr.selected_maid
 
+        self.ui.personality_combo.setEnabled(not maid["main_maid"])
+
         for name, element in self.properties.items():
             element.set_value(maid["properties"][name])
 
