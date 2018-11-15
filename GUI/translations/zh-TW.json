@@ -32,10 +32,10 @@
             "close": "關閉"
         },
         "warning_dialog": {
-            "title": "A message of warning",
-            "warning": "Before using Maid Fiddler, understand that this tool <b>can destroy your save</b> if you are not careful!<br><br>Make sure that<ol><li>You make a backup of your save file</li><li>You don't use Maid Fiddler during the intro (first three in-game days)</li><li>You understand that using Maid Fiddler can cause the game to skip story, softlock or even crash</li></ol><br><b>By clicking OK you accept that you understand all this.</b>",
-            "dont_show_again": "Don't show this message again",
-            "ok": "OK"
+            "title": "一個警告信息",
+            "warning": "在使用Maid Fiddler之前，請先了解這個工具 <b> 可能會破壞你存檔 </b> 如果你不小心！ <br><br> 確保 <ol><li> 備份你的存檔 </li><li> 在遊戲中（遊戲前三天）中你沒辦法使用Maid Fiddler </li><li> 使用Maid Fiddler會導致遊戲跳過故事，軟鎖可能會導致崩潰 </li></ol><br><b> 點擊“確定”即表示您接受了解這一切。 </b>",
+            "dont_show_again": "不要再顯示此消息",
+            "ok": "確定"
         },
         "error_dialog": {
             "title": "哇哇哇!",
@@ -43,7 +43,7 @@
         },
         "connect_dialog": {
             "title": "連線至COM3D2",
-            "info": "使用 Maid Fiddler 之前, 您必須將本工具連接至遊戲!\n\n1. 啟動COM3D2\n2. 等候至遊戲主選單載入\n3. 按下 \"連線\"\n\n如果您有設定不同的連接埠號碼, 請在此輸入:",
+            "info": "使用 Maid Fiddler 之前, 您必須將本工具連接至遊戲!\n\n1. 啟動COM3D2\n2. 等候至遊戲主選單載入\n3. 按下 \"連線\"\n如果您有設定不同的連接埠號碼, 請在此輸入:",
             "status": {
                 "wait": "等待連線中...",
                 "connect": "嘗試連線至 tcp://{}:{}",
@@ -539,6 +539,13 @@
 			"天使のささやき": "天使的呢喃",
 			"悪魔のささやき": "惡魔的耳語",
 			"ゆるふわダンサー": "輕盈舞者",
+			"セクシーダンサー": "性感舞者",
+			"アクティブ料理人": "活躍料理人",
+			"アグレッシブ料理人": "熱血料理人",
+			"カラオケっ子": "Ｋ歌女孩",
+			"カラオケマスター": "Ｋ歌大師",
+			"エネルギッシュダンス": "活潑舞者",
+			"ブレイクダンサー": "激熱舞者",
 			"セクシーダンサー": "性感舞者"
         },
         "work_noon": {
