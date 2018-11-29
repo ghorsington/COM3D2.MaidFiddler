@@ -271,6 +271,9 @@ namespace COM3D2.MaidFiddler.Core.Service
                 if (max)
                     skill.expSystem.SetLevel(skill.expSystem.GetMaxLevel());
             }
+
+            // Run skill fixing in case there were invalid skills prior to running this unlock
+            FixYotogiSkills(maid);
         }
 
         private void UnlockAllJobClass(Maid maid, bool max)
