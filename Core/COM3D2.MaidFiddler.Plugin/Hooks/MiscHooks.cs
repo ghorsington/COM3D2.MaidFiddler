@@ -96,7 +96,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
                 var data = new YotogiSkillListManager.Data
                 {
                         skillData = skill,
-                        conditionDatas = new KeyValuePair<string, bool>[0],
+                        conditionDatas = new KeyValuePair<string[], bool>[0],
                         maidStatusSkillData = skillData
                 };
                 result.Add(skill.id, data);
@@ -134,7 +134,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
                 var data = new YotogiSkillListManager.Data
                 {
                         skillDataOld = skill,
-                        conditionDatas = new KeyValuePair<string, bool>[0],
+                        conditionDatas = new KeyValuePair<string[], bool>[0],
                         maidStatusSkillData = skillData
                 };
                 result.Add(skill.id, data);
