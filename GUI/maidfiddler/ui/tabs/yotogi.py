@@ -88,7 +88,7 @@ class YotogiTab(UiTab):
     def update_if_success(self, work):
         def handler():
             if work():
-                self.maid_mgr.selected_maid = self.core.GetMaidData(
+                self.maid_mgr.selected_maid["yotogi_skill_data"] = self.core.GetYotogiSkillData(
                     self.maid_mgr.selected_maid["guid"])
                 self.on_maid_selected()
         return handler

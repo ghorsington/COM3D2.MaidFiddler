@@ -114,6 +114,22 @@ namespace COM3D2.MaidFiddler.Core.Service
             return ReadMaidData(maids[0]);
         }
 
+        public Dictionary<int, object> GetYotogiSkillData(string maidId)
+        {
+            string id = maidId.ToLower(CultureInfo.InvariantCulture);
+
+            var maids = GameMain.Instance.CharacterMgr.GetStockMaidList()
+                                .Where(m => m.status.guid.ToLower(CultureInfo.InvariantCulture).StartsWith(id)).ToArray();
+
+            if (maids.Length == 0)
+                throw new ArgumentException($"No such maid with ID: {maidId}", nameof(maidId));
+            if (maids.Length > 1)
+                throw new
+                        ArgumentException($"Found multiple maids whose ID starts the same:\n\n{string.Join("\n", maids.Select(m => $"{m.status.fullNameEnStyle}; ID: {m.status.guid}").ToArray())}\nPlease give a more specific ID!");
+
+            return ReadYotogiSkillData(maids[0]);
+        }
+
         public void TogglePropensity(Maid maid, object propensityId, bool toggle)
         {
             int id = Convert.ToInt32(propensityId);
@@ -236,7 +252,7 @@ namespace COM3D2.MaidFiddler.Core.Service
         {
             int skillId = Convert.ToInt32(id);
 
-            Debugger.WriteLine($"Toggling skill {skillId} to state {state}");
+            Debugger.Debug(LogLevel.Info, $"Toggling skill {skillId} to state {state}");
 
             if (state)
                 maid.status.yotogiSkill.Add(skillId);
@@ -336,6 +352,28 @@ namespace COM3D2.MaidFiddler.Core.Service
             return result;
         }
 
+        private Dictionary<int, object> ReadYotogiSkillData(Maid maid)
+        {
+            var yotogiSkills = new Dictionary<int, object>();
+
+            foreach (YotogiSkillData yotogiSkill in maid.status.yotogiSkill.datas.GetValueArray())
+                yotogiSkills[yotogiSkill.data.id] = new Dict
+                {
+                        ["level"] = yotogiSkill.level,
+                        ["cur_exp"] = yotogiSkill.currentExp,
+                        ["play_count"] = yotogiSkill.playCount
+                };
+
+            foreach (YotogiSkillData yotogiSkill in maid.status.yotogiSkill.oldDatas.GetValueArray())
+                yotogiSkills[yotogiSkill.oldData.id] = new Dict
+                {
+                        ["level"] = yotogiSkill.level,
+                        ["cur_exp"] = yotogiSkill.currentExp,
+                        ["play_count"] = yotogiSkill.playCount
+                };
+            return yotogiSkills;
+        }
+
         private Dict ReadMaidData(Maid maid)
         {
             if (maid == null || maid.status == null)
@@ -401,24 +439,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             foreach (var classData in maid.status.yotogiClass.datas.GetValueArray())
                 yotogiData[classData.data.id.ToString()] = new Dict {["level"] = classData.level, ["cur_exp"] = classData.cur_exp};
 
-            var yotogiSkills = new Dictionary<int, object>();
-            result["yotogi_skill_data"] = yotogiSkills;
-
-            foreach (YotogiSkillData yotogiSkill in maid.status.yotogiSkill.datas.GetValueArray())
-                yotogiSkills[yotogiSkill.data.id] = new Dict
-                {
-                        ["level"] = yotogiSkill.level,
-                        ["cur_exp"] = yotogiSkill.currentExp,
-                        ["play_count"] = yotogiSkill.playCount
-                };
-
-            foreach (YotogiSkillData yotogiSkill in maid.status.yotogiSkill.oldDatas.GetValueArray())
-                yotogiSkills[yotogiSkill.oldData.id] = new Dict
-                {
-                        ["level"] = yotogiSkill.level,
-                        ["cur_exp"] = yotogiSkill.currentExp,
-                        ["play_count"] = yotogiSkill.playCount
-                };
+            result["yotogi_skill_data"] = ReadYotogiSkillData(maid);
 
             result["feature_ids"] = maid.status.features.GetValueArray().Select(f => f.id).ToArray();
             result["propensity_ids"] = maid.status.propensitys.GetValueArray().Select(f => f.id).ToArray();
