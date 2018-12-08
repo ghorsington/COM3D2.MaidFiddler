@@ -23,6 +23,17 @@
         "It's not NTR if a computer program does it!"
     ],
     "translation": {
+        "updater_dialog": {
+            "title": "Update checker",
+            "checking_updates": "Checking for updates...",
+            "updater_error": "Failed to check for updates. Reason: {}\n\nPlease try again later.",
+            "no_update": "Your game is up-to-date!",
+            "download_error": "Failed to download installer. Reason: {}\n\nPlease try again later.",
+            "update_available": "A new update is available!\n\nYour version: {}\nAvailable version: {}",
+            "download": "Download",
+            "close": "Close",
+            "dont_check_updates": "Don't check for updates on every startup"
+        },
         "about_dialog": {
             "title": "About Maid Fiddler",
             "info": "Maid Fiddler for COM3D2",
