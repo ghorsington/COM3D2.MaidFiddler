@@ -93,7 +93,6 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.core = PipeRpcCaller(self.connection_lost)
         self.event_poller = PipedEventHandler(
             "MaidFildderEventEmitter", self.connection_lost)
-        self.connect_dialog = ConnectDialog(self, self.core)
 
         self.about_dialog = AboutDialog()
         self.core_version = "?"
@@ -129,9 +128,9 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
             sys.exit(0)
 
     def connect(self):
-        self.connect_dialog.reload()
+        connect_dialog = ConnectDialog(self, self.core)
 
-        result = self.connect_dialog.exec()
+        result = connect_dialog.exec()
         if result != QDialog.Accepted:
             QApplication.instance().exit()
             sys.exit(0)
@@ -139,11 +138,11 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
         self.event_poller.start_polling()
 
-        game_data = self.connect_dialog.game_data
+        game_data = connect_dialog.game_data
         if game_data is None:
             self.on_connection_close()
             return
-        self.connect_dialog.game_data = None
+        connect_dialog.game_data = None
 
         self.core_version = self.core.get_Version()
 
