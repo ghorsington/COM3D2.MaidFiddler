@@ -1,19 +1,21 @@
 import PyQt5.uic as uic
-import time
 import os
-import threading
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtWidgets import QPushButton, QLabel, QApplication, QLayout, QSizePolicy
+from PyQt5.QtWidgets import QLayout
 from PyQt5.QtCore import Qt, pyqtSignal, QThread
 import maidfiddler.util.util as util
 from maidfiddler.util.translation import tr, tr_str
 from maidfiddler.ui.resources import APP_ICON
 import urllib.request as request
+from urllib.error import URLError
 import json
 import markdown2
 import subprocess
 
 from app_info import GIT_REPO, VERSION
+
+TMP_FOLDER = "tmp_downloads"
+UPDATER_FILE = "installer.exe"
 
 DETACHED_PROCESS = 0x00000008
 (ui_class, ui_base) = uic.loadUiType(
@@ -22,6 +24,7 @@ DETACHED_PROCESS = 0x00000008
 class GetUpdateDataThread(QThread):
     update_available = pyqtSignal(dict)
     no_update = pyqtSignal()
+    error = pyqtSignal(str)
 
     def __init__(self):
         QThread.__init__(self)
@@ -34,15 +37,8 @@ class GetUpdateDataThread(QThread):
         
         try:
             response = request.urlopen(f"https://api.github.com/repos/{GIT_REPO}/releases/latest", timeout=5)
-        except Exception as e:
-            print(e)
-            self.no_update.emit()
-            return
-
-        print("request done")
-        if response.getcode() != 200:
-            print(f"Got status code: {response.getcode()}")
-            self.no_update.emit()
+        except URLError as e:
+            self.error.emit(str(e.reason))
             return
         data = json.load(response)
         version = data["tag_name"][1:]
@@ -72,17 +68,17 @@ class DownloadUpdateThread(QThread):
     def run(self):
         print("Beginning download")
 
-        tmp_downloads_path = util.get_resource_path("tmp_downloads")
+        tmp_downloads_path = util.get_resource_path(TMP_FOLDER)
         if not os.path.exists(tmp_downloads_path):
             os.mkdir(tmp_downloads_path)
 
         try:
             response = request.urlopen(self.url)
-        except request.URLError as e:
-            self.error.emit(f"Error downloading the file: {e}\nPlease try again later.")
+        except URLError as e:
+            self.error.emit(str(e.reason))
             return
 
-        with open(util.get_resource_path("tmp_downloads/installer.exe"), "wb") as f:
+        with open(util.get_resource_path(f"{TMP_FOLDER}/{UPDATER_FILE}"), "wb") as f:
             while True:
                 chunk = response.read(self.chunk_size)
                 if not chunk:
@@ -93,19 +89,23 @@ class DownloadUpdateThread(QThread):
         self.download_complete.emit()
 
 class UpdateDialog(ui_class, ui_base):
-    def __init__(self):
+    def __init__(self, silent):
         super(UpdateDialog, self).__init__()
         self.setupUi(self)
         self.layout().setSizeConstraint(QLayout.SetFixedSize)
+        
+        self.silent = silent
 
         self.update_data_thread = GetUpdateDataThread()
         self.download_update_thread = DownloadUpdateThread()
        
         self.download_update_thread.chunk_downloaded.connect(self.on_chunk_downloaded)
         self.download_update_thread.download_complete.connect(self.run_installer)
+        self.download_update_thread.error.connect(self.on_downloader_error)
 
         self.update_data_thread.update_available.connect(self.show_update_text)
-        self.update_data_thread.no_update.connect(self.reject)
+        self.update_data_thread.no_update.connect(self.on_no_update)
+        self.update_data_thread.error.connect(self.on_updater_error)
 
         self.downloadButton.clicked.connect(self.download_and_run)
 
@@ -118,6 +118,11 @@ class UpdateDialog(ui_class, ui_base):
         self.setWindowIcon(QIcon(icon))
 
         self.setWindowTitle(tr_str("updater_dialog.title"))
+        self.checkLabel.setText(tr_str("updater_dialog.checking_updates"))
+        self.checkOnStartupCheckBox.setText(tr(self.checkOnStartupCheckBox))
+        self.downloadButton.setText(tr(self.downloadButton))
+        self.closeButton.setText(tr(self.closeButton))
+
         self.changelogBrowser.hide()
         self.progressLabel.hide()
         self.progressBar.hide()
@@ -126,8 +131,27 @@ class UpdateDialog(ui_class, ui_base):
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.adjustSize()
 
+    def on_downloader_error(self, msg):
+        self.progressBar.setValue(0)
+        self.progressLabel.setText(tr_str("updater_dialog.download_error").format(msg))
+        self.adjustSize()
+
+    def on_updater_error(self, msg):
+        if self.silent:
+            self.reject()
+        else:
+            self.checkLabel.setText(tr_str("updater_dialog.updater_error").format(msg))
+            self.adjustSize()
+
+    def on_no_update(self):
+        if self.silent:
+            self.reject()
+        else:
+            self.checkLabel.setText(tr_str("updater_dialog.no_update"))
+            self.adjustSize()
+
     def run_installer(self):
-        subprocess.Popen([util.get_resource_path("tmp_downloads/installer.exe")], creationflags=DETACHED_PROCESS)
+        subprocess.Popen([util.get_resource_path(f"{TMP_FOLDER}/{UPDATER_FILE}")], creationflags=DETACHED_PROCESS)
         self.accept()
 
     def on_chunk_downloaded(self):
@@ -145,17 +169,14 @@ class UpdateDialog(ui_class, ui_base):
     def show_update_text(self, data):
         self.download_update_thread.setUrl(data["assets"][0]["browser_download_url"])
         self.progressBar.setMaximum(data["assets"][0]["size"])
-        self.checkLabel.setText(f"A new update is available!\n\nYour version: {VERSION}\nAvailable version: {data['tag_name'][1:]}")
+        self.checkLabel.setText(tr_str("updater_dialog.update_available").format(VERSION, data['tag_name'][1:]))
         self.changelogBrowser.setHtml(markdown2.markdown(data["body"]))
         self.changelogBrowser.show()
         self.downloadButton.show()
         self.adjustSize()
 
     def closeEvent(self, evt):
-        print("kill")
         self.reject()
 
     def showEvent(self, evt):
         self.update_data_thread.start()
-
-

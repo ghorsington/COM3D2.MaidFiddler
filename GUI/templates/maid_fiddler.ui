@@ -1572,6 +1572,7 @@
     </widget>
     <addaction name="actionAbout"/>
     <addaction name="menutop_bar_misc_language"/>
+    <addaction name="actiontop_bar_misc_check_updates"/>
    </widget>
    <addaction name="menuGeneral_tools"/>
    <addaction name="menuAll_maids"/>
@@ -1868,6 +1869,14 @@
    </property>
    <property name="whatsThis">
     <string>top_bar.all_maid.fix_yotogi_skills</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_misc_check_updates">
+   <property name="text">
+    <string>top_bar.misc.check_updates</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.misc.check_updates</string>
    </property>
   </action>
  </widget>

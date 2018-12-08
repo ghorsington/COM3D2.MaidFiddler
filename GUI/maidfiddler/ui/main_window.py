@@ -120,8 +120,8 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.close()
         QApplication.instance().exit()
 
-    def check_updates(self):
-        updater_dialog = UpdateDialog()
+    def check_updates(self, silent):
+        updater_dialog = UpdateDialog(silent)
         result = updater_dialog.exec()
         if result == QDialog.Accepted:
             self.close()
@@ -273,6 +273,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
             lambda c: self.core.SetAllNTRSkillsVisible(c))
 
         self.actionAbout.triggered.connect(self.show_about)
+        self.actiontop_bar_misc_check_updates.triggered.connect(lambda: self.check_updates(False))
 
     def show_about(self):
         self.about_dialog.reload(self.core_version)

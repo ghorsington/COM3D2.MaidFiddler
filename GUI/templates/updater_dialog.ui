@@ -87,6 +87,9 @@ p, li { white-space: pre-wrap; }
      </item>
      <item>
       <widget class="QCheckBox" name="checkOnStartupCheckBox">
+       <property name="whatsThis">
+        <string>updater_dialog.dont_check_updates</string>
+       </property>
        <property name="text">
         <string>Do not check on startup</string>
        </property>
@@ -94,6 +97,9 @@ p, li { white-space: pre-wrap; }
      </item>
      <item>
       <widget class="QPushButton" name="downloadButton">
+       <property name="whatsThis">
+        <string>updater_dialog.download</string>
+       </property>
        <property name="text">
         <string>Download</string>
        </property>
@@ -101,6 +107,9 @@ p, li { white-space: pre-wrap; }
      </item>
      <item>
       <widget class="QPushButton" name="closeButton">
+       <property name="whatsThis">
+        <string>updater_dialog.close</string>
+       </property>
        <property name="text">
         <string>Close</string>
        </property>

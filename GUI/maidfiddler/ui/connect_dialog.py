@@ -29,7 +29,8 @@ class ConnectDialog(ui_class, ui_base):
 
         self.close_button.clicked.connect(self.closeEvent)
 
-        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
+        self.setWindowFlags(self.windowFlags() & ~
+                            Qt.WindowContextHelpButtonHint)
 
     def reload(self):
         for label in self.findChildren(QLabel):

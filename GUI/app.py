@@ -12,7 +12,7 @@ def main():
     app.setStyle(QStyleFactory.create("Fusion"))
 
     window = MainWindow()
-    window.check_updates()
+    window.check_updates(True)
     window.show()
     window.connect()
 
