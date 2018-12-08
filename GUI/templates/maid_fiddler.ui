@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>950</width>
-    <height>750</height>
+    <width>850</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -61,10 +61,16 @@
          <bool>true</bool>
         </property>
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
         </property>
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
@@ -437,7 +443,7 @@
           <item>
            <widget class="QGroupBox" name="description_group">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -473,10 +479,16 @@
                 <bool>false</bool>
                </property>
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
                </property>
               </widget>
              </item>
@@ -486,7 +498,7 @@
           <item>
            <widget class="QGroupBox" name="user_comment_group">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -516,7 +528,7 @@
                 <bool>false</bool>
                </property>
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -524,7 +536,7 @@
                <property name="minimumSize">
                 <size>
                  <width>0</width>
-                 <height>1</height>
+                 <height>0</height>
                 </size>
                </property>
                <property name="documentTitle">
@@ -533,16 +545,6 @@
               </widget>
              </item>
             </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QWidget" name="widget" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
            </widget>
           </item>
          </layout>
@@ -589,8 +591,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>155</width>
-               <height>186</height>
+               <width>584</width>
+               <height>629</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -861,8 +863,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>155</width>
-               <height>190</height>
+               <width>584</width>
+               <height>629</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1063,8 +1065,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>463</width>
-               <height>181</height>
+               <width>584</width>
+               <height>629</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -1342,8 +1344,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>175</width>
-               <height>116</height>
+               <width>584</width>
+               <height>629</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -1452,7 +1454,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>950</width>
+     <width>850</width>
      <height>21</height>
     </rect>
    </property>
