@@ -88,10 +88,10 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QCheckBox" name="checkOnStartupCheckBox">
        <property name="whatsThis">
-        <string>updater_dialog.dont_check_updates</string>
+        <string>updater_dialog.check_updates_on_startup</string>
        </property>
        <property name="text">
-        <string>Do not check on startup</string>
+        <string>updater_dialog.check_updates_on_startup</string>
        </property>
       </widget>
      </item>
@@ -101,7 +101,7 @@ p, li { white-space: pre-wrap; }
         <string>updater_dialog.download</string>
        </property>
        <property name="text">
-        <string>Download</string>
+        <string>updater_dialog.download</string>
        </property>
       </widget>
      </item>
@@ -111,7 +111,7 @@ p, li { white-space: pre-wrap; }
         <string>updater_dialog.close</string>
        </property>
        <property name="text">
-        <string>Close</string>
+        <string>updater_dialog.close</string>
        </property>
       </widget>
      </item>
