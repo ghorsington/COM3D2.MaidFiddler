@@ -32,7 +32,7 @@
             "update_available": "A new update is available!\n\nYour version: {}\nAvailable version: {}",
             "download": "Download",
             "close": "Close",
-            "dont_check_updates": "Don't check for updates on every startup"
+            "dont_check_updates": "Check for updates on every startup"
         },
         "about_dialog": {
             "title": "About Maid Fiddler",

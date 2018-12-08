@@ -1,5 +1,5 @@
 import sys
-from maidfiddler.util.config import load_config
+from maidfiddler.util.config import load_config, CONFIG, save_config
 from PyQt5.QtWidgets import QApplication, QStyleFactory
 from maidfiddler.ui.main_window import MainWindow
 
@@ -12,7 +12,10 @@ def main():
     app.setStyle(QStyleFactory.create("Fusion"))
 
     window = MainWindow()
-    window.check_updates(True)
+    if CONFIG.getboolean("Options", "check_updates_on_startup", fallback=True):
+        CONFIG["Options"]["check_updates_on_startup"] = "yes"
+        save_config()
+        window.check_updates(True)
     window.show()
     window.connect()
 

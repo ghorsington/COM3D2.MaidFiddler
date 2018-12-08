@@ -4,6 +4,7 @@ from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QLayout
 from PyQt5.QtCore import Qt, pyqtSignal, QThread
 import maidfiddler.util.util as util
+from maidfiddler.util.config import CONFIG, save_config
 from maidfiddler.util.translation import tr, tr_str
 from maidfiddler.ui.resources import APP_ICON
 import urllib.request as request
@@ -113,6 +114,12 @@ class UpdateDialog(ui_class, ui_base):
         self.closeButton.clicked.connect(self.download_update_thread.exit)
         self.closeButton.clicked.connect(self.closeEvent)
 
+        check_on_startup = CONFIG.getboolean("Options", "check_updates_on_startup", fallback=True)
+        CONFIG["Options"]["check_updates_on_startup"] = "yes" if check_on_startup else "no"
+        save_config()
+        self.checkOnStartupCheckBox.setCheckState(Qt.Checked if check_on_startup else Qt.Unchecked)
+        self.checkOnStartupCheckBox.stateChanged.connect(self.on_startup_check_option_change)
+
         icon = QPixmap()
         icon.loadFromData(APP_ICON)
         self.setWindowIcon(QIcon(icon))
@@ -130,6 +137,11 @@ class UpdateDialog(ui_class, ui_base):
 
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.adjustSize()
+
+    def on_startup_check_option_change(self, state):
+        opt = "yes" if state == Qt.Checked else "no"
+        CONFIG["Options"]["check_updates_on_startup"] = opt
+        save_config()
 
     def on_downloader_error(self, msg):
         self.progressBar.setValue(0)

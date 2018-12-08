@@ -49,6 +49,7 @@ class ConnectWorker(QThread):
                     return
             except Exception as e:
                 print(f"Failed to connect because {e}! Retrying in a second!")
+                self.connection_reset.emit()
 
 
 class ConnectDialog(ui_class, ui_base):
