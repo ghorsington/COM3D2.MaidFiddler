@@ -7,6 +7,9 @@ Maid Fiddler is a real-time game manipulation tool for COM3D2.
 
 Changelog:
 
+* 1.0.3.3
+  - Maid Fiddler will now automatically remove invalid skills when all skills are unlocked
+  - Update codebase to work with COM 1.23 (WILL NOT WORK ON OLDER VERSIONS)
 * 1.0.3.1
   - Fix game crashing when enabling "all skills visible"
 * 1.0.3.0
