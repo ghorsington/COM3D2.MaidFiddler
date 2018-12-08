@@ -95,7 +95,8 @@ class YotogiTab(UiTab):
 
     def on_skill_add(self, args):
         if args["skill_id"] not in self.skill_elements:
-            print(f"WRN: Yotogi skill {args['skill_id']} is not a valid skill!")
+            print(
+                f"WRN: Yotogi skill {args['skill_id']} is not a valid skill!")
             return
 
         (cb, level, exp, play_count) = self.skill_elements[args["skill_id"]]

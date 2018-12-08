@@ -42,6 +42,8 @@ class PipeRpcCaller:
             print(f"Flushed!")
 
     def close(self):
+        if self.handler is None:
+            return
         try:
             h = self.handler
             self.handler = None

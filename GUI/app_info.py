@@ -1,4 +1,4 @@
-VERSION = "1.0.3.3"
+VERSION = "1.0.3.2"
 
 CONTRIBUTORS = [
     "@ghorsington -- original developer",
@@ -7,3 +7,5 @@ CONTRIBUTORS = [
 ]
 
 INFO_LINK = "<a href='https://github.com/denikson/COM3D2.MaidFiddler'>https://github.com/denikson/COM3D2.MaidFiddler</a>"
+
+GIT_REPO = "denikson/COM3D2.MaidFiddler"

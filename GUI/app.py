@@ -3,9 +3,6 @@ from maidfiddler.util.config import load_config
 from PyQt5.QtWidgets import QApplication, QStyleFactory
 from maidfiddler.ui.main_window import MainWindow
 
-def close():
-    QApplication.instance().exit()
-
 def main():
     print("Starting MF")
 
@@ -14,7 +11,8 @@ def main():
     app = QApplication(sys.argv)
     app.setStyle(QStyleFactory.create("Fusion"))
 
-    window = MainWindow(close)
+    window = MainWindow()
+    window.check_updates()
     window.show()
     window.connect()
 

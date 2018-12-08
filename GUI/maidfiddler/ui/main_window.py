@@ -5,7 +5,17 @@ import threading
 import time
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QListWidgetItem, QMenu, QAction, QDialog, QApplication, QMessageBox, QCheckBox, QPushButton
+
+from PyQt5.QtWidgets import (QWidget,
+                             QHBoxLayout,
+                             QListWidgetItem,
+                             QMenu,
+                             QAction,
+                             QDialog,
+                             QApplication,
+                             QMessageBox,
+                             QCheckBox,
+                             QPushButton)
 
 import maidfiddler.util.util as util
 from maidfiddler.ui.tabs import *
@@ -15,11 +25,18 @@ from maidfiddler.ui.connect_dialog import ConnectDialog
 from maidfiddler.ui.error_dialog import ErrorDialog
 from maidfiddler.ui.about_dialog import AboutDialog
 
-from maidfiddler.util.translation import load_translation, tr, get_random_title, get_language_name, tr_str
+from maidfiddler.util.translation import (load_translation,
+                                          tr,
+                                          get_random_title,
+                                          get_language_name,
+                                          tr_str)
+
 from maidfiddler.util.config import CONFIG, save_config
 
 from maidfiddler.ui.resources import APP_ICON
 from maidfiddler.util.pipes import PipedEventHandler, PipeRpcCaller
+
+from maidfiddler.ui.dialogs.update_checker import UpdateDialog
 
 
 UI_MainWindow = uic.loadUiType(
@@ -55,13 +72,14 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
     maid_list_widgets = {}
     just_launched = True
 
-    def __init__(self, close_func):
+    def __init__(self):
         print("Initializing UI")
         super(MainWindow, self).__init__()
         self.setupUi(self)
 
         self.error_occurred.connect(self.display_error_box)
-        sys.excepthook = lambda t, v, tr: self.error_occurred.emit({"t": t, "val": v, "traceback": tr})
+        sys.excepthook = lambda t, v, tr: self.error_occurred.emit(
+            {"t": t, "val": v, "traceback": tr})
 
         icon = QPixmap()
         icon.loadFromData(APP_ICON)
@@ -76,7 +94,6 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.event_poller = PipedEventHandler(
             "MaidFildderEventEmitter", self.connection_lost)
         self.connect_dialog = ConnectDialog(self, self.core)
-        self.close_func = close_func
 
         self.about_dialog = AboutDialog()
         self.core_version = "?"
@@ -102,6 +119,14 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         dialog.exec()
         self.close()
         QApplication.instance().exit()
+
+    def check_updates(self):
+        updater_dialog = UpdateDialog()
+        result = updater_dialog.exec()
+        if result == QDialog.Accepted:
+            self.close()
+            QApplication.instance().exit()
+            sys.exit(0)
 
     def connect(self):
         self.connect_dialog.reload()
@@ -138,15 +163,15 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
     def display_warning(self):
         if not CONFIG.getboolean("Options", "show_startup_warning", fallback=True) or not self.just_launched:
             return
-        
+
         self.just_launched = False
         warning_box = QMessageBox(self)
         warning_box.setIcon(QMessageBox.Warning)
-        
+
         dont_show_cb = QCheckBox(tr_str("warning_dialog.dont_show_again"))
         dont_show_cb.setCheckable(True)
         dont_show_cb.blockSignals(True)
-        
+
         confirm_button = QPushButton()
         ok_text = tr_str("warning_dialog.ok")
         confirm_button.setText(ok_text)
@@ -255,7 +280,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
 
     def closeEvent(self, event):
         self.close()
-        self.close_func()
+        QApplication.instance().exit()
 
     def close(self):
         self.core.close()

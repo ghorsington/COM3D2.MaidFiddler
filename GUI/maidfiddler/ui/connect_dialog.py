@@ -58,7 +58,7 @@ class ConnectDialog(ui_class, ui_base):
             self.game_data, err = self.core.try_invoke("GetGameInfo")
         except Exception as e:
             err = True
-            print("Got error while calling GetGameInfo: {e}")
+            print(f"Got error while calling GetGameInfo: {e}")
         if not err:
             self.run_connect = False
             self.accept()
