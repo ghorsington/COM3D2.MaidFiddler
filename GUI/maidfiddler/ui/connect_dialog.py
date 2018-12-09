@@ -30,6 +30,13 @@ class ConnectWorker(QThread):
         print("Got connection! Trying to get game data!")
         try:
             game_data, err = self.core.try_invoke("GetGameInfo")
+
+            if game_data is None:
+                print(f"Got empty response! Resetting the connection!")
+                self.core.close()
+                self.connection_reset.emit()
+                return False
+
         except Exception as e:
             print(f"Got error while calling GetGameInfo: {e}")
             self.connection_reset.emit()
