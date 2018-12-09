@@ -3,7 +3,7 @@
 
 #define MyAppName "Maid Fiddler"
 #define MyAppPub "NeighTools"
-#define MyAppVersion "1.0.3.3"
+#define MyAppVersion "1.0.4.0"
 #define MyAppURL "https://github.com/denikson/COM3D2.MaidFiddler"
 #define MyAppExeName "maid_fiddler_qt.exe"
 
@@ -37,6 +37,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
+Source: "bin\InstallerHelper.dll"; DestDir: "{app}"; Flags: dontcopy
 Source: "bin\app\maid_fiddler_qt.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\app\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "bin\plugin\*"; DestDir: "{code:GetInstallLocation}"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -47,6 +48,9 @@ Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Code]
+function IsProcessOpened(path: String) : Boolean;
+external 'IsProcessOpened@files:InstallerHelper.dll stdcall';
+
 var
   HelperDirPage: TInputDirWizardPage;
 
@@ -68,7 +72,12 @@ end;
 
 function NextButtonClick(CurPageID: Integer) : Boolean;
 begin
-  if (CurPageID = HelperDirPage.ID) and (not DirExists(AddBackslash(HelperDirPage.Values[0]) + 'Sybaris')) then
+  if (CurPageID = wpInfoBefore) and IsProcessOpened('COM3D2x64') then
+  begin
+    MsgBox('COM3D2 is detected to still be open!'#13#10'Please close COM3D2 before continuing.', mbError, MB_OK);
+    Result := False;    
+  end
+  else if (CurPageID = HelperDirPage.ID) and (not DirExists(AddBackslash(HelperDirPage.Values[0]) + 'Sybaris')) then
   begin
     MsgBox('No Sybaris folder found in the given COM3D2 directory!'#13#10'Check that you have Sybaris 2 installed in the given directory.', mbError, MB_OK);
     Result := False;
