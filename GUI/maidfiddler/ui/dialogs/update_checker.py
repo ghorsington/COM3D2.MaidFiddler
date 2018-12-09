@@ -69,7 +69,7 @@ class DownloadUpdateThread(QThread):
     def run(self):
         print("Beginning download")
 
-        tmp_downloads_path = util.get_resource_path(TMP_FOLDER)
+        tmp_downloads_path = os.path.join(util.BASE_DIR, TMP_FOLDER)
         if not os.path.exists(tmp_downloads_path):
             os.mkdir(tmp_downloads_path)
 
@@ -79,7 +79,7 @@ class DownloadUpdateThread(QThread):
             self.error.emit(str(e.reason))
             return
 
-        with open(util.get_resource_path(f"{TMP_FOLDER}/{UPDATER_FILE}"), "wb") as f:
+        with open(os.path.join(tmp_downloads_path, UPDATER_FILE), "wb") as f:
             while True:
                 chunk = response.read(self.chunk_size)
                 if not chunk:
@@ -163,7 +163,7 @@ class UpdateDialog(ui_class, ui_base):
             self.adjustSize()
 
     def run_installer(self):
-        subprocess.Popen([util.get_resource_path(f"{TMP_FOLDER}/{UPDATER_FILE}")], creationflags=DETACHED_PROCESS)
+        subprocess.Popen([os.path.join(util.BASE_DIR, TMP_FOLDER, UPDATER_FILE)], creationflags=DETACHED_PROCESS)
         self.accept()
 
     def on_chunk_downloaded(self):
