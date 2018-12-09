@@ -128,6 +128,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
             sys.exit(0)
 
     def connect(self):
+        print("showing connection dialog!")
         connect_dialog = ConnectDialog(self, self.core)
 
         result = connect_dialog.exec()

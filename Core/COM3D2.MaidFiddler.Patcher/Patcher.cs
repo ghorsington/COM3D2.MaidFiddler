@@ -130,6 +130,20 @@ namespace COM3D2.MaidFiddler.Patcher
 
             getAllRelease.InjectWith(miscHooks.GetMethod("GetAllDanceRelease"), flags: InjectFlags.ModifyReturn);
 
+
+            /* All freemode items always visible */
+
+            TypeDefinition freeModeItemEveryday = ass.MainModule.GetType("FreeModeItemEveryday");
+            TypeDefinition freeModeItemVip = ass.MainModule.GetType("FreeModeItemVip");
+            TypeDefinition sceneFreeModeSelectManager = ass.MainModule.GetType("SceneFreeModeSelectManager");
+
+            MethodDefinition isEnabledHook = miscHooks.GetMethod("GetFreeModeItemEnabled");
+
+            freeModeItemEveryday.GetMethod("get_is_enabled").InjectWith(isEnabledHook, flags: InjectFlags.ModifyReturn);
+            freeModeItemEveryday.GetMethod("IsEnabledFlag").InjectWith(isEnabledHook, flags: InjectFlags.ModifyReturn);
+            freeModeItemVip.GetMethod("get_is_enabled").InjectWith(isEnabledHook, flags: InjectFlags.ModifyReturn);
+
+            sceneFreeModeSelectManager.GetMethod("Start").InjectWith(miscHooks.GetMethod("OnSceneFreeModeSelectAwake"), -1, flags: InjectFlags.PassInvokingInstance);
         }
 
         public static void PatchPlayerStatus(AssemblyDefinition ass)

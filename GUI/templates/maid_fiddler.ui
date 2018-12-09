@@ -1501,6 +1501,7 @@
      <addaction name="actionAll_unlock_yotogi_skills"/>
      <addaction name="actionAll_unlock_yotogi_commands"/>
      <addaction name="actiontop_bar_all_maid_unlock_ntr_skills"/>
+     <addaction name="actiontop_bar_all_maid_unlock_free_mode_items"/>
     </widget>
     <addaction name="actionMax_all_maids"/>
     <addaction name="actiontop_bar_all_maid_unlock_max_stats"/>
@@ -1877,6 +1878,17 @@
    </property>
    <property name="whatsThis">
     <string>top_bar.misc.check_updates</string>
+   </property>
+  </action>
+  <action name="actiontop_bar_all_maid_unlock_free_mode_items">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>top_bar.all_maid.unlock.free_mode_items</string>
+   </property>
+   <property name="whatsThis">
+    <string>top_bar.all_maid.unlock.free_mode_items</string>
    </property>
   </action>
  </widget>

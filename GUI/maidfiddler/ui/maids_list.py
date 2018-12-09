@@ -43,9 +43,11 @@ class MaidsList(QObject):
         event_poller.on("deserialize_done", self.deserialize_done_signal)
         event_poller.on("maid_added", self.maid_added_signal)
         event_poller.on("maid_removed", self.maid_removed_signal)
-        event_poller.on("maid_thumbnail_changed", self.maid_thumbnail_changed_signal)
+        event_poller.on("maid_thumbnail_changed",
+                        self.maid_thumbnail_changed_signal)
         event_poller.on("maid_prop_changed", self.maid_prop_changed_signal)
-        event_poller.on("old_maid_deserialized", self.old_maid_deserialized_signal)
+        event_poller.on("old_maid_deserialized",
+                        self.old_maid_deserialized_signal)
 
         self.maid_list.currentItemChanged.connect(self.maid_selected)
 
@@ -60,6 +62,8 @@ class MaidsList(QObject):
             lambda c: self.core.SetEnableAllScenarios(c))
         self.ui.actionUnlock_all_schedule_events.toggled.connect(
             lambda c: self.core.SetEnableAllScheduleItems(c))
+        self.ui.actiontop_bar_all_maid_unlock_free_mode_items.toggled.connect(
+            lambda c: self.core.SetAllFreeModeItemsVisible(c))
         self.ui.actionMax_all_maids.triggered.connect(
             self.do_and_reselect(lambda: self.core.MaxAllForAllMaids()))
         self.ui.actiontop_bar_all_maid_unlock_max_stats.triggered.connect(

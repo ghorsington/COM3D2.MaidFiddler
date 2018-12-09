@@ -131,6 +131,11 @@ namespace COM3D2.MaidFiddler.Core.Service
             return true;
         }
 
+        public void SetAllFreeModeItemsVisible(bool toggle)
+        {
+            MiscHooks.EnableAllFreeModeItems = toggle;
+        }
+
         public void SetAllNTRSkillsVisible(bool toggle)
         {
             MiscHooks.DisplayNTRSkills = toggle;

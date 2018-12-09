@@ -85,7 +85,8 @@
                     "scenes": "Make all scenarios visible",
                     "yotogi_skills": "Make all yotogi skills selectable",
                     "yotogi_commands": "Make all yotogi commands selectable",
-                    "ntr_skills": "Always display NTR yotogi skills"
+                    "ntr_skills": "Always display NTR yotogi skills",
+                    "free_mode_items": "Make everything selectable if free mode"
                 },
                 "fix_yotogi_skills": "Remove invalid yotogi skills"
             },

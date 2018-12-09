@@ -16,9 +16,28 @@ namespace COM3D2.MaidFiddler.Core.Hooks
         public static bool EnableYotogiSkills { get; set; }
         public static bool EnableAllDances { get; set; }
         public static bool DisplayNTRSkills { get; set; }
+        public static bool EnableAllFreeModeItems { get; set; }
 
         public static event EventHandler DummySkillTreeCreationStart;
         public static event EventHandler DummySkillTreeCreationEnd;
+
+        public static void OnSceneFreeModeSelectAwake(SceneFreeModeSelectManager mgr)
+        {
+            if (!EnableAllFreeModeItems)
+                return;
+
+            var root = mgr.gameObject.transform.parent.gameObject;
+            var buttonObj = UTY.GetChildObject(root, "MenuSelect/Menu/FreeModeMenuButton/夜伽");
+            buttonObj.SetActive(true);
+            var button = buttonObj.GetComponent<UIButton>();
+            button.isEnabled = true;
+        }
+
+        public static bool GetFreeModeItemEnabled(out bool result)
+        {
+            result = true;
+            return EnableAllFreeModeItems;
+        }
 
         public static bool GetAllDanceRelease(out bool result)
         {
@@ -40,7 +59,7 @@ namespace COM3D2.MaidFiddler.Core.Hooks
         public static bool ToggleWork(out bool result)
         {
             result = true;
-            return EnableAllScheduleItems;
+            return EnableAllScheduleItems || (EnableAllFreeModeItems && SceneFreeModeSelectManager.IsFreeMode);
         }
 
         public static bool ScenarioCheckPlayableCondition(out bool result, ref List<Maid> eventMaids)
