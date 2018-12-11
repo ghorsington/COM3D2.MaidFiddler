@@ -114,7 +114,8 @@
             "misc": {
                 "name": "Other",
                 "about": "About Maid Fiddler",
-                "language": "Language"
+                "language": "Language",
+                "check_updates": "Check for updates"
             }
         },
         "tabs": {
