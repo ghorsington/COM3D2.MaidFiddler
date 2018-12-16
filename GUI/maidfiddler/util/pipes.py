@@ -20,6 +20,7 @@ class PipeRpcCaller:
         self.handler = None
         self.call_id = 0
         self.on_connection_lost = on_connection_lost
+        self.max_retries = 5
 
     def connect(self, pipe_name):
         self.handler = open(f"\\\\.\\pipe\\{pipe_name}", "r+b", 0)
@@ -61,6 +62,9 @@ class PipeRpcCaller:
         return result
 
     def try_invoke(self, method, *args):
+        return self._try_invoke_internal(method, 1, *args)
+
+    def _try_invoke_internal(self, method, try_count, *args):
         if isinstance(method, bytes):
             method = method.decode('utf-8')
         print(f"Calling {method}")
@@ -93,7 +97,15 @@ class PipeRpcCaller:
             self.close()
             return (None, True)
 
-        response = msgpack.unpackb(response_packed, raw=False)
+        try:
+            response = msgpack.unpackb(response_packed, raw=False)
+        except msgpack.ExtraData as e:
+            if try_count >= self.max_retries:
+                print(f"Forcing to fail after {try_count} tries.")
+                return (None, True)
+            print(f"Received extra data! Flushing and retrying. More info: {e}")
+            self._flush()
+            return self._try_invoke_internal(method, try_count + 1, *args)
 
         response_type = response["data"][0]
 
