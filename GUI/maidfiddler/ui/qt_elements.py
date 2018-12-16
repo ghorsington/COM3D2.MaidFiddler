@@ -46,7 +46,7 @@ class NumberElement(UiElement):
         self.qt_element.setMinimum(-2**31)
 
     def value(self):
-        return self.qt_element.value()
+        return int(self.qt_element.value())
 
     def set_value(self, val):
         self.qt_element.blockSignals(True)
