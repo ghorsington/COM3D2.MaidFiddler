@@ -79,6 +79,7 @@
     <Compile Include="Service\Service.cs" />
     <Compile Include="Service\Service.MaidStatus.cs" />
     <Compile Include="Utils\Debug.cs" />
+    <Compile Include="Utils\DllUtils.cs" />
     <Compile Include="Utils\Extensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

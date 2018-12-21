@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.MaidFiddler.Core", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.MaidFiddler.Patcher", "COM3D2.MaidFiddler.Patcher\COM3D2.MaidFiddler.Patcher.csproj", "{7C3C0E80-0200-4160-BCDD-9F1FF89F1378}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.MaidFiddler.GUI", "COM3D2.MaidFiddler.GUI\COM3D2.MaidFiddler.GUI.csproj", "{F9822FB1-E5C5-4697-A173-6F3868B4A06F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CodeAnalysis|Any CPU = CodeAnalysis|Any CPU
@@ -31,6 +33,14 @@ Global
 		{7C3C0E80-0200-4160-BCDD-9F1FF89F1378}.Instrument|Any CPU.Build.0 = Release|Any CPU
 		{7C3C0E80-0200-4160-BCDD-9F1FF89F1378}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C3C0E80-0200-4160-BCDD-9F1FF89F1378}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9822FB1-E5C5-4697-A173-6F3868B4A06F}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
+		{F9822FB1-E5C5-4697-A173-6F3868B4A06F}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
+		{F9822FB1-E5C5-4697-A173-6F3868B4A06F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9822FB1-E5C5-4697-A173-6F3868B4A06F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9822FB1-E5C5-4697-A173-6F3868B4A06F}.Instrument|Any CPU.ActiveCfg = Release|Any CPU
+		{F9822FB1-E5C5-4697-A173-6F3868B4A06F}.Instrument|Any CPU.Build.0 = Release|Any CPU
+		{F9822FB1-E5C5-4697-A173-6F3868B4A06F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9822FB1-E5C5-4697-A173-6F3868B4A06F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
