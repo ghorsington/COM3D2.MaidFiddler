@@ -14,6 +14,7 @@ class PlayerTab(UiTab):
 
         self.properties = {}
         self.type_generators = {
+            "uint": lambda: NumberElement(QSpinBox(), 0, 2**32), 
             "int": lambda: NumberElement(QSpinBox()),
             "double": lambda: NumberElement(QDoubleSpinBox()),
             "string": lambda: TextElement(QLineEdit()),

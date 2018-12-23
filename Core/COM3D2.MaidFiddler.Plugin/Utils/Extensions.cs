@@ -9,19 +9,28 @@ namespace COM3D2.MaidFiddler.Core.Utils
 
         private static readonly HashSet<Type> IntegerTypes = new HashSet<Type>
         {
-                typeof(byte),
                 typeof(sbyte),
                 typeof(short),
-                typeof(ushort),
                 typeof(int),
-                typeof(uint),
                 typeof(long),
+        };
+
+        private static readonly HashSet<Type> UnsignedIntegerTypes = new HashSet<Type>
+        {
+                typeof(byte),
+                typeof(ushort),
+                typeof(uint),
                 typeof(ulong)
         };
 
-        public static bool IsInteger(this Type self)
+        public static bool IsSignedInteger(this Type self)
         {
             return IntegerTypes.Contains(self) || IntegerTypes.Contains(Nullable.GetUnderlyingType(self));
+        }
+
+        public static bool IsUnsignedInteger(this Type self)
+        {
+            return UnsignedIntegerTypes.Contains(self) || UnsignedIntegerTypes.Contains(Nullable.GetUnderlyingType(self));
         }
 
         public static bool IsFloat(this Type self)

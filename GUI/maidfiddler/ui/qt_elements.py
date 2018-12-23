@@ -39,11 +39,11 @@ class PlainTextElement(UiElement):
 
 
 class NumberElement(UiElement):
-    def __init__(self, qt_element):
+    def __init__(self, qt_element, minVal=-2**31, maxVal=2**31-1):
         UiElement.__init__(self, qt_element)
 
-        self.qt_element.setMaximum(2**31 - 1)
-        self.qt_element.setMinimum(-2**31)
+        self.qt_element.setMaximum(maxVal)
+        self.qt_element.setMinimum(minVal)
 
     def value(self):
         return int(self.qt_element.value())

@@ -71,8 +71,10 @@ namespace COM3D2.MaidFiddler.Core.Service
                                                    Type t = p.PropertyType;
                                                    if (t.IsFloat())
                                                        return "double";
-                                                   if (t.IsInteger())
+                                                   if (t.IsSignedInteger())
                                                        return "int";
+                                                   if (t.IsUnsignedInteger())
+                                                       return "uint";
                                                    if (t == typeof(bool))
                                                        return "bool";
                                                    return "string";
@@ -103,8 +105,10 @@ namespace COM3D2.MaidFiddler.Core.Service
                                                               Type t = p.PropertyType;
                                                               if (t.IsFloat())
                                                                   return "double";
-                                                              if (t.IsInteger())
+                                                              if (t.IsSignedInteger())
                                                                   return "int";
+                                                              if (t.IsUnsignedInteger())
+                                                                  return "uint";
                                                               return "string";
                                                           });
         }
