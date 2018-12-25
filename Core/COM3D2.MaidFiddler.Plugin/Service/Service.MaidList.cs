@@ -32,7 +32,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             SetMaidProperty(selectedMaid, property, value);
         }
 
-        public void SetPersonalActive(int personalId)
+        public void SetPersonalActive(object personalId)
         {
             if (selectedMaid == null)
                 return;

@@ -46,7 +46,7 @@ class NumberElement(UiElement):
         self.qt_element.setMinimum(minVal)
 
     def value(self):
-        return int(self.qt_element.value())
+        return self.qt_element.value()
 
     def set_value(self, val):
         self.qt_element.blockSignals(True)
@@ -66,7 +66,7 @@ class ComboElement(UiElement):
         return self.value_to_index_map
 
     def value(self):
-        return self.qt_element.currentData()
+        return int(self.qt_element.currentData())
 
     def set_value(self, val):
         self.qt_element.blockSignals(True)

@@ -182,9 +182,10 @@ namespace COM3D2.MaidFiddler.Core.Service
             maid.status.ChangeYotogiClass(data);
         }
 
-        private void SetPersonal(Maid maid, int personalId)
+        private void SetPersonal(Maid maid, object personalId)
         {
-            maid.status.SetPersonal(personalId);
+            int id = Convert.ToInt32(personalId);
+            maid.status.SetPersonal(id);
         }
 
         private void SetCurrentJobClass(Maid maid, object classId)
