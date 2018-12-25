@@ -7,6 +7,13 @@ Maid Fiddler is a real-time game manipulation tool for COM3D2.
 
 Changelog:
 
+* 1.0.4.2
+  - Fix some UI elements for non-negative integers permitting negative values
+  - Fix crashing when personality is changed to Ladylike (for real this time)
+* 1.0.4.1
+  - Fixed crash when personality is changed to Ladylike
+  - Potential fix for crash on save reload
+  - Update TW translations
 * 1.0.4.0
   - Added auto-updater functionality
   - Added "unlock everything in free mode" option
