@@ -45,6 +45,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="UnityEngine">
       <HintPath>..\Libs\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -70,6 +71,7 @@
     <Compile Include="IPC\Util\ThreadHelpers.cs" />
     <Compile Include="IPC\PipeService.cs" />
     <Compile Include="IPC\Util\SerializerUtils.cs" />
+    <Compile Include="Service\MaidFiddlerService.cs" />
     <Compile Include="Service\Service.Cheats.cs" />
     <Compile Include="Service\Service.EventEmitter.cs" />
     <Compile Include="Service\Service.GameMain.cs" />
@@ -81,6 +83,12 @@
     <Compile Include="Utils\Debug.cs" />
     <Compile Include="Utils\DllUtils.cs" />
     <Compile Include="Utils\Extensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\COM3D2.MaidFiddler.Common\COM3D2.MaidFiddler.Common.csproj">
+      <Project>{a385cf6d-02fb-4cdd-ae54-ce5fb54cee14}</Project>
+      <Name>COM3D2.MaidFiddler.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
