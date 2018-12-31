@@ -7,7 +7,9 @@ using System.Runtime.Remoting.Channels.Tcp;
 using System.Runtime.Serialization.Formatters;
 using COM3D2.MaidFiddler.Core.Service;
 using COM3D2.MaidFiddler.Core.Utils;
+using GearMenu;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityInjector;
 
 namespace COM3D2.MaidFiddler.Core
@@ -16,16 +18,24 @@ namespace COM3D2.MaidFiddler.Core
     {
         private const int PORT = 8899;
         private const string SERVICE_NAME = "MFService.rem";
+        private readonly Color DisabledColor = new Color(0.827f, 0.827f, 0.827f);
 
         private string dllPath;
+        private readonly Color EnabledColor = Color.red;
+        private byte[] gearIcon;
+
+        private bool guiDisplayed;
         private IntPtr guiDll;
-        private MaidFiddlerService serviceImplementation;
         private Action HideGUI;
-        private Action ShowGUI;
         private ObjRef internalObj;
+        private MaidFiddlerService serviceImplementation;
+        private Action ShowGUI;
         private TcpServerChannel tcpChannel;
 
         internal string Version { get; } = typeof(MaidFiddlerPlugin).Assembly.GetName().Version.ToString();
+        private string ButtonLabel => $"MaidFiddler {(guiDisplayed ? "OFF" : "ON")}";
+
+        private string ButtonName => "MaidFiddlerGearButton";
 
         public void Awake()
         {
@@ -47,19 +57,29 @@ namespace COM3D2.MaidFiddler.Core
             Debugger.WriteLine(LogLevel.Info, "Initializing TCP service!");
             InitService();
             Debugger.WriteLine(LogLevel.Info, "Service initialized!");
+
+            gearIcon = GetType().Assembly.GetResourceBytes("Icon/GearMenuIcon.png");
+
+            SceneManager.sceneLoaded += (arg0, mode) =>
+            {
+                if (mode == LoadSceneMode.Single)
+                    DisplayGearButton();
+            };
         }
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKeyDown(KeyCode.A) && !guiDisplayed)
             {
                 Debugger.Debug(LogLevel.Info, "Showing GUI!");
                 ShowGUI();
+                UpdateGearButton(true);
             }
-            else if (Input.GetKeyDown(KeyCode.S))
+            else if (Input.GetKeyDown(KeyCode.S) && guiDisplayed)
             {
                 Debugger.Debug(LogLevel.Info, "Hiding GUI!");
                 HideGUI();
+                UpdateGearButton(false);
             }
             else if (Input.GetKeyDown(KeyCode.D))
             {
@@ -73,23 +93,50 @@ namespace COM3D2.MaidFiddler.Core
 
             RemotingServices.Unmarshal(internalObj);
             ChannelServices.UnregisterChannel(tcpChannel);
-
             DllUtils.FreeLibrary(guiDll);
 
             Debugger.WriteLine(LogLevel.Info, "Maid Fiddler stopped!");
         }
 
+        private void OnGearMenuClick(GameObject go)
+        {
+            UpdateGearButton(!guiDisplayed);
+
+            if (guiDisplayed)
+                ShowGUI();
+            else
+                HideGUI();
+        }
+
+        private void DisplayGearButton()
+        {
+            if (Buttons.Contains(ButtonName))
+                Buttons.Remove(ButtonName);
+
+            Buttons.Add(ButtonName, ButtonLabel, gearIcon, OnGearMenuClick);
+            Buttons.SetFrameColor(ButtonName, guiDisplayed ? EnabledColor : DisabledColor);
+        }
+
+        private void UpdateGearButton(bool enable)
+        {
+            guiDisplayed = enable;
+            Buttons.Add(ButtonName, ButtonLabel, gearIcon, OnGearMenuClick);
+            Buttons.SetFrameColor(ButtonName, guiDisplayed ? EnabledColor : DisabledColor);
+        }
+
         private void InitService()
         {
             serviceImplementation = new MaidFiddlerService();
+            serviceImplementation.GuiHiding += OnGuiHiding;
             var serverProv = new BinaryServerFormatterSinkProvider {TypeFilterLevel = TypeFilterLevel.Full};
-            tcpChannel = new TcpServerChannel(new Hashtable
-            {
-                ["port"] = PORT,
-                ["name"] = SERVICE_NAME
-            }, serverProv);
+            tcpChannel = new TcpServerChannel(new Hashtable {["port"] = PORT, ["name"] = SERVICE_NAME}, serverProv);
             ChannelServices.RegisterChannel(tcpChannel, false);
             internalObj = RemotingServices.Marshal(serviceImplementation, SERVICE_NAME);
+        }
+
+        private void OnGuiHiding(object sender, EventArgs e)
+        {
+            UpdateGearButton(false);
         }
     }
 }

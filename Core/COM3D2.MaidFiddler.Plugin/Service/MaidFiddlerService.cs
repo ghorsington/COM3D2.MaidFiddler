@@ -8,6 +8,7 @@ namespace COM3D2.MaidFiddler.Core.Service
     public class MaidFiddlerService : MarshalByRefObject, IMaidFiddlerService
     {
         private IMaidFiddlerEventHandler eventHandler;
+        public event EventHandler GuiHiding;
 
         public void AttachEventHandler(IMaidFiddlerEventHandler handler)
         {
@@ -17,6 +18,11 @@ namespace COM3D2.MaidFiddler.Core.Service
         public GameInfo GetGameInfo()
         {
             return Utils.COM3D2.GameInfo;
+        }
+
+        public void OnGUIHidden()
+        {
+            GuiHiding?.Invoke(null, EventArgs.Empty);
         }
 
         public void Debug(string str)

@@ -7,6 +7,7 @@ namespace COM3D2.MaidFiddler.Common.Service
         void Debug(string str);
         void AttachEventHandler(IMaidFiddlerEventHandler handler);
         GameInfo GetGameInfo();
+        void OnGUIHidden();
     }
 
     public interface IMaidFiddlerEventHandler
