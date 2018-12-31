@@ -80,9 +80,10 @@
     <Compile Include="Service\Service.PlayerStatus.cs" />
     <Compile Include="Service\Service.cs" />
     <Compile Include="Service\Service.MaidStatus.cs" />
+    <Compile Include="Utils\COM3D2.cs" />
     <Compile Include="Utils\Debug.cs" />
     <Compile Include="Utils\DllUtils.cs" />
-    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\COM3D2.MaidFiddler.Common\COM3D2.MaidFiddler.Common.csproj">

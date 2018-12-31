@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace COM3D2.MaidFiddler.Core.Utils
 {
-    public static class Extensions
+    public static class TypeExtensions
     {
         private static readonly HashSet<Type> FloatTypes = new HashSet<Type> {typeof(float), typeof(double), typeof(decimal)};
 

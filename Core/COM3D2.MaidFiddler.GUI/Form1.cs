@@ -1,29 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.IO;
+using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Tcp;
-using System.Runtime.Serialization.Formatters;
 using System.Windows.Forms;
-using COM3D2.MaidFiddler.Common;
+using COM3D2.MaidFiddler.GUI.Remoting;
 
 namespace COM3D2.MaidFiddler.GUI
 {
     public partial class Form1 : Form
     {
-        private const int PORT = 8899;
-        private readonly string SERVICE_URL = $"tcp://localhost:{PORT}/MFService.rem";
-        private IMaidFiddlerService service;
-        private IMaidFiddlerEventHandler test;
-        private TcpChannel tcpChannel;
-
         public Form1()
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
             InitializeComponent();
-            InitService();
+            Game.InitializeService();
+            InitEvents();
         }
 
         private static Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
@@ -32,36 +23,18 @@ namespace COM3D2.MaidFiddler.GUI
             return File.Exists(path) ? Assembly.LoadFile(path) : null;
         }
 
-        private void InitService()
+        private void InitEvents()
         {
-            var clientProv = new BinaryClientFormatterSinkProvider();
-            var serverProv = new BinaryServerFormatterSinkProvider{ TypeFilterLevel = TypeFilterLevel.Full};
-
-            tcpChannel = new TcpChannel(new Hashtable
-            {
-                ["name"] = "MFClient",
-                ["port"] = 0
-            }, clientProv, serverProv);
-            ChannelServices.RegisterChannel(tcpChannel, false);
-            RemotingConfiguration.RegisterWellKnownClientType(typeof(IMaidFiddlerService), SERVICE_URL);
-            service = (IMaidFiddlerService) Activator.GetObject(typeof(IMaidFiddlerService), SERVICE_URL);
-            test = new EventHandlerTest();
-            service.AttachEventHandler(test);
+            Game.Events.OnTest += (sender, args) => testLabel.Text = "Hello, world!";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            service.Debug("[Remote MFService] TESTOOO!");
-        }
-    }
+            Game.Service.Debug("[Remote MFService] TESTOOO!");
+            var gameInfo = Game.Service.GetGameInfo();
 
-    public class EventHandlerTest : MarshalByRefObject, IMaidFiddlerEventHandler
-    {
-        public void Test()
-        {
-            MessageBox.Show("Test!");
+            Game.Service.Debug($"Got game info with {gameInfo.LockableMaidStats.Count} maid stats");
+            Game.Service.Debug($"Known personalities: {string.Join(",", gameInfo.Personalities.Select(p => p.UniqueName))}");
         }
-
-        public override object InitializeLifetimeService() => null;
     }
 }
