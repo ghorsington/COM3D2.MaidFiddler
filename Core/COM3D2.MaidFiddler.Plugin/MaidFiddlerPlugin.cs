@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.IO;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Tcp;
-using System.Runtime.Serialization.Formatters;
+using System.Runtime.InteropServices;
+using COM3D2.MaidFiddler.Common.IPC;
+using COM3D2.MaidFiddler.Common.Service;
 using COM3D2.MaidFiddler.Core.Service;
 using COM3D2.MaidFiddler.Core.Utils;
 using GearMenu;
+using MessagePack;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityInjector;
@@ -16,8 +15,9 @@ namespace COM3D2.MaidFiddler.Core
 {
     public class MaidFiddlerPlugin : PluginBase
     {
-        private const int PORT = 8899;
-        private const string SERVICE_NAME = "MFService.rem";
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate IntPtr ExchangeMessagingHandlersDelegate(IntPtr plugin);
+
         private readonly Color DisabledColor = new Color(0.827f, 0.827f, 0.827f);
 
         private string dllPath;
@@ -27,10 +27,14 @@ namespace COM3D2.MaidFiddler.Core
         private bool guiDisplayed;
         private IntPtr guiDll;
         private Action HideGUI;
-        private ObjRef internalObj;
         private MaidFiddlerService serviceImplementation;
+        private ServiceHandler<IMaidFiddlerService> serviceHandler;
         private Action ShowGUI;
-        private TcpServerChannel tcpChannel;
+        private ExchangeMessagingHandlersDelegate ExchangeMessagingHandlers;
+        private Action Initialize;
+
+        private HandleMessageDelegate eventMessageHandler;
+        private HandleMessageDelegate serviceMessageHandler;
 
         internal string Version { get; } = typeof(MaidFiddlerPlugin).Assembly.GetName().Version.ToString();
         private string ButtonLabel => $"MaidFiddler {(guiDisplayed ? "OFF" : "ON")}";
@@ -53,8 +57,11 @@ namespace COM3D2.MaidFiddler.Core
             guiDll = DllUtils.LoadLibrary(dllPath);
             HideGUI = DllUtils.GetProcDelegate<Action>(guiDll, nameof(HideGUI));
             ShowGUI = DllUtils.GetProcDelegate<Action>(guiDll, nameof(ShowGUI));
+            Initialize = DllUtils.GetProcDelegate<Action>(guiDll, nameof(Initialize));
+            ExchangeMessagingHandlers = DllUtils.GetProcDelegate<ExchangeMessagingHandlersDelegate>(guiDll, nameof(ExchangeMessagingHandlers));
 
-            Debugger.WriteLine(LogLevel.Info, "Initializing TCP service!");
+            Debugger.WriteLine(LogLevel.Info, "Initializing services!");
+            Initialize();
             InitService();
             Debugger.WriteLine(LogLevel.Info, "Service initialized!");
 
@@ -91,8 +98,6 @@ namespace COM3D2.MaidFiddler.Core
         {
             Debugger.WriteLine(LogLevel.Info, "Stopping MaidFiddler");
 
-            RemotingServices.Unmarshal(internalObj);
-            ChannelServices.UnregisterChannel(tcpChannel);
             DllUtils.FreeLibrary(guiDll);
 
             Debugger.WriteLine(LogLevel.Info, "Maid Fiddler stopped!");
@@ -128,10 +133,50 @@ namespace COM3D2.MaidFiddler.Core
         {
             serviceImplementation = new MaidFiddlerService();
             serviceImplementation.GuiHiding += OnGuiHiding;
-            var serverProv = new BinaryServerFormatterSinkProvider {TypeFilterLevel = TypeFilterLevel.Full};
-            tcpChannel = new TcpServerChannel(new Hashtable {["port"] = PORT, ["name"] = SERVICE_NAME}, serverProv);
-            ChannelServices.RegisterChannel(tcpChannel, false);
-            internalObj = RemotingServices.Marshal(serviceImplementation, SERVICE_NAME);
+            serviceHandler = new ServiceHandler<IMaidFiddlerService>(serviceImplementation);
+            serviceMessageHandler = serviceHandler.HandleMessage;
+
+            Debugger.WriteLine("Exchanging messaging handlers");
+            var resPtr = ExchangeMessagingHandlers(Marshal.GetFunctionPointerForDelegate(serviceMessageHandler));
+
+            eventMessageHandler = (HandleMessageDelegate) Marshal.GetDelegateForFunctionPointer(resPtr, typeof(HandleMessageDelegate));
+            serviceImplementation.AttachEventHandler(ServiceProxyGenerator.GenerateServiceProxy<IMaidFiddlerEventHandler>(SendMessage));
+
+            Debugger.WriteLine("Testing the event!");
+            serviceImplementation.TestEvent();
+            Debugger.WriteLine("Test complete!");
+        }
+
+        private byte[] SendMessage(string methodname, byte[] data)
+        {
+            byte[] result = null;
+            Error err = null;
+            unsafe
+            {
+                fixed (byte* b = data)
+                {
+                    var res = eventMessageHandler(methodname, new IntPtr(b), data?.Length ?? 0, out var len);
+                    if (res == IntPtr.Zero)
+                        return null;
+
+                    var d = (byte*) res;
+                    if (len == 0 && *d == 0x00)
+                    {
+                        using (var us = new UnmanagedMemoryStream(d + 1, len))
+                            err = MessagePackSerializer.Deserialize<Error>(us);
+                    }
+                    else
+                    {
+                        result = new byte[len];
+                        Marshal.Copy(res, result, 0, (int)len);
+                    }
+                    Marshal.FreeHGlobal(res);
+                }
+            }
+
+            if(err != null)
+                throw new RemoteException(err.Message, err.StackTrace);
+            return result;
         }
 
         private void OnGuiHiding(object sender, EventArgs e)

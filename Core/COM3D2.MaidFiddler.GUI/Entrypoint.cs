@@ -1,7 +1,11 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using COM3D2.MaidFiddler.Common.IPC;
+using COM3D2.MaidFiddler.GUI.Remoting;
 
 namespace COM3D2.MaidFiddler.GUI
 {
@@ -10,6 +14,13 @@ namespace COM3D2.MaidFiddler.GUI
         private static Form1 form;
         private static readonly bool guiInitialized = false;
         private static Thread t;
+
+        [DllExport(CallingConvention.StdCall)]
+        public static IntPtr ExchangeMessagingHandlers(IntPtr msgHandler)
+        {
+            Game.InitializeService(Marshal.GetDelegateForFunctionPointer<HandleMessageDelegate>(msgHandler));
+            return Marshal.GetFunctionPointerForDelegate<HandleMessageDelegate>(Game.EventService.HandleMessage);
+        }
 
         [DllExport(CallingConvention.StdCall)]
         public static void ShowGUI()
@@ -24,6 +35,30 @@ namespace COM3D2.MaidFiddler.GUI
         public static void HideGUI()
         {
             form.Invoke((Action) (() => { form.Visible = false; }));
+        }
+
+        [DllExport(CallingConvention.StdCall)]
+        public static void Initialize()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+            Application.ThreadException += ApplicationOnThreadException;
+        }
+
+        private static void ApplicationOnThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            MessageBox.Show(e.ToString());
+        }
+
+        private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(e.ExceptionObject.ToString(), "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private static Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            string path = Path.GetFullPath(Path.Combine("Sybaris", $"{new AssemblyName(args.Name).Name}.dll"));
+            return File.Exists(path) ? Assembly.LoadFile(path) : null;
         }
 
         [STAThread]

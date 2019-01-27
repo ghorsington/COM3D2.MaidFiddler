@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>c3b18607-30ec-4789-b5b4-6054bc9accd4</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>COM3D2.MaidFiddler.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Data\GameInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IPC\Error.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IPC\Delegates.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IPC\RemoteException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IPC\ServiceHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IPC\ServiceProxyGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Service\IMaidFiddlerService.cs" />
+  </ItemGroup>
+</Project>

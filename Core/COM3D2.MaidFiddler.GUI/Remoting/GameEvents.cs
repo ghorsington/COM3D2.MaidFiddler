@@ -13,7 +13,7 @@ namespace COM3D2.MaidFiddler.GUI.Remoting
         public IMaidFiddlerEventHandler EventHandler { get; }
         public event EventHandler OnTest;
 
-        private class EventHandlerImpl : MarshalByRefObject, IMaidFiddlerEventHandler
+        private class EventHandlerImpl : IMaidFiddlerEventHandler
         {
             private readonly GameEvents parent;
 
@@ -27,9 +27,9 @@ namespace COM3D2.MaidFiddler.GUI.Remoting
                 parent.OnTest?.Invoke(null, EventArgs.Empty);
             }
 
-            public override object InitializeLifetimeService()
+            public string Test2(string foo)
             {
-                return null;
+                return foo;
             }
         }
     }

@@ -9,9 +9,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.MaidFiddler.Patcher"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.MaidFiddler.GUI", "COM3D2.MaidFiddler.GUI\COM3D2.MaidFiddler.GUI.csproj", "{F9822FB1-E5C5-4697-A173-6F3868B4A06F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.MaidFiddler.Common", "COM3D2.MaidFiddler.Common\COM3D2.MaidFiddler.Common.csproj", "{A385CF6D-02FB-4CDD-AE54-CE5FB54CEE14}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "COM3D2.MaidFiddler.Shared", "COM3D2.MaidFiddler.Shared\COM3D2.MaidFiddler.Shared.shproj", "{C3B18607-30EC-4789-B5B4-6054BC9ACCD4}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		COM3D2.MaidFiddler.Shared\COM3D2.MaidFiddler.Shared.projitems*{c3b18607-30ec-4789-b5b4-6054bc9accd4}*SharedItemsImports = 13
+		COM3D2.MaidFiddler.Shared\COM3D2.MaidFiddler.Shared.projitems*{cfd04517-9577-4758-91df-8e6f1a63f2e8}*SharedItemsImports = 4
+		COM3D2.MaidFiddler.Shared\COM3D2.MaidFiddler.Shared.projitems*{f9822fb1-e5c5-4697-a173-6f3868b4a06f}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CodeAnalysis|Any CPU = CodeAnalysis|Any CPU
 		Debug|Any CPU = Debug|Any CPU
@@ -43,14 +48,6 @@ Global
 		{F9822FB1-E5C5-4697-A173-6F3868B4A06F}.Instrument|Any CPU.Build.0 = Release|Any CPU
 		{F9822FB1-E5C5-4697-A173-6F3868B4A06F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9822FB1-E5C5-4697-A173-6F3868B4A06F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A385CF6D-02FB-4CDD-AE54-CE5FB54CEE14}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
-		{A385CF6D-02FB-4CDD-AE54-CE5FB54CEE14}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
-		{A385CF6D-02FB-4CDD-AE54-CE5FB54CEE14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A385CF6D-02FB-4CDD-AE54-CE5FB54CEE14}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A385CF6D-02FB-4CDD-AE54-CE5FB54CEE14}.Instrument|Any CPU.ActiveCfg = Release|Any CPU
-		{A385CF6D-02FB-4CDD-AE54-CE5FB54CEE14}.Instrument|Any CPU.Build.0 = Release|Any CPU
-		{A385CF6D-02FB-4CDD-AE54-CE5FB54CEE14}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A385CF6D-02FB-4CDD-AE54-CE5FB54CEE14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

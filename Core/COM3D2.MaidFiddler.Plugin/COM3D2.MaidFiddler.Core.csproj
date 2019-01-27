@@ -31,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
@@ -40,12 +41,11 @@
     <Reference Include="ExIni">
       <HintPath>..\Libs\ExIni.dll</HintPath>
     </Reference>
-    <Reference Include="MsgPack">
-      <HintPath>..\Libs\MsgPack.dll</HintPath>
+    <Reference Include="MessagePack">
+      <HintPath>..\Libs\MessagePack.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="UnityEngine">
       <HintPath>..\Libs\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -62,24 +62,9 @@
     <Compile Include="Hooks\MiscHooks.cs" />
     <Compile Include="Hooks\PlayerStatusHooks.cs" />
     <Compile Include="Hooks\YotogiSkillHooks.cs" />
-    <Compile Include="IPC\PipeFactory.cs" />
     <Compile Include="MaidFiddlerPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IPC\Util\ArgumentUnpacker.cs" />
-    <Compile Include="IPC\Data.cs" />
-    <Compile Include="IPC\PipeEventEmitter.cs" />
-    <Compile Include="IPC\Util\ThreadHelpers.cs" />
-    <Compile Include="IPC\PipeService.cs" />
-    <Compile Include="IPC\Util\SerializerUtils.cs" />
     <Compile Include="Service\MaidFiddlerService.cs" />
-    <Compile Include="Service\Service.Cheats.cs" />
-    <Compile Include="Service\Service.EventEmitter.cs" />
-    <Compile Include="Service\Service.GameMain.cs" />
-    <Compile Include="Service\Service.MaidList.cs" />
-    <Compile Include="Service\Service.MaidMgr.cs" />
-    <Compile Include="Service\Service.PlayerStatus.cs" />
-    <Compile Include="Service\Service.cs" />
-    <Compile Include="Service\Service.MaidStatus.cs" />
     <Compile Include="Utils\COM3D2.cs" />
     <Compile Include="Utils\Debug.cs" />
     <Compile Include="Utils\DllUtils.cs" />
@@ -88,19 +73,14 @@
     <Compile Include="Utils\TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\COM3D2.MaidFiddler.Common\COM3D2.MaidFiddler.Common.csproj">
-      <Project>{a385cf6d-02fb-4cdd-ae54-ce5fb54cee14}</Project>
-      <Name>COM3D2.MaidFiddler.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Icon\GearMenuIcon.png" />
   </ItemGroup>
+  <Import Project="..\COM3D2.MaidFiddler.Shared\COM3D2.MaidFiddler.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <MakeDir Directories="$(OutputDirectory)/Sybaris/UnityInjector" />
     <Move SourceFiles="$(OutputPath)\$(AssemblyName).dll" DestinationFiles="$(OutputPath)\Sybaris\UnityInjector\$(AssemblyName).dll" />
-    <Move SourceFiles="$(OutputPath)\MsgPack.dll" DestinationFiles="$(OutputPath)\Sybaris\MsgPack.dll" />
+    <Move SourceFiles="$(OutputPath)\MessagePack.dll" DestinationFiles="$(OutputPath)\Sybaris\MessagePack.dll" />
     <Copy SourceFiles="$(OutputPath)\Mono.Cecil.Inject.dll" DestinationFiles="$(OutputPath)\Sybaris\Mono.Cecil.Inject.dll" />
   </Target>
 </Project>
