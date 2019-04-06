@@ -58,7 +58,7 @@ class WorkTab(UiTab):
             line_play_count.setProperty("work_id", work_data["id"])
 
             level = NumberElement(line_level)
-            play_count = NumberElement(line_play_count, 0, 2**32)
+            play_count = NumberElement(line_play_count, 0)
             self.work_elements[work_data["id"]] = (level, play_count)
 
             level.connect(self.change_level)
