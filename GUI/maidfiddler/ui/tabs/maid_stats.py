@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QDoubleSpinBox, QSpinBox, QCheckBox, QWidget, QHBoxLayout, QGroupBox
 from PyQt5.QtCore import Qt, pyqtSignal
 from .ui_tab import UiTab
-from maidfiddler.ui.qt_elements import NumberElement, TextElement
+from maidfiddler.ui.qt_elements import NumberElement, TextElement, CheckboxElement
 from maidfiddler.util.translation import tr
 
 
@@ -17,7 +17,8 @@ class MaidStatsTab(UiTab):
             "uint": lambda: NumberElement(QSpinBox(), 0, 2**32),
             "int": lambda: NumberElement(QSpinBox()),
             "double": lambda: NumberElement(QDoubleSpinBox()),
-            "string": lambda: TextElement(QLineEdit())
+            "string": lambda: TextElement(QLineEdit()),
+            "bool": lambda: CheckboxElement(QCheckBox())
         }
 
     def update_ui(self):
@@ -47,7 +48,11 @@ class MaidStatsTab(UiTab):
             name = QTableWidgetItem(maid_prop)
             name.setWhatsThis(f"maid_props.{maid_prop}")
             line = self.type_generators[prop_type]()
-            line.qt_element.setStyleSheet("width: 15em;")
+
+            if prop_type != "bool":
+                line.qt_element.setStyleSheet("width: 15em;")
+            else:
+                line.checkbox.setProperty("prop_name", maid_prop)
 
             checkbox = QCheckBox()
             widget = QWidget()
@@ -144,6 +149,7 @@ class MaidStatsTab(UiTab):
         maid = self.maid_mgr.selected_maid
 
         for name, widgets in self.properties.items():
+            print(f"Setting {name}")
             widgets[0].set_value(maid["properties"][name])
             widgets[1].setCheckState(
                 Qt.Checked if maid["prop_locks"][name] else Qt.Unchecked)

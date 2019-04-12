@@ -208,7 +208,8 @@
             "evaluation": "Evaluation",
             "totalEvaluations": "Total evaluations",
             "sales": "Sales",
-            "totalSales": "Total sales"
+            "totalSales": "Total sales",
+            "isNickNameCall": "Call by nickname"  
         },
         "maid_bonus_props": {
             "excite": "Excitement",

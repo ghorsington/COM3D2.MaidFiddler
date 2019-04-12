@@ -109,6 +109,8 @@ namespace COM3D2.MaidFiddler.Core.Service
                                                                   return "int";
                                                               if (t.IsUnsignedInteger())
                                                                   return "uint";
+                                                              if (t == typeof(bool))
+                                                                  return "bool";
                                                               return "string";
                                                           });
         }
