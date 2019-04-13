@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QLineEdit, QDoubleSpinBox, QSpinBox, QCheckBox, QWidget, QHBoxLayout, QGroupBox
 from PyQt5.QtCore import Qt, pyqtSignal
 from .ui_tab import UiTab
-from maidfiddler.ui.qt_elements import NumberElement, TextElement, CheckboxElement
+from maidfiddler.ui.qt_elements import NumberElement, TextElement, CheckboxElement, MIN_MAX_DICT, FLOAT_TYPES
 from maidfiddler.util.translation import tr
 
 
@@ -13,13 +13,17 @@ class MaidStatsTab(UiTab):
 
         self.properties = {}
         self.bonus_properties = {}
-        self.type_generators = {
-            "uint": lambda: NumberElement(QSpinBox(), 0, 2**32),
-            "int": lambda: NumberElement(QSpinBox()),
-            "double": lambda: NumberElement(QDoubleSpinBox()),
-            "string": lambda: TextElement(QLineEdit()),
-            "bool": lambda: CheckboxElement(QCheckBox())
-        }
+
+    def create_line(self, t):
+        if t in MIN_MAX_DICT:
+            s = QDoubleSpinBox()
+            s.setDecimals(0)
+            return NumberElement(s, type=t)
+        if t in FLOAT_TYPES:
+            return NumberElement(QDoubleSpinBox())
+        if t == "System.Boolean":
+            return CheckboxElement(QCheckBox())
+        return TextElement(QLineEdit())
 
     def update_ui(self):
         self.properties.clear()
@@ -47,9 +51,9 @@ class MaidStatsTab(UiTab):
             prop_type = self.game_data["maid_status_settable"][maid_prop]
             name = QTableWidgetItem(maid_prop)
             name.setWhatsThis(f"maid_props.{maid_prop}")
-            line = self.type_generators[prop_type]()
+            line = self.create_line(prop_type)
 
-            if prop_type != "bool":
+            if prop_type != "System.Boolean":
                 line.qt_element.setStyleSheet("width: 15em;")
             else:
                 line.checkbox.setProperty("prop_name", maid_prop)

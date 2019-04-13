@@ -1,6 +1,23 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QHBoxLayout
 
+MIN_MAX_DICT = {
+    "System.SByte": (-128, 127),
+    "System.Byte": (0, 255),
+    "System.Int16": (-2**15, 2**15-1),
+    "System.UInt16": (0, 2**16-1),
+    "System.Int32": (-2**31, 2**31-1),
+    "System.UInt32": (0, 2**32-1),
+    "System.Int64": (-2**63, 2**63-1),
+    "System.UInt64": (0, 2**64-1)
+}
+
+FLOAT_TYPES = set([
+    "System.Single",
+    "System.Double",
+    "System.Decimal"
+])
+
 
 class UiElement(object):
     def __init__(self, qt_element):
@@ -39,8 +56,11 @@ class PlainTextElement(UiElement):
 
 
 class NumberElement(UiElement):
-    def __init__(self, qt_element, minVal=-2**31, maxVal=2**31-1):
+    def __init__(self, qt_element, minVal=-2**31, maxVal=2**31-1, type=None):
         UiElement.__init__(self, qt_element)
+
+        if type is not None and type in MIN_MAX_DICT:
+            minVal, maxVal = MIN_MAX_DICT[type]
 
         self.qt_element.setMaximum(maxVal)
         self.qt_element.setMinimum(minVal)

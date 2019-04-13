@@ -69,15 +69,9 @@ namespace COM3D2.MaidFiddler.Core.Service
                                                p =>
                                                {
                                                    Type t = p.PropertyType;
-                                                   if (t.IsFloat())
-                                                       return "double";
-                                                   if (t.IsSignedInteger())
-                                                       return "int";
-                                                   if (t.IsUnsignedInteger())
-                                                       return "uint";
-                                                   if (t == typeof(bool))
-                                                       return "bool";
-                                                   return "string";
+                                                   if (t.IsNativeType())
+                                                       return t.FullName;
+                                                   return "System.String";
                                                });
         }
 
@@ -103,15 +97,9 @@ namespace COM3D2.MaidFiddler.Core.Service
                                                           p =>
                                                           {
                                                               Type t = p.PropertyType;
-                                                              if (t.IsFloat())
-                                                                  return "double";
-                                                              if (t.IsSignedInteger())
-                                                                  return "int";
-                                                              if (t.IsUnsignedInteger())
-                                                                  return "uint";
-                                                              if (t == typeof(bool))
-                                                                  return "bool";
-                                                              return "string";
+                                                              if (t.IsNativeType())
+                                                                  return t.FullName;
+                                                              return "System.String";
                                                           });
         }
 

@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QCheckBox, QWidget, QHBoxLayout, QLineEdit, QSpinBox, QDoubleSpinBox, QGroupBox
 from PyQt5.QtCore import Qt, pyqtSignal
 from .ui_tab import UiTab
-from maidfiddler.ui.qt_elements import NumberElement, TextElement, CheckboxElement
+from maidfiddler.ui.qt_elements import NumberElement, TextElement, CheckboxElement, MIN_MAX_DICT, FLOAT_TYPES
 from maidfiddler.util.translation import tr, tr_str
 
 
@@ -13,13 +13,17 @@ class PlayerTab(UiTab):
         UiTab.__init__(self, ui)
 
         self.properties = {}
-        self.type_generators = {
-            "uint": lambda: NumberElement(QSpinBox(), 0, 2**32), 
-            "int": lambda: NumberElement(QSpinBox()),
-            "double": lambda: NumberElement(QDoubleSpinBox()),
-            "string": lambda: TextElement(QLineEdit()),
-            "bool": lambda: CheckboxElement(QCheckBox())
-        }
+
+    def create_line(self, t):
+        if t in MIN_MAX_DICT:
+            s = QDoubleSpinBox()
+            s.setDecimals(0)
+            return NumberElement(s, type=t)
+        if t in FLOAT_TYPES:
+            return NumberElement(QDoubleSpinBox())
+        if t == "System.Boolean":
+            return CheckboxElement(QCheckBox())
+        return TextElement(QLineEdit())
 
     def update_ui(self):
         self.properties.clear()
@@ -40,10 +44,10 @@ class PlayerTab(UiTab):
             prop_type = self.game_data["player_status_settable"][prop]
             name = QTableWidgetItem(prop)
             name.setWhatsThis(f"player_props.{prop}")
-            line = self.type_generators[prop_type]()
+            line = self.create_line(prop_type)
             line.qt_element.setProperty("prop_name", prop)
 
-            if prop_type != "bool":
+            if prop_type != "System.Boolean":
                 line.qt_element.setStyleSheet("width: 15em;")
             else:
                 line.checkbox.setProperty("prop_name", prop)
