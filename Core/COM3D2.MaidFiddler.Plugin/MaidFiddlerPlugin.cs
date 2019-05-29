@@ -1,12 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using COM3D2.MaidFiddler.Common.IPC;
+using System.Threading;
 using COM3D2.MaidFiddler.Common.Service;
 using COM3D2.MaidFiddler.Core.Service;
 using COM3D2.MaidFiddler.Core.Utils;
 using GearMenu;
+using GhettoPipes;
 using MessagePack;
+using MiniIPC;
+using MiniIPC.Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityInjector;
@@ -27,14 +30,16 @@ namespace COM3D2.MaidFiddler.Core
         private bool guiDisplayed;
         private IntPtr guiDll;
         private Action HideGUI;
-        private MaidFiddlerService serviceImplementation;
-        private ServiceHandler<IMaidFiddlerService> serviceHandler;
         private Action ShowGUI;
-        private ExchangeMessagingHandlersDelegate ExchangeMessagingHandlers;
         private Action Initialize;
 
-        private HandleMessageDelegate eventMessageHandler;
-        private HandleMessageDelegate serviceMessageHandler;
+        private MaidFiddlerService serviceImplementation;
+        private NamedPipeStream receivePipeStream;
+        private StreamServiceReceiver<IMaidFiddlerService> serviceReceiver;
+        private Thread receiverThread;
+
+        private NamedPipeStream sendPipeStream;
+        private StreamServiceSender<IMaidFiddlerEventHandler> serviceSender;
 
         internal string Version { get; } = typeof(MaidFiddlerPlugin).Assembly.GetName().Version.ToString();
         private string ButtonLabel => $"MaidFiddler {(guiDisplayed ? "OFF" : "ON")}";
@@ -58,11 +63,11 @@ namespace COM3D2.MaidFiddler.Core
             HideGUI = DllUtils.GetProcDelegate<Action>(guiDll, nameof(HideGUI));
             ShowGUI = DllUtils.GetProcDelegate<Action>(guiDll, nameof(ShowGUI));
             Initialize = DllUtils.GetProcDelegate<Action>(guiDll, nameof(Initialize));
-            ExchangeMessagingHandlers = DllUtils.GetProcDelegate<ExchangeMessagingHandlersDelegate>(guiDll, nameof(ExchangeMessagingHandlers));
+            //ExchangeMessagingHandlers = DllUtils.GetProcDelegate<ExchangeMessagingHandlersDelegate>(guiDll, nameof(ExchangeMessagingHandlers));
 
             Debugger.WriteLine(LogLevel.Info, "Initializing services!");
-            Initialize();
             InitService();
+            Initialize();
             Debugger.WriteLine(LogLevel.Info, "Service initialized!");
 
             gearIcon = GetType().Assembly.GetResourceBytes("Icon/GearMenuIcon.png");
@@ -131,52 +136,36 @@ namespace COM3D2.MaidFiddler.Core
 
         private void InitService()
         {
+            receivePipeStream = NamedPipeStream.Create("MaidFiddler_GameService", NamedPipeStream.PipeDirection.InOut, securityDescriptor: "D:(A;OICI;GA;;;WD)");
             serviceImplementation = new MaidFiddlerService();
             serviceImplementation.GuiHiding += OnGuiHiding;
-            serviceHandler = new ServiceHandler<IMaidFiddlerService>(serviceImplementation);
-            serviceMessageHandler = serviceHandler.HandleMessage;
-
-            Debugger.WriteLine("Exchanging messaging handlers");
-            var resPtr = ExchangeMessagingHandlers(Marshal.GetFunctionPointerForDelegate(serviceMessageHandler));
-
-            eventMessageHandler = (HandleMessageDelegate) Marshal.GetDelegateForFunctionPointer(resPtr, typeof(HandleMessageDelegate));
-            serviceImplementation.AttachEventHandler(ServiceProxyGenerator.GenerateServiceProxy<IMaidFiddlerEventHandler>(SendMessage));
-
-            Debugger.WriteLine("Testing the event!");
-            serviceImplementation.TestEvent();
-            Debugger.WriteLine("Test complete!");
+            serviceImplementation.GuiConnected += OnGUIConnected;
+            serviceReceiver = new StreamServiceReceiver<IMaidFiddlerService>(serviceImplementation, receivePipeStream);
+            receiverThread = new Thread(ReceiverLoop);
+            receiverThread.Start();
         }
 
-        private byte[] SendMessage(string methodname, byte[] data)
+        private void OnGUIConnected(object sender, EventArgs e)
         {
-            byte[] result = null;
-            Error err = null;
-            unsafe
+            Debugger.WriteLine("GUI Connected and done! Creating service!");
+
+            sendPipeStream = NamedPipeStream.Open("MaidFiddler_EventService", NamedPipeStream.PipeDirection.InOut);
+            serviceSender = new StreamServiceSender<IMaidFiddlerEventHandler>(sendPipeStream);
+
+            serviceImplementation.AttachEventHandler(serviceSender.Service);
+        }
+
+        private void ReceiverLoop()
+        {
+            Debugger.WriteLine($"Started waiting for connections...");
+            receivePipeStream.WaitForConnection();
+            Debugger.WriteLine($"Got connection! Processing messages!");
+
+            while (true)
             {
-                fixed (byte* b = data)
-                {
-                    var res = eventMessageHandler(methodname, new IntPtr(b), data?.Length ?? 0, out var len);
-                    if (res == IntPtr.Zero)
-                        return null;
-
-                    var d = (byte*) res;
-                    if (len == 0 && *d == 0x00)
-                    {
-                        using (var us = new UnmanagedMemoryStream(d + 1, len))
-                            err = MessagePackSerializer.Deserialize<Error>(us);
-                    }
-                    else
-                    {
-                        result = new byte[len];
-                        Marshal.Copy(res, result, 0, (int)len);
-                    }
-                    Marshal.FreeHGlobal(res);
-                }
+                serviceReceiver.ProcessMessage();
+                receivePipeStream.Flush();
             }
-
-            if(err != null)
-                throw new RemoteException(err.Message, err.StackTrace);
-            return result;
         }
 
         private void OnGuiHiding(object sender, EventArgs e)

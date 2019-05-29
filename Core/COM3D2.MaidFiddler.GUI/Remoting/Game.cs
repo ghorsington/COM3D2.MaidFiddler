@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.InteropServices;
-using COM3D2.MaidFiddler.Common.IPC;
 using COM3D2.MaidFiddler.Common.Service;
-using MessagePack;
+using GhettoPipes;
+using MiniIPC.Service;
 
 namespace COM3D2.MaidFiddler.GUI.Remoting
 {
@@ -11,52 +9,50 @@ namespace COM3D2.MaidFiddler.GUI.Remoting
     {
         private static bool isInitialized = false;
 
-        public static GameEvents Events { get; private set; }
+        private static NamedPipeStream eventReceiverPipe;
+        private static NamedPipeStream serviceSenderPipe;
+        private static StreamServiceSender<IMaidFiddlerService> serviceSender;
+        public static GameEvents Events { get; private set; } = new GameEvents();
         public static IMaidFiddlerService Service { get; private set; }
-        private static HandleMessageDelegate HandleMessage { get; set; }
-        public static ServiceHandler<IMaidFiddlerEventHandler> EventService { get; private set; }
+        public static StreamServiceReceiver<IMaidFiddlerEventHandler> EventService { get; private set; }
 
-        public static void InitializeService(HandleMessageDelegate messageHandler)
+        public static string InitializeConnection()
+        {
+            if (serviceSender != null)
+                return "";
+            try
+            {
+                serviceSenderPipe = NamedPipeStream.Open("MaidFiddler_GameService", NamedPipeStream.PipeDirection.InOut);
+                serviceSender = new StreamServiceSender<IMaidFiddlerService>(serviceSenderPipe);
+                Service = serviceSender.Service;
+                return "";
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
+        public static void InitializeService()
         {
             if (isInitialized)
                 return;
-            HandleMessage = messageHandler;
-            Service = ServiceProxyGenerator.GenerateServiceProxy<IMaidFiddlerService>(SendMessage);
-            Events = new GameEvents();
-            EventService = new ServiceHandler<IMaidFiddlerEventHandler>(Events.EventHandler);
+            
+            eventReceiverPipe = NamedPipeStream.Create("MaidFiddler_EventService", NamedPipeStream.PipeDirection.InOut, securityDescriptor: "D:(A;OICI;GA;;;WD)");
+            EventService = new StreamServiceReceiver<IMaidFiddlerEventHandler>(Events.EventHandler, eventReceiverPipe);
+            Service.OnGUIConnected();
             isInitialized = true;
         }
 
-        private static byte[] SendMessage(string methodName, byte[] data)
+        private static void ReceiveLoop()
         {
-            byte[] result = null;
-            Error err = null;
-            unsafe
+            eventReceiverPipe.WaitForConnection();
+
+            while (true)
             {
-                fixed (byte* b = data)
-                {
-                    var res = HandleMessage(methodName, new IntPtr(b), data?.Length ?? 0, out var len);
-                    if (res == IntPtr.Zero)
-                        return null;
-
-                    var d = (byte*)res;
-                    if (len == 0 && *d == 0x00)
-                    {
-                        using (var us = new UnmanagedMemoryStream(d + 1, len))
-                            err = MessagePackSerializer.Deserialize<Error>(us);
-                    }
-                    else
-                    {
-                        result = new byte[len];
-                        Marshal.Copy(res, result, 0, (int)len);
-                    }
-                    Marshal.FreeHGlobal(res);
-                }
+                EventService.ProcessMessage();
+                eventReceiverPipe.Flush();
             }
-
-            if (err != null)
-                throw new RemoteException(err.Message, err.StackTrace);
-            return result;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace COM3D2.MaidFiddler.Core.Service
     {
         private IMaidFiddlerEventHandler eventHandler;
         public event EventHandler GuiHiding;
+        public event EventHandler GuiConnected;
 
         public void AttachEventHandler(IMaidFiddlerEventHandler handler)
         {
@@ -23,6 +24,11 @@ namespace COM3D2.MaidFiddler.Core.Service
         public void OnGUIHidden()
         {
             GuiHiding?.Invoke(null, EventArgs.Empty);
+        }
+
+        public void OnGUIConnected()
+        {
+            GuiConnected?.Invoke(null, EventArgs.Empty);
         }
 
         public void Debug(string str)

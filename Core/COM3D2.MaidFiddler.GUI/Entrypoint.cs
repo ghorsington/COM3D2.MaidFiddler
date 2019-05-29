@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-using COM3D2.MaidFiddler.Common.IPC;
 using COM3D2.MaidFiddler.GUI.Remoting;
 
 namespace COM3D2.MaidFiddler.GUI
@@ -15,12 +14,6 @@ namespace COM3D2.MaidFiddler.GUI
         private static readonly bool guiInitialized = false;
         private static Thread t;
 
-        [DllExport(CallingConvention.StdCall)]
-        public static IntPtr ExchangeMessagingHandlers(IntPtr msgHandler)
-        {
-            Game.InitializeService(Marshal.GetDelegateForFunctionPointer<HandleMessageDelegate>(msgHandler));
-            return Marshal.GetFunctionPointerForDelegate<HandleMessageDelegate>(Game.EventService.HandleMessage);
-        }
 
         [DllExport(CallingConvention.StdCall)]
         public static void ShowGUI()

@@ -33,9 +33,10 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.testLabel = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.testLabel = new System.Windows.Forms.Label();
+            this.infoLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -79,6 +80,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.infoLabel);
             this.tabPage1.Controls.Add(this.testLabel);
             this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -88,6 +90,15 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // testLabel
+            // 
+            this.testLabel.AutoSize = true;
+            this.testLabel.Location = new System.Drawing.Point(6, 42);
+            this.testLabel.Name = "testLabel";
+            this.testLabel.Size = new System.Drawing.Size(35, 13);
+            this.testLabel.TabIndex = 1;
+            this.testLabel.Text = "label1";
             // 
             // button1
             // 
@@ -109,14 +120,15 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // testLabel
+            // infoLabel
             // 
-            this.testLabel.AutoSize = true;
-            this.testLabel.Location = new System.Drawing.Point(6, 42);
-            this.testLabel.Name = "testLabel";
-            this.testLabel.Size = new System.Drawing.Size(35, 13);
-            this.testLabel.TabIndex = 1;
-            this.testLabel.Text = "label1";
+            this.infoLabel.AutoSize = true;
+            this.infoLabel.Location = new System.Drawing.Point(5, 109);
+            this.infoLabel.Name = "infoLabel";
+            this.infoLabel.Size = new System.Drawing.Size(41, 13);
+            this.infoLabel.TabIndex = 2;
+            this.infoLabel.Text = "label14";
+            this.infoLabel.Click += new System.EventHandler(this.Label1_Click);
             // 
             // Form1
             // 
@@ -149,6 +161,7 @@
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label testLabel;
+        private System.Windows.Forms.Label infoLabel;
     }
 }
 
