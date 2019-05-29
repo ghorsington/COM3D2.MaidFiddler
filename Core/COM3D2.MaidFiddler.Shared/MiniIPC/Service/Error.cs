@@ -1,6 +1,6 @@
 ﻿using MessagePack;
 
-namespace COM3D2.MaidFiddler.Common.IPC {
+namespace MiniIPC {
     [MessagePackObject]
     public class Error
     {

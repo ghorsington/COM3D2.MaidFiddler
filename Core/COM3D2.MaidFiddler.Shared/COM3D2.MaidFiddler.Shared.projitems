@@ -10,11 +10,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Data\GameInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IPC\Error.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IPC\Delegates.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IPC\RemoteException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IPC\ServiceHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IPC\ServiceProxyGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MiniIPC\Delegates.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MiniIPC\DynamicCodeGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MiniIPC\ProxyFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MiniIPC\Service\Error.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MiniIPC\Service\RemoteException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MiniIPC\Service\StreamServiceReceiver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MiniIPC\Service\StreamServiceSender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NamedPipeStream.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\IMaidFiddlerService.cs" />
   </ItemGroup>
 </Project>

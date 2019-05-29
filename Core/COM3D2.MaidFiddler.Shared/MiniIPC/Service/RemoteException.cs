@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace COM3D2.MaidFiddler.Common.IPC {
+namespace MiniIPC {
     public class RemoteException : Exception
     {
         public string RemoteStackTrace { get; }

@@ -7,6 +7,7 @@ namespace COM3D2.MaidFiddler.Common.Service
         void Debug(string str);
         GameInfo GetGameInfo();
         void OnGUIHidden();
+        void OnGUIConnected();
     }
 
     public interface IMaidFiddlerEventHandler
@@ -14,6 +15,4 @@ namespace COM3D2.MaidFiddler.Common.Service
         void Test();
         string Test2(string foo);
     }
-
-
 }
