@@ -8,8 +8,7 @@ Distribution/*
 Build/*
 **/Libs/*.dll
 **/Libs/*.exe
-!**/Libs/ZeroRpc.Net.dll
-!**/Libs/MsgPack.dll
+!**/Libs/MessagePack.dll
 
 .vs/
 
