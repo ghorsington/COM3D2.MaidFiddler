@@ -13,6 +13,7 @@ class MaidInfoTab(UiTab):
         self.personality_names = []
         self.contracts_names = []
         self.relations_names = []
+        self.additional_relations_names = []
         self.seikeiken_names = []
         self.job_classes_names = []
         self.yotogi_classes_names = []
@@ -23,6 +24,7 @@ class MaidInfoTab(UiTab):
             "personal": ComboElement(self.ui.personality_combo),
             "contract": ComboElement(self.ui.contract_combo),
             "relation": ComboElement(self.ui.relation_combo),
+            "additionalRelation": ComboElement(self.ui.additional_relation_combo),
             "cur_seikeiken": ComboElement(self.ui.current_combo),
             "init_seikeiken": ComboElement(self.ui.initial_combo),
             "current_job_class_id": ComboElement(self.ui.job_class_combo),
@@ -36,6 +38,7 @@ class MaidInfoTab(UiTab):
         personalities = self.properties["personal"].index_map()
         contracts = self.properties["contract"].index_map()
         relations = self.properties["relation"].index_map()
+        additional_relations = self.properties["additionalRelation"].index_map()
         cur_seikeiken = self.properties["cur_seikeiken"].index_map()
         init_seikeiken = self.properties["init_seikeiken"].index_map()
         job_classes = self.properties["current_job_class_id"].index_map()
@@ -44,6 +47,7 @@ class MaidInfoTab(UiTab):
         personalities.clear()
         contracts.clear()
         relations.clear()
+        additional_relations.clear()
         cur_seikeiken.clear()
         init_seikeiken.clear()
         job_classes.clear()
@@ -52,6 +56,7 @@ class MaidInfoTab(UiTab):
         self.personality_names.clear()
         self.contracts_names.clear()
         self.relations_names.clear()
+        self.additional_relations_names.clear()
         self.seikeiken_names.clear()
         self.job_classes_names.clear()
         self.yotogi_classes_names.clear()
@@ -59,6 +64,7 @@ class MaidInfoTab(UiTab):
         self.ui.personality_combo.blockSignals(True)
         self.ui.contract_combo.blockSignals(True)
         self.ui.relation_combo.blockSignals(True)
+        self.ui.additional_relation_combo.blockSignals(True)
         self.ui.current_combo.blockSignals(True)
         self.ui.initial_combo.blockSignals(True)
         self.ui.job_class_combo.blockSignals(True)
@@ -67,6 +73,7 @@ class MaidInfoTab(UiTab):
         self.ui.personality_combo.clear()
         self.ui.contract_combo.clear()
         self.ui.relation_combo.clear()
+        self.ui.additional_relation_combo.clear()
         self.ui.current_combo.clear()
         self.ui.initial_combo.clear()
         self.ui.job_class_combo.clear()
@@ -88,6 +95,12 @@ class MaidInfoTab(UiTab):
             self.ui.relation_combo.addItem(relation_name, relation_id)
             relations[relation_id] = i
             self.relations_names.append(f"relations.{relation_name}")
+
+        for i, relation_name in enumerate(self._game_data["additional_relation"]):
+            relation_id = self._game_data["additional_relation"][relation_name]
+            self.ui.additional_relation_combo.addItem(relation_name, relation_id)
+            additional_relations[relation_id] = i
+            self.additional_relations_names.append(f"additional_relations.{relation_name}")
 
         for i, seik_name in enumerate(self._game_data["seikeiken"]):
             seik_id = self._game_data["seikeiken"][seik_name]
@@ -114,6 +127,7 @@ class MaidInfoTab(UiTab):
         self.ui.personality_combo.blockSignals(False)
         self.ui.contract_combo.blockSignals(False)
         self.ui.relation_combo.blockSignals(False)
+        self.ui.additional_relation_combo.blockSignals(False)
         self.ui.current_combo.blockSignals(False)
         self.ui.initial_combo.blockSignals(False)
         self.ui.job_class_combo.blockSignals(False)
@@ -126,6 +140,8 @@ class MaidInfoTab(UiTab):
             self.commit_prop_changes("lastName"))
         self.ui.relation_combo.currentIndexChanged.connect(
             self.commit_prop_changes("relation"))
+        self.ui.additional_relation_combo.currentIndexChanged.connect(
+            self.commit_prop_changes("additionalRelation"))
         self.ui.employment_day_box.valueChanged.connect(
             self.commit_prop_changes("employmentDay"))
         self.ui.personality_combo.currentIndexChanged.connect(
@@ -184,6 +200,9 @@ class MaidInfoTab(UiTab):
 
         for i, relation in enumerate(self.relations_names):
             self.ui.relation_combo.setItemText(i, tr_str(relation))
+
+        for i, relation in enumerate(self.additional_relations_names):
+            self.ui.additional_relation_combo.setItemText(i, tr_str(relation))
 
         for i, seikeiken in enumerate(self.seikeiken_names):
             self.ui.current_combo.setItemText(i, tr_str(seikeiken))

@@ -24,6 +24,7 @@ namespace COM3D2.MaidFiddler.Core.Service
                     ["feature_list"] = GetFeatureInfo(),
                     ["propensity_list"] = GetPropensityInfo(),
                     ["relation"] = GetEnumInfo<Relation>(),
+                    ["additional_relation"] = GetEnumInfo<AdditionalRelation>(),
                     ["seikeiken"] = GetEnumInfo<Seikeiken>(),
                     ["contract"] = GetEnumInfo<Contract>(),
                     ["job_class_list"] = GetJobClassInfo(),

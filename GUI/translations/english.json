@@ -171,9 +171,11 @@
         "maid_props": {
             "firstName": "First name",
             "lastName": "Last name",
+            "nickName": "Nickname",
             "personal": "Personality",
             "contract": "Contract",
             "relation": "Relation",
+            "additional_relation": "Additional relation",
             "employmentDay": "Employment day",
             "description": "Maid description",
             "freeComment": "Free comment",
@@ -250,6 +252,11 @@
             "Contact": "Contact",
             "Trust": "Trusted",
             "Lover": "Lover"
+        },
+        "additional_relations": {
+            "Null": "None/Disabled",
+            "Vigilance": "Vigilant",
+            "LoverPlus": "Lover+"
         },
         "contracts": {
             "Trainee": "Trainee",
