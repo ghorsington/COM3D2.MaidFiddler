@@ -1,4 +1,4 @@
-VERSION = "1.0.4.4"
+VERSION = "1.0.5.0"
 
 CONTRIBUTORS = [
     "@ghorsington -- original developer",
