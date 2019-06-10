@@ -33,6 +33,12 @@ namespace COM3D2.MaidFiddler.Core.Hooks
             button.isEnabled = true;
         }
 
+        public static bool GetLifeModeScenarioExecuteCount(out int result)
+        {
+            result = 9999;
+            return EnableAllFreeModeItems;
+        }
+
         public static bool GetFreeModeItemEnabled(out bool result)
         {
             result = true;

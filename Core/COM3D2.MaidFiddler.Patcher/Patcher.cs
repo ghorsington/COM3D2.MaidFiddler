@@ -143,6 +143,11 @@ namespace COM3D2.MaidFiddler.Patcher
             freeModeItemEveryday.GetMethod("IsEnabledFlag").InjectWith(isEnabledHook, flags: InjectFlags.ModifyReturn);
             freeModeItemVip.GetMethod("get_is_enabled").InjectWith(isEnabledHook, flags: InjectFlags.ModifyReturn);
 
+            TypeDefinition empireLifeModeManager = ass.MainModule.GetType("EmpireLifeModeManager");
+            MethodDefinition getScenarioExcetueCountHook = miscHooks.GetMethod("GetLifeModeScenarioExecuteCount");
+
+            empireLifeModeManager.GetMethod("GetScenarioExecuteCount").InjectWith(getScenarioExcetueCountHook, flags: InjectFlags.ModifyReturn);
+
             sceneFreeModeSelectManager.GetMethod("Start").InjectWith(miscHooks.GetMethod("OnSceneFreeModeSelectAwake"), -1, flags: InjectFlags.PassInvokingInstance);
         }
 
