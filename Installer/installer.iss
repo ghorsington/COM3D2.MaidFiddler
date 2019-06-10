@@ -3,7 +3,7 @@
 
 #define MyAppName "Maid Fiddler"
 #define MyAppPub "NeighTools"
-#define MyAppVersion "1.0.4.4"
+#define MyAppVersion "1.0.5.1"
 #define MyAppURL "https://github.com/denikson/COM3D2.MaidFiddler"
 #define MyAppExeName "maid_fiddler_qt.exe"
 
@@ -28,6 +28,7 @@ SolidCompression=yes
 ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
 PrivilegesRequired=lowest
+PrivilegesRequiredOverridesAllowed=dialog
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -45,7 +46,7 @@ Source: "bin\plugin\*"; DestDir: "{code:GetInstallLocation}"; Flags: ignoreversi
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Code]
 function IsProcessOpened(path: String) : Boolean;

@@ -7,6 +7,12 @@ Maid Fiddler is a real-time game manipulation tool for COM3D2.
 
 Changelog:
 
+* 1.0.5.1
+  - Unlocking free mode items now unlocks Empire Life Mode events as well
+  - Add default config.ini generating
+* 1.0.5.0
+  - Add "Additional relation" option for 1.31
+  - IMPORTANT: YOU MUST HAVE 1.31 OR NEWER INSTALLED TO USE THIS VERSION
 * 1.0.4.4
   - Fix overflow error in some properties
 * 1.0.4.3
