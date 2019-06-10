@@ -3,6 +3,17 @@ import os
 from maidfiddler.util.util import BASE_DIR
 
 CONFIG = configparser.ConfigParser()
+CONFIG.read_dict({
+        "Options": {
+                "language": "english.json",
+                "show_startup_warning": "yes",
+                "check_updates_on_startup": "yes"
+        },
+        "Developer": {
+                "minify-untranslated-tags": "yes"
+        }
+})
+
 CONFIG_PATH = os.path.join(BASE_DIR, "config.ini")
 
 def load_config():

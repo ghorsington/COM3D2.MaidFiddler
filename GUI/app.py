@@ -7,6 +7,7 @@ def main():
     print("Starting MF")
 
     load_config()
+    save_config()
 
     app = QApplication(sys.argv)
     app.setStyle(QStyleFactory.create("Fusion"))
