@@ -7,6 +7,11 @@ Maid Fiddler is a real-time game manipulation tool for COM3D2.
 
 Changelog:
 
+* 1.0.6.0
+  - Add support for age value
+  - Add ability to watch some values better
+  - Add support for previously unchangeable values
+  - Add game version check
 * 1.0.5.1
   - Unlocking free mode items now unlocks Empire Life Mode events as well
   - Add default config.ini generating
