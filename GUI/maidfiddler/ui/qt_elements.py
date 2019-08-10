@@ -95,15 +95,18 @@ class ComboElement(UiElement):
 
 
 class CheckboxElement(UiElement):
-    def __init__(self, qt_element):
+    def __init__(self, qt_element, center=True):
         self.checkbox = qt_element
-        widget = QWidget()
-        hbox = QHBoxLayout(widget)
-        hbox.addWidget(qt_element)
-        hbox.setAlignment(Qt.AlignCenter)
-        hbox.setContentsMargins(0, 0, 0, 0)
-        widget.setLayout(hbox)
-        self.qt_element = widget
+        if center:
+            widget = QWidget()
+            hbox = QHBoxLayout(widget)
+            hbox.addWidget(qt_element)
+            hbox.setAlignment(Qt.AlignCenter)
+            hbox.setContentsMargins(0, 0, 0, 0)
+            widget.setLayout(hbox)
+            self.qt_element = widget
+        else:
+            self.qt_element = qt_element
 
     def value(self):
         return self.checkbox.checkState() == Qt.Checked

@@ -15,6 +15,7 @@ namespace COM3D2.MaidFiddler.Core.Service
     {
         private Dictionary<string, MethodInfo> maidGetters;
         private Dictionary<string, MethodInfo> maidSetters;
+        private Dictionary<string, FieldInfo> maidFields;
 
         public Dictionary<string, string> GetMaidList()
         {
@@ -290,9 +291,11 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         private void SetMaidProperty(Maid maid, string propertyName, object value)
         {
-            if (!maidSetters.TryGetValue(propertyName, out MethodInfo setter))
+            FieldInfo field = null;
+            MethodInfo setter = null;
+            if (!maidSetters.TryGetValue(propertyName, out setter) && !maidFields.TryGetValue(propertyName, out field))
                 throw new ArgumentException($"No such property: {propertyName}", nameof(propertyName));
-            Type paramType = setter.GetParameters()[0].ParameterType;
+            Type paramType = setter?.GetParameters()[0].ParameterType ?? field.FieldType;
 
             object val;
             if (paramType.IsEnum)
@@ -309,11 +312,16 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             try
             {
-                var locks = maidLockList[maid.status.guid];
-                bool prev = locks[propertyName];
-                locks[propertyName] = false;
-                setter.Invoke(maid.status, new[] {val});
-                locks[propertyName] = prev;
+                if (setter != null)
+                {
+                    var locks = maidLockList[maid.status.guid];
+                    bool prev = locks[propertyName];
+                    locks[propertyName] = false;
+                    setter.Invoke(maid.status, new[] { val });
+                    locks[propertyName] = prev;
+                }
+                else
+                    field.SetValue(maid.status, val);
             }
             catch (Exception e)
             {
@@ -392,17 +400,17 @@ namespace COM3D2.MaidFiddler.Core.Service
                     else
                         props[getter.Key] = getter.Value.Invoke(maid.status, new object[0]);
 
-            props["cur_seikeiken"] = (int) maid.status.seikeiken;
-            props["init_seikeiken"] = (int) maid.status.initSeikeiken;
-            props["contract"] = (int) maid.status.contract;
+            foreach (var field in maidFields)
+            {
+                if (field.Value.FieldType.IsEnum)
+                    props[field.Key] = (int) field.Value.GetValue(maid.status);
+                else
+                    props[field.Key] = field.Value.GetValue(maid.status);
+            }
+
             props["personal"] = maid.status.personal?.id ?? 0;
             props["current_job_class_id"] = maid.status.selectedJobClass?.data?.id ?? 0;
             props["current_yotogi_class_id"] = maid.status.selectedYotogiClass?.data?.id ?? 0;
-            props["first_name_call"] = maid.status.isFirstNameCall;
-            props["is_leader"] = maid.status.leader;
-            props["active_noon_work_id"] = maid.status.noonWorkId;
-            props["active_night_work_id"] = maid.status.nightWorkId;
-            props["profile_comment"] = maid.status.profileComment;
 
             var workLevels = new Dictionary<int, object>();
             var workPlayCounts = new Dictionary<int, object>();
@@ -450,7 +458,6 @@ namespace COM3D2.MaidFiddler.Core.Service
             result["maid_thumbnail"] = thum?.EncodeToPNG();
 
             result["guid"] = maid.status.guid;
-            result["main_maid"] = maid.status.mainChara;
 
             return result;
         }
@@ -540,7 +547,15 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         private void OnStatusUpdate(string name, object val)
         {
-            Debug.Log($"[MF] Status {name} changed to {val}");
+            if (IsDeserializing || selectedMaid == null)
+                return;
+
+            Debug.Log($"[MF] Changed {name} to {val}");
+
+            if (val.GetType().IsEnum)
+                val = (int) val;
+
+            Emit("maid_prop_changed", new Dict { ["guid"] = selectedMaidGuid, ["property_name"] = name, ["value"] = val });
         }
 
         public void UpdateActiveMaidStatus()
@@ -566,6 +581,7 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             maidSetters = new Dictionary<string, MethodInfo>();
             maidGetters = new Dictionary<string, MethodInfo>();
+            maidFields = new Dictionary<string, FieldInfo>();
 
             var props = typeof(Status).GetProperties(BindingFlags.Instance | BindingFlags.Public);
 
@@ -580,6 +596,12 @@ namespace COM3D2.MaidFiddler.Core.Service
                 if (set != null)
                     maidSetters.Add(propertyInfo.Name, set);
             }
+
+            var fields = typeof(Status).GetFields(BindingFlags.Instance | BindingFlags.Public).Where(f =>
+                f.FieldType.IsValueType || f.FieldType.IsEnum || f.FieldType == typeof(string));
+
+            foreach (var field in fields)
+                maidFields[field.Name] = field;
 
             MaidStatusHooks.PropertyChanged += OnPropertyChange;
             MaidStatusHooks.WorkDataChanged += OnMaidStatusHooksOnWorkDataChanged;

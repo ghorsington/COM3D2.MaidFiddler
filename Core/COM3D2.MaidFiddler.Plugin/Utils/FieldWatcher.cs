@@ -28,7 +28,6 @@ namespace COM3D2.MaidFiddler.Core.Utils
                 TypeAttributes.BeforeFieldInit, typeof(object),
                 new[] {typeof(IWatcher<T>)});
 
-
             // Generate code for delegate
             var onValChangedField = typeBuilder.DefineField("_onValChanged_BackingField",
                 typeof(Action<string, object>), FieldAttributes.Private);

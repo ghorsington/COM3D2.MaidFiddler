@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QGroupBox, QLabel
 from .ui_tab import UiTab
-from maidfiddler.ui.qt_elements import TextElement, ComboElement, NumberElement, PlainTextElement
+from maidfiddler.ui.qt_elements import TextElement, ComboElement, NumberElement, PlainTextElement, CheckboxElement
 from maidfiddler.util.translation import tr, tr_str
 
 
@@ -25,13 +25,20 @@ class MaidInfoTab(UiTab):
             "contract": ComboElement(self.ui.contract_combo),
             "relation": ComboElement(self.ui.relation_combo),
             "additionalRelation": ComboElement(self.ui.additional_relation_combo),
-            "cur_seikeiken": ComboElement(self.ui.current_combo),
-            "init_seikeiken": ComboElement(self.ui.initial_combo),
+            "seikeiken": ComboElement(self.ui.current_combo),
+            "initSeikeiken": ComboElement(self.ui.initial_combo),
             "current_job_class_id": ComboElement(self.ui.job_class_combo),
             "current_yotogi_class_id": ComboElement(self.ui.yotogi_class_combo),
             "employmentDay": NumberElement(self.ui.employment_day_box),
-            "profile_comment": PlainTextElement(self.ui.maid_description_edit),
-            "freeComment": PlainTextElement(self.ui.user_comment_text)
+            "profileComment": PlainTextElement(self.ui.maid_description_edit),
+            "freeComment": PlainTextElement(self.ui.user_comment_text),
+            "age": NumberElement(self.ui.age_box),
+
+            "isFirstNameCall": CheckboxElement(self.ui.isFirstNameCallCheck, False),
+            "leader": CheckboxElement(self.ui.leaderCheck, False),
+            "mainChara": CheckboxElement(self.ui.mainCharaCheck, False),
+            "nightCommu": CheckboxElement(self.ui.nightCommuCheck, False),
+            "noonCommu": CheckboxElement(self.ui.noonCommuCheck, False)
         }
 
     def update_ui(self):
@@ -39,8 +46,8 @@ class MaidInfoTab(UiTab):
         contracts = self.properties["contract"].index_map()
         relations = self.properties["relation"].index_map()
         additional_relations = self.properties["additionalRelation"].index_map()
-        cur_seikeiken = self.properties["cur_seikeiken"].index_map()
-        init_seikeiken = self.properties["init_seikeiken"].index_map()
+        cur_seikeiken = self.properties["seikeiken"].index_map()
+        init_seikeiken = self.properties["initSeikeiken"].index_map()
         job_classes = self.properties["current_job_class_id"].index_map()
         yotogi_classes = self.properties["current_yotogi_class_id"].index_map()
 
@@ -144,14 +151,28 @@ class MaidInfoTab(UiTab):
             self.commit_prop_changes("additionalRelation"))
         self.ui.employment_day_box.valueChanged.connect(
             self.commit_prop_changes("employmentDay"))
+        self.ui.age_box.valueChanged.connect(
+            self.commit_prop_changes("age"))
+        
+        self.ui.isFirstNameCallCheck.stateChanged.connect(
+            self.commit_prop_changes("isFirstNameCall"))
+        self.ui.leaderCheck.stateChanged.connect(
+            self.commit_prop_changes("leader"))
+        self.ui.mainCharaCheck.stateChanged.connect(
+            self.commit_prop_changes("mainChara"))
+        self.ui.nightCommuCheck.stateChanged.connect(
+            self.commit_prop_changes("nightCommu"))
+        self.ui.nightCommuCheck.stateChanged.connect(
+            self.commit_prop_changes("nightCommu"))
+
         self.ui.personality_combo.currentIndexChanged.connect(
             lambda: self.core.SetPersonalActive(self.properties["personal"].value()))
         self.ui.contract_combo.currentIndexChanged.connect(
             lambda: self.core.SetContractActive(self.properties["contract"].value()))
         self.ui.current_combo.currentIndexChanged.connect(
-            lambda: self.core.SetCurSeikeikenActive(self.properties["cur_seikeiken"].value()))
+            lambda: self.core.SetCurSeikeikenActive(self.properties["seikeiken"].value()))
         self.ui.initial_combo.currentIndexChanged.connect(
-            lambda: self.core.SetInitSeikeikenActive(self.properties["init_seikeiken"].value()))
+            lambda: self.core.SetInitSeikeikenActive(self.properties["initSeikeiken"].value()))
         self.ui.job_class_combo.currentIndexChanged.connect(
             lambda: self.core.SetCurrentJobClassActive(self.properties["current_job_class_id"].value()))
         self.ui.yotogi_class_combo.currentIndexChanged.connect(
@@ -170,6 +191,9 @@ class MaidInfoTab(UiTab):
         if args["property_name"] not in self.properties:
             return
 
+        if args["property_name"] == "mainChara":
+            self.ui.personality_combo.setEnabled(not args["value"])
+        
         self.properties[args["property_name"]].set_value(args["value"])
 
     def on_maid_selected(self):
@@ -178,7 +202,7 @@ class MaidInfoTab(UiTab):
 
         maid = self.maid_mgr.selected_maid
 
-        self.ui.personality_combo.setEnabled(not maid["main_maid"])
+        self.ui.personality_combo.setEnabled(not maid["properties"]["mainChara"])
 
         for name, element in self.properties.items():
             element.set_value(maid["properties"][name])

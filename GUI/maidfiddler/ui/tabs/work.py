@@ -121,15 +121,15 @@ class WorkTab(UiTab):
                 play_count.set_value(0)
 
         self.ui.cur_noon_work_combo.blockSignals(True)
-        if maid["properties"]["active_noon_work_id"] in self.noon_work_id_index:
+        if maid["properties"]["noonWorkId"] in self.noon_work_id_index:
             self.ui.cur_noon_work_combo.setCurrentIndex(
-                self.noon_work_id_index[maid["properties"]["active_noon_work_id"]])
+                self.noon_work_id_index[maid["properties"]["noonWorkId"]])
         self.ui.cur_noon_work_combo.blockSignals(False)
 
         self.ui.cur_night_work_combo.blockSignals(True)
-        if maid["properties"]["active_night_work_id"] in self.night_work_id_index:
+        if maid["properties"]["nightWorkId"] in self.night_work_id_index:
             self.ui.cur_night_work_combo.setCurrentIndex(
-                self.night_work_id_index[maid["properties"]["active_night_work_id"]])
+                self.night_work_id_index[maid["properties"]["nightWorkId"]])
         self.ui.cur_night_work_combo.blockSignals(False)
 
     def translate_ui(self):
