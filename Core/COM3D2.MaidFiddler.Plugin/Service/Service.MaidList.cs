@@ -21,6 +21,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             }
 
             selectedMaid = GetMaid(guid);
+            maidStatusWatcher.Set(selectedMaid.status);
             return ReadMaidData(selectedMaid);
         }
 

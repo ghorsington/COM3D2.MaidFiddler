@@ -31,6 +31,11 @@ namespace COM3D2.MaidFiddler.Core
             Debugger.WriteLine(LogLevel.Info, "Started server!");
         }
 
+        public void LateUpdate()
+        {
+            service?.UpdateActiveMaidStatus();
+        }
+
         public void OnDestroy()
         {
             Debugger.WriteLine(LogLevel.Info, "Stopping MaidFiddler");

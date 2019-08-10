@@ -80,6 +80,7 @@
     <Compile Include="Service\Service.MaidStatus.cs" />
     <Compile Include="Utils\Debug.cs" />
     <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\FieldWatcher.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">

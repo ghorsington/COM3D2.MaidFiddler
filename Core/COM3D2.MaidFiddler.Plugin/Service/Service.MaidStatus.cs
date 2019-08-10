@@ -538,12 +538,26 @@ namespace COM3D2.MaidFiddler.Core.Service
                  });
         }
 
+        private void OnStatusUpdate(string name, object val)
+        {
+            Debug.Log($"[MF] Status {name} changed to {val}");
+        }
+
+        public void UpdateActiveMaidStatus()
+        {
+            if(selectedMaid != null)
+                maidStatusWatcher.Update(selectedMaid.status);
+        }
 
         private FieldInfo bonusStatusField;
         private FieldInfo[] bonusStatusFields;
+        private IWatcher<Status> maidStatusWatcher;
 
         private void InitMaidStatus()
         {
+            maidStatusWatcher = FieldWatcher.CreateWatcher<Status>();
+            maidStatusWatcher.OnValueChanged = OnStatusUpdate;
+
             bonusStatusField = typeof(Status).GetField("bonusStatus",
                                                        BindingFlags.NonPublic
                                                        | BindingFlags.Public
