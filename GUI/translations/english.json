@@ -127,7 +127,8 @@
                 "sex_exp_init": "Initial",
                 "job_class": "Job class",
                 "job_class_noon": "Noon",
-                "job_class_night": "Night"
+                "job_class_night": "Night",
+                "maid_checks": "Special modifiers"
             },
             "maid_stats": {
                 "title": "Maid stats",
@@ -212,7 +213,13 @@
             "sales": "Sales",
             "totalSales": "Total sales",
             "isNickNameCall": "Call by nickname",
-            "nockName": "Nickname"  
+            "nockName": "Nickname",
+            "age": "Age",
+            "isFirstNameCall": "Call by first name",
+            "leader": "Is leader maid",
+            "mainChara": "Part of main story\n(Personality locked)",
+            "nightCommu": "Communicate in evening",
+            "noonCommu": "Communicate in noon"
         },
         "maid_bonus_props": {
             "excite": "Excitement",

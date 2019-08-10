@@ -550,8 +550,6 @@ namespace COM3D2.MaidFiddler.Core.Service
             if (IsDeserializing || selectedMaid == null)
                 return;
 
-            Debug.Log($"[MF] Changed {name} to {val}");
-
             if (val.GetType().IsEnum)
                 val = (int) val;
 

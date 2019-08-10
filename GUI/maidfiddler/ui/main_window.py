@@ -38,6 +38,7 @@ from maidfiddler.util.pipes import PipedEventHandler, PipeRpcCaller
 
 from maidfiddler.ui.dialogs.update_checker import UpdateDialog
 
+from app_info import MIN_SUPPORTED_GAME_VERSION, VERSION
 
 UI_MainWindow = uic.loadUiType(
     open(util.get_resource_path("templates/maid_fiddler.ui")))
@@ -137,6 +138,18 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
             sys.exit(0)
             return
 
+        game_version = self.core.get_GameVersion()
+        if game_version < MIN_SUPPORTED_GAME_VERSION:
+            error_dialog = QMessageBox(QMessageBox.Critical, 
+                                    "Unsupported game version", 
+                                    f"Maid Fiddler {VERSION} only supports game version {MIN_SUPPORTED_GAME_VERSION} or newer.\nThis game's build version is {game_version}.\n\nPlease update the game before using this version of Maid Fiddler.", 
+                                    QMessageBox.Ok)
+            error_dialog.exec()
+            self.core.close()
+            QApplication.instance().exit()
+            sys.exit(0)
+            return
+
         self.event_poller.start_polling()
 
         game_data = connect_dialog.game_data
@@ -144,7 +157,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
             self.on_connection_close()
             return
         connect_dialog.game_data = None
-
+        
         self.core_version = self.core.get_Version()
 
         for tab in self.tabs:

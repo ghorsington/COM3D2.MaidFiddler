@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QGroupBox, QLabel
+from PyQt5.QtWidgets import QGroupBox, QLabel, QCheckBox
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import TextElement, ComboElement, NumberElement, PlainTextElement, CheckboxElement
 from maidfiddler.util.translation import tr, tr_str
@@ -214,6 +214,9 @@ class MaidInfoTab(UiTab):
             group.setTitle(tr(group))
 
         for label in self.ui.tab_maid_info.findChildren(QLabel):
+            label.setText(tr(label))
+
+        for label in self.ui.checks_group.findChildren(QCheckBox):
             label.setText(tr(label))
 
         for i, personality in enumerate(self.personality_names):

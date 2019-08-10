@@ -1,4 +1,5 @@
-VERSION = "1.0.5.1"
+VERSION = "1.0.6.0"
+MIN_SUPPORTED_GAME_VERSION = 1330
 
 CONTRIBUTORS = [
     "@ghorsington -- original developer",
