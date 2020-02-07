@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Hooks\CharacterMgrHooks.cs" />
+    <Compile Include="Hooks\Fixes.cs" />
     <Compile Include="Hooks\GameMainHooks.cs" />
     <Compile Include="Hooks\MaidStatusHooks.cs" />
     <Compile Include="Hooks\MathUtilHooks.cs" />

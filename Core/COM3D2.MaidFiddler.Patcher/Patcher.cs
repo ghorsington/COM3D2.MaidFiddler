@@ -32,6 +32,18 @@ namespace COM3D2.MaidFiddler.Patcher
             PatchYotogiSkillSystem(ass);
             PatchPlayerStatus(ass);
             PatchCheats(ass);
+            FixFeelingGetter(ass);
+        }
+
+        private static void FixFeelingGetter(AssemblyDefinition ass)
+        {
+            TypeDefinition fixes = HookDefinition.MainModule.GetType($"{HOOK_NAME}.Hooks.Fixes");
+
+            TypeDefinition maidStatus = ass.MainModule.GetType("MaidStatus.Status");
+            MethodDefinition feelingGetter = maidStatus.GetMethod("get_feeling");
+            MethodDefinition feelingFix = fixes.GetMethod("GetFeelingFix");
+
+            feelingGetter.InjectWith(feelingFix, flags: InjectFlags.PassFields | InjectFlags.ModifyReturn, typeFields: new []{ maidStatus.GetField("flags_") });
         }
 
         public static void PatchCheats(AssemblyDefinition ass)

@@ -28,6 +28,7 @@ namespace COM3D2.MaidFiddler.Core.Service
                     ["seikeiken"] = GetEnumInfo<Seikeiken>(),
                     ["contract"] = GetEnumInfo<Contract>(),
                     ["heroine_type"] = GetEnumInfo<HeroineType>(),
+                    ["feeling"] = GetEnumInfo<Feeling>(),
                     ["job_class_list"] = GetJobClassInfo(),
                     ["yotogi_class_list"] = GetYotogiClassInfo(),
                     ["personal_list"] = GetPersonalInfo(),

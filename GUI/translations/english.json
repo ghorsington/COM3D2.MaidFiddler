@@ -176,6 +176,7 @@
             "personal": "Personality",
             "contract": "Contract",
             "relation": "Relation",
+            "feeling": "Feeling",
             "additional_relation": "Additional relation",
             "employmentDay": "Employment day",
             "description": "Maid description",
@@ -259,6 +260,11 @@
             "Contact": "Contact",
             "Trust": "Trusted",
             "Lover": "Lover"
+        },
+        "feeling": {
+            "Bad": "Bad",
+            "Normal": "Normal",
+            "Goood": "Good"
         },
         "additional_relations": {
             "Null": "None/Disabled",

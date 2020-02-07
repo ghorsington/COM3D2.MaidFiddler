@@ -135,6 +135,85 @@
           <property name="bottomMargin">
            <number>6</number>
           </property>
+          <item row="1" column="0">
+           <widget class="QGroupBox" name="sex_exp_group">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="whatsThis">
+             <string>tabs.maid_info.sex_exp</string>
+            </property>
+            <property name="title">
+             <string>tabs.maid_info.sex_exp</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="2">
+              <widget class="QComboBox" name="current_combo">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="initial_label">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="whatsThis">
+                <string>tabs.maid_info.sex_exp_init</string>
+               </property>
+               <property name="text">
+                <string>tabs.maid_info.sex_exp_init</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="current_label">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="whatsThis">
+                <string>tabs.maid_info.sex_exp_cur</string>
+               </property>
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="text">
+                <string>tabs.maid_info.sex_exp_cur</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="4">
+              <widget class="QComboBox" name="initial_combo">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QGroupBox" name="main_data_group">
             <property name="sizePolicy">
@@ -168,24 +247,28 @@
              <property name="bottomMargin">
               <number>0</number>
              </property>
-             <item row="0" column="5">
-              <widget class="QLineEdit" name="last_name_edit"/>
-             </item>
-             <item row="0" column="3">
-              <widget class="QLineEdit" name="first_name_edit"/>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLabel" name="personality_label">
+             <item row="3" column="1">
+              <widget class="QLabel" name="employment_day_label">
                <property name="whatsThis">
-                <string>maid_props.personal</string>
+                <string>maid_props.employmentDay</string>
                </property>
                <property name="text">
-                <string>maid_props.personal</string>
+                <string>maid_props.employmentDay</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
+             </item>
+             <item row="3" column="5">
+              <widget class="QSpinBox" name="age_box">
+               <property name="maximum">
+                <number>99999</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="5">
+              <widget class="QLineEdit" name="last_name_edit"/>
              </item>
              <item row="0" column="4">
               <widget class="QLabel" name="last_name_label">
@@ -200,8 +283,56 @@
                </property>
               </widget>
              </item>
+             <item row="3" column="4">
+              <widget class="QLabel" name="age_label">
+               <property name="whatsThis">
+                <string>maid_props.age</string>
+               </property>
+               <property name="text">
+                <string>maid_props.age</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
              <item row="1" column="3">
               <widget class="QComboBox" name="personality_combo"/>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLabel" name="relation_label">
+               <property name="whatsThis">
+                <string>maid_props.relation</string>
+               </property>
+               <property name="text">
+                <string>maid_props.relation</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="5">
+              <widget class="QComboBox" name="contract_combo"/>
+             </item>
+             <item row="3" column="3">
+              <widget class="QSpinBox" name="employment_day_box"/>
+             </item>
+             <item row="2" column="5">
+              <widget class="QComboBox" name="additional_relation_combo"/>
+             </item>
+             <item row="2" column="4">
+              <widget class="QLabel" name="additional_relation_label">
+               <property name="whatsThis">
+                <string>maid_props.additional_relation</string>
+               </property>
+               <property name="text">
+                <string>maid_props.additional_relation</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="QComboBox" name="relation_combo"/>
              </item>
              <item row="0" column="1">
               <widget class="QLabel" name="first_name_label">
@@ -219,21 +350,8 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="5">
-              <widget class="QComboBox" name="contract_combo"/>
-             </item>
-             <item row="2" column="1">
-              <widget class="QLabel" name="relation_label">
-               <property name="whatsThis">
-                <string>maid_props.relation</string>
-               </property>
-               <property name="text">
-                <string>maid_props.relation</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
+             <item row="0" column="3">
+              <widget class="QLineEdit" name="first_name_edit"/>
              </item>
              <item row="1" column="4">
               <widget class="QLabel" name="contract_label">
@@ -248,55 +366,32 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
-              <widget class="QLabel" name="employment_day_label">
+             <item row="1" column="1">
+              <widget class="QLabel" name="personality_label">
                <property name="whatsThis">
-                <string>maid_props.employmentDay</string>
+                <string>maid_props.personal</string>
                </property>
                <property name="text">
-                <string>maid_props.employmentDay</string>
+                <string>maid_props.personal</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
-             <item row="3" column="3">
-              <widget class="QSpinBox" name="employment_day_box"/>
+             <item row="4" column="5">
+              <widget class="QComboBox" name="feeling_combo"/>
              </item>
-             <item row="2" column="3">
-              <widget class="QComboBox" name="relation_combo"/>
-             </item>
-             <item row="2" column="4">
-              <widget class="QLabel" name="additional_relation_label">
+             <item row="4" column="4">
+              <widget class="QLabel" name="feeling_label">
                <property name="whatsThis">
-                <string>maid_props.additional_relation</string>
+                <string>maid_props.feeling</string>
                </property>
                <property name="text">
-                <string>maid_props.additional_relation</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="5">
-              <widget class="QComboBox" name="additional_relation_combo"/>
-             </item>
-             <item row="3" column="4">
-              <widget class="QLabel" name="age_label">
-               <property name="whatsThis">
-                <string>maid_props.age</string>
-               </property>
-               <property name="text">
-                <string>maid_props.age</string>
+                <string>maid_props.feeling</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="5">
-              <widget class="QSpinBox" name="age_box">
-               <property name="maximum">
-                <number>99999</number>
                </property>
               </widget>
              </item>
@@ -440,85 +535,6 @@
                  <width>0</width>
                  <height>0</height>
                 </size>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QGroupBox" name="sex_exp_group">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="whatsThis">
-             <string>tabs.maid_info.sex_exp</string>
-            </property>
-            <property name="title">
-             <string>tabs.maid_info.sex_exp</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_3">
-             <item row="0" column="2">
-              <widget class="QComboBox" name="current_combo">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3">
-              <widget class="QLabel" name="initial_label">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="whatsThis">
-                <string>tabs.maid_info.sex_exp_init</string>
-               </property>
-               <property name="text">
-                <string>tabs.maid_info.sex_exp_init</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="current_label">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="whatsThis">
-                <string>tabs.maid_info.sex_exp_cur</string>
-               </property>
-               <property name="layoutDirection">
-                <enum>Qt::LeftToRight</enum>
-               </property>
-               <property name="text">
-                <string>tabs.maid_info.sex_exp_cur</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="4">
-              <widget class="QComboBox" name="initial_combo">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
                </property>
               </widget>
              </item>
@@ -790,11 +806,11 @@
                    <attribute name="horizontalHeaderCascadingSectionResizes">
                     <bool>false</bool>
                    </attribute>
-                   <attribute name="horizontalHeaderDefaultSectionSize">
-                    <number>100</number>
-                   </attribute>
                    <attribute name="horizontalHeaderMinimumSectionSize">
                     <number>24</number>
+                   </attribute>
+                   <attribute name="horizontalHeaderDefaultSectionSize">
+                    <number>100</number>
                    </attribute>
                    <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                     <bool>false</bool>
@@ -805,10 +821,10 @@
                    <attribute name="verticalHeaderVisible">
                     <bool>false</bool>
                    </attribute>
-                   <attribute name="verticalHeaderDefaultSectionSize">
+                   <attribute name="verticalHeaderMinimumSectionSize">
                     <number>24</number>
                    </attribute>
-                   <attribute name="verticalHeaderMinimumSectionSize">
+                   <attribute name="verticalHeaderDefaultSectionSize">
                     <number>24</number>
                    </attribute>
                    <column>
@@ -905,10 +921,10 @@
                    <attribute name="verticalHeaderVisible">
                     <bool>false</bool>
                    </attribute>
-                   <attribute name="verticalHeaderDefaultSectionSize">
+                   <attribute name="verticalHeaderMinimumSectionSize">
                     <number>24</number>
                    </attribute>
-                   <attribute name="verticalHeaderMinimumSectionSize">
+                   <attribute name="verticalHeaderDefaultSectionSize">
                     <number>24</number>
                    </attribute>
                    <column>
@@ -1288,10 +1304,10 @@
                    <attribute name="verticalHeaderVisible">
                     <bool>false</bool>
                    </attribute>
-                   <attribute name="verticalHeaderDefaultSectionSize">
+                   <attribute name="verticalHeaderMinimumSectionSize">
                     <number>24</number>
                    </attribute>
-                   <attribute name="verticalHeaderMinimumSectionSize">
+                   <attribute name="verticalHeaderDefaultSectionSize">
                     <number>24</number>
                    </attribute>
                    <column>
@@ -1375,10 +1391,10 @@
             <attribute name="verticalHeaderVisible">
              <bool>false</bool>
             </attribute>
-            <attribute name="verticalHeaderDefaultSectionSize">
+            <attribute name="verticalHeaderMinimumSectionSize">
              <number>24</number>
             </attribute>
-            <attribute name="verticalHeaderMinimumSectionSize">
+            <attribute name="verticalHeaderDefaultSectionSize">
              <number>24</number>
             </attribute>
             <column>
@@ -1516,10 +1532,10 @@
                    <attribute name="verticalHeaderVisible">
                     <bool>false</bool>
                    </attribute>
-                   <attribute name="verticalHeaderDefaultSectionSize">
+                   <attribute name="verticalHeaderMinimumSectionSize">
                     <number>24</number>
                    </attribute>
-                   <attribute name="verticalHeaderMinimumSectionSize">
+                   <attribute name="verticalHeaderDefaultSectionSize">
                     <number>24</number>
                    </attribute>
                    <column>

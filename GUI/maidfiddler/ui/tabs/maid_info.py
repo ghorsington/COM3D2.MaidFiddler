@@ -13,6 +13,7 @@ class MaidInfoTab(UiTab):
         self.personality_names = []
         self.contracts_names = []
         self.relations_names = []
+        self.feeling_names = []
         self.additional_relations_names = []
         self.seikeiken_names = []
         self.job_classes_names = []
@@ -24,6 +25,7 @@ class MaidInfoTab(UiTab):
             "personal": ComboElement(self.ui.personality_combo),
             "contract": ComboElement(self.ui.contract_combo),
             "relation": ComboElement(self.ui.relation_combo),
+            "feeling": ComboElement(self.ui.feeling_combo),
             "additionalRelation": ComboElement(self.ui.additional_relation_combo),
             "seikeiken": ComboElement(self.ui.current_combo),
             "initSeikeiken": ComboElement(self.ui.initial_combo),
@@ -45,6 +47,7 @@ class MaidInfoTab(UiTab):
         personalities = self.properties["personal"].index_map()
         contracts = self.properties["contract"].index_map()
         relations = self.properties["relation"].index_map()
+        feelings = self.properties["feeling"].index_map()
         additional_relations = self.properties["additionalRelation"].index_map()
         cur_seikeiken = self.properties["seikeiken"].index_map()
         init_seikeiken = self.properties["initSeikeiken"].index_map()
@@ -54,6 +57,7 @@ class MaidInfoTab(UiTab):
         personalities.clear()
         contracts.clear()
         relations.clear()
+        feelings.clear()
         additional_relations.clear()
         cur_seikeiken.clear()
         init_seikeiken.clear()
@@ -63,6 +67,7 @@ class MaidInfoTab(UiTab):
         self.personality_names.clear()
         self.contracts_names.clear()
         self.relations_names.clear()
+        self.feeling_names.clear()
         self.additional_relations_names.clear()
         self.seikeiken_names.clear()
         self.job_classes_names.clear()
@@ -71,6 +76,7 @@ class MaidInfoTab(UiTab):
         self.ui.personality_combo.blockSignals(True)
         self.ui.contract_combo.blockSignals(True)
         self.ui.relation_combo.blockSignals(True)
+        self.ui.feeling_combo.blockSignals(True)
         self.ui.additional_relation_combo.blockSignals(True)
         self.ui.current_combo.blockSignals(True)
         self.ui.initial_combo.blockSignals(True)
@@ -103,6 +109,12 @@ class MaidInfoTab(UiTab):
             relations[relation_id] = i
             self.relations_names.append(f"relations.{relation_name}")
 
+        for i, feeling_name in enumerate(self._game_data["feeling"]):
+            feeling_id = self._game_data["feeling"][feeling_name]
+            self.ui.feeling_combo.addItem(feeling_name, feeling_id)
+            feelings[feeling_id] = i
+            self.feeling_names.append(f"feeling.{feeling_name}")
+
         for i, relation_name in enumerate(self._game_data["additional_relation"]):
             relation_id = self._game_data["additional_relation"][relation_name]
             self.ui.additional_relation_combo.addItem(relation_name, relation_id)
@@ -134,6 +146,7 @@ class MaidInfoTab(UiTab):
         self.ui.personality_combo.blockSignals(False)
         self.ui.contract_combo.blockSignals(False)
         self.ui.relation_combo.blockSignals(False)
+        self.ui.feeling_combo.blockSignals(False)
         self.ui.additional_relation_combo.blockSignals(False)
         self.ui.current_combo.blockSignals(False)
         self.ui.initial_combo.blockSignals(False)
@@ -147,6 +160,8 @@ class MaidInfoTab(UiTab):
             self.commit_prop_changes("lastName"))
         self.ui.relation_combo.currentIndexChanged.connect(
             self.commit_prop_changes("relation"))
+        self.ui.feeling_combo.currentIndexChanged.connect(
+            self.commit_prop_changes("feeling"))
         self.ui.additional_relation_combo.currentIndexChanged.connect(
             self.commit_prop_changes("additionalRelation"))
         self.ui.employment_day_box.valueChanged.connect(
@@ -227,6 +242,9 @@ class MaidInfoTab(UiTab):
 
         for i, relation in enumerate(self.relations_names):
             self.ui.relation_combo.setItemText(i, tr_str(relation))
+
+        for i, feeling in enumerate(self.feeling_names):
+            self.ui.feeling_combo.setItemText(i, tr_str(feeling))
 
         for i, relation in enumerate(self.additional_relations_names):
             self.ui.additional_relation_combo.setItemText(i, tr_str(relation))
