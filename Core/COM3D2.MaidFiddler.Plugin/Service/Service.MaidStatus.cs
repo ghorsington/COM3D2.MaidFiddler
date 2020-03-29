@@ -24,12 +24,22 @@ namespace COM3D2.MaidFiddler.Core.Service
 
         public List<Dict> GetAllStockMaids()
         {
-            return GameMain.Instance.CharacterMgr.GetStockMaidList().Select(ReadMaidData).ToList();
+            List<Dict> result = null;
+            exec.RunSync(() =>
+                {
+                    result = GameMain.Instance.CharacterMgr.GetStockMaidList().Select(ReadMaidData).ToList();
+                });
+            return result;
         }
 
         public List<Dict> GetAllStockMaidsBasic()
         {
-            return GameMain.Instance.CharacterMgr.GetStockMaidList().Select(ReadBasicMaidData).ToList();
+            List<Dict> result = null;
+            exec.RunSync(() =>
+                {
+                    result = GameMain.Instance.CharacterMgr.GetStockMaidList().Select(ReadBasicMaidData).ToList();
+                });
+            return result;
         }
 
         public string[] GetMaidParameterList()
@@ -112,7 +122,9 @@ namespace COM3D2.MaidFiddler.Core.Service
                 throw new
                         ArgumentException($"Found multiple maids whose ID starts the same:\n\n{string.Join("\n", maids.Select(m => $"{m.status.fullNameEnStyle}; ID: {m.status.guid}").ToArray())}\nPlease give a more specific ID!");
 
-            return ReadMaidData(maids[0]);
+            Dict result = null;
+            exec.RunSync(() => { result = ReadMaidData(maids[0]); });
+            return result;
         }
 
         public Dictionary<int, object> GetYotogiSkillData(string maidId)

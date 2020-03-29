@@ -10,10 +10,14 @@ namespace COM3D2.MaidFiddler.Core.Service
     {
         private static readonly IPEndPoint DefaultLoopbackEndpoint = new IPEndPoint(IPAddress.Loopback, 0);
         private readonly MonoBehaviour parent;
+        private readonly ExecutorHelper exec;
+        private readonly GameObject go;
 
         public Service(MonoBehaviour parent)
         {
             this.parent = parent;
+            go = new GameObject();
+            exec = go.AddComponent<ExecutorHelper>();
             Debugger.WriteLine(LogLevel.Info, "Created a service provider!");
 
             InitPlayerStatus();

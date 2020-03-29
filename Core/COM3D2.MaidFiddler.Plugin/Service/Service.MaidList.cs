@@ -22,7 +22,12 @@ namespace COM3D2.MaidFiddler.Core.Service
 
             selectedMaid = GetMaid(guid);
             maidStatusWatcher.Set(selectedMaid.status);
-            return ReadMaidData(selectedMaid);
+            Dictionary<string, object> result = null;
+            exec.RunSync(() =>
+            {
+                result = ReadMaidData(selectedMaid);
+            });
+            return result;
         }
 
         public void SetMaidPropertyActive(string property, object value)
