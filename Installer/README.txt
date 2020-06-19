@@ -7,6 +7,9 @@ Maid Fiddler is a real-time game manipulation tool for COM3D2.
 
 Changelog:
 
+* 1.0.7.3
+  - Add support for 1.48
+  - IMPORTANT: You need 1.48 for this version!
 * 1.0.7.2
   - Fix game crash when using certain scripts
 * 1.0.7.0
