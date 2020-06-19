@@ -220,7 +220,8 @@
             "leader": "Is leader maid",
             "mainChara": "Part of main story\n(Personality locked)",
             "nightCommu": "Communicate in evening",
-            "noonCommu": "Communicate in noon"
+            "noonCommu": "Communicate in noon",
+            "isScoutMaid": "Is Scout Maid"
         },
         "maid_bonus_props": {
             "excite": "Excitement",
