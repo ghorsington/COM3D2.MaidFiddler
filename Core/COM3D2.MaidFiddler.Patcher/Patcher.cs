@@ -33,8 +33,20 @@ namespace COM3D2.MaidFiddler.Patcher
             PatchPlayerStatus(ass);
             PatchCheats(ass);
             FixFeelingGetter(ass);
+            FixIsScoutMaidGetter(ass);
         }
 
+        private static void FixIsScoutMaidGetter(AssemblyDefinition ass)
+        {
+            TypeDefinition fixes = HookDefinition.MainModule.GetType($"{HOOK_NAME}.Hooks.Fixes");
+
+            TypeDefinition maidStatus = ass.MainModule.GetType("MaidStatus.Status");
+            MethodDefinition getter = maidStatus.GetMethod("get_isScoutMaid");
+            MethodDefinition fix = fixes.GetMethod("GetIsScoutMaidFix");
+
+            getter.InjectWith(fix, flags: InjectFlags.PassFields | InjectFlags.ModifyReturn, typeFields: new []{ maidStatus.GetField("flags_") });
+        }
+        
         private static void FixFeelingGetter(AssemblyDefinition ass)
         {
             TypeDefinition fixes = HookDefinition.MainModule.GetType($"{HOOK_NAME}.Hooks.Fixes");
