@@ -1,4 +1,6 @@
 import logging
+from util import BASE_DIR
+import os.path
 
 logger = logging.getLogger("MaidFiddler")
 
@@ -11,7 +13,7 @@ def setup_logger():
     conoutCh.setLevel(logging.DEBUG)
     conoutCh.setFormatter(formatter)
 
-    fileCh = logging.FileHandler("mf_log.txt", "w")
+    fileCh = logging.FileHandler(os.path.join(BASE_DIR, "mf_log.txt"), "w")
     fileCh.setLevel(logging.DEBUG)
     fileCh.setFormatter(formatter)
 
