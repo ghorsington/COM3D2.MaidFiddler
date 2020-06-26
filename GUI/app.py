@@ -2,10 +2,10 @@ import sys
 from maidfiddler.util.config import load_config, CONFIG, save_config
 from PyQt5.QtWidgets import QApplication, QStyleFactory
 from maidfiddler.ui.main_window import MainWindow
+from maidfiddler.util.logger import setup_logger, logger
 
 def main():
-    print("Starting MF")
-
+    setup_logger()
     load_config()
     save_config()
 
@@ -21,7 +21,7 @@ def main():
     window.connect()
 
     app.exec_()
-    print("Exited!")
+    logger.info("Exited!")
 
 if __name__ == "__main__":
     main()

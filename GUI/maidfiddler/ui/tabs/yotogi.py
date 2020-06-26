@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QHeaderView, QTableWidgetItem, QCheckBox, QSpinBox, 
 from PyQt5.QtCore import Qt, pyqtSignal
 from .ui_tab import UiTab
 from maidfiddler.util.translation import tr, tr_str
-
+from maidfiddler.util.logger import logger
 
 class YotogiTab(UiTab):
     on_skill_add_signal = pyqtSignal(dict)
@@ -95,8 +95,8 @@ class YotogiTab(UiTab):
 
     def on_skill_add(self, args):
         if args["skill_id"] not in self.skill_elements:
-            print(
-                f"WRN: Yotogi skill {args['skill_id']} is not a valid skill!")
+            logger.warning(
+                f"Yotogi skill {args['skill_id']} is not a valid skill!")
             return
 
         (cb, level, exp, play_count) = self.skill_elements[args["skill_id"]]

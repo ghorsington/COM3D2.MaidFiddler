@@ -40,6 +40,8 @@ from maidfiddler.ui.dialogs.update_checker import UpdateDialog
 
 from app_info import MIN_SUPPORTED_GAME_VERSION, VERSION
 
+from maidfiddler.util.logger import logger
+
 UI_MainWindow = uic.loadUiType(
     open(util.get_resource_path("templates/maid_fiddler.ui")))
 
@@ -74,7 +76,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
     just_launched = True
 
     def __init__(self):
-        print("Initializing UI")
+        logger.info("Initializing UI")
         super(MainWindow, self).__init__()
         self.setupUi(self)
 
@@ -114,7 +116,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
         self.init_translations()
 
     def display_error_box(self, data):
-        print("Trying to show error dialog")
+        logger.debug("Trying to show error dialog")
         dialog = ErrorDialog(data["t"], data["val"], data["traceback"])
         dialog.exec()
         self.close()
@@ -129,7 +131,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
             sys.exit(0)
 
     def connect(self):
-        print("showing connection dialog!")
+        logger.debug("showing connection dialog!")
         connect_dialog = ConnectDialog(self, self.core)
 
         result = connect_dialog.exec()
@@ -250,7 +252,7 @@ class MainWindow(UI_MainWindow[1], UI_MainWindow[0]):
     def on_connection_close(self):
         if not self.core.is_connected():
             return
-        print("Connection closed!")
+        logger.info("Connection closed!")
         self.close()
         self.maids_list.clear_list()
 

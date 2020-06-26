@@ -7,6 +7,7 @@ from PyQt5.QtCore import Qt, QThread, pyqtSignal
 import maidfiddler.util.util as util
 from maidfiddler.util.translation import tr, tr_str
 from maidfiddler.ui.resources import APP_ICON
+from maidfiddler.util.logger import logger
 
 (ui_class, ui_base) = uic.loadUiType(
     open(util.get_resource_path("templates/connect_dialog.ui")))
@@ -27,18 +28,18 @@ class ConnectWorker(QThread):
 
     def _connected(self):
         self.connected.emit()
-        print("Got connection! Trying to get game data!")
+        logger.info("Got connection! Trying to get game data!")
         try:
             game_data, err = self.core.try_invoke("GetGameInfo")
 
             if game_data is None:
-                print(f"Got empty response! Resetting the connection!")
+                logger.warning(f"Got empty response! Resetting the connection!")
                 self.core.close()
                 self.connection_reset.emit()
                 return False
 
         except Exception as e:
-            print(f"Got error while calling GetGameInfo: {e}")
+            logger.error(f"Got error while calling GetGameInfo: {e}")
             self.connection_reset.emit()
             return False
         self.connecting = False
@@ -52,10 +53,10 @@ class ConnectWorker(QThread):
             try:
                 self.core.connect("MaidFiddlerService")
                 if self._connected():
-                    print("Connected!")
+                    logger.info("Connected!")
                     return
             except Exception as e:
-                print(f"Failed to connect because {e}! Retrying in a second!")
+                logger.error(f"Failed to connect because {e}! Retrying in a second!")
                 self.connection_reset.emit()
 
 

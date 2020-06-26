@@ -2,7 +2,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QListWidgetItem
 from maidfiddler.ui.resources import NO_THUMBNAIL
-
+from maidfiddler.util.logger import logger
 
 class MaidsList(QObject):
     deserialize_start_signal = pyqtSignal(dict)
@@ -198,7 +198,7 @@ class MaidsList(QObject):
         if guid not in self.maid_list_widgets:
             return
 
-        print("Maid removed!")
+        logger.debug("Maid removed!")
 
         self.maid_list.takeItem(
             self.maid_list.row(self.maid_list_widgets[guid]))

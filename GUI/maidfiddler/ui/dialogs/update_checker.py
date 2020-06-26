@@ -7,6 +7,7 @@ import maidfiddler.util.util as util
 from maidfiddler.util.config import CONFIG, save_config
 from maidfiddler.util.translation import tr, tr_str
 from maidfiddler.ui.resources import APP_ICON
+from maidfiddler.util.logger import logger
 import urllib.request as request
 from urllib.error import URLError
 import json
@@ -34,7 +35,7 @@ class GetUpdateDataThread(QThread):
         self.wait()
     
     def run(self):
-        print("doing request")
+        logger.debug("doing request")
         
         try:
             response = request.urlopen(f"https://api.github.com/repos/{GIT_REPO}/releases/latest", timeout=5)
@@ -43,7 +44,7 @@ class GetUpdateDataThread(QThread):
             return
         data = json.load(response)
         version = data["tag_name"][1:]
-        print(f"Latest version: {version}, current version: {VERSION}")
+        logger.info(f"Latest version: {version}, current version: {VERSION}")
         if version <= VERSION:
             self.no_update.emit()
             return
@@ -67,7 +68,7 @@ class DownloadUpdateThread(QThread):
         self.url = url
 
     def run(self):
-        print("Beginning download")
+        logger.debug("Beginning download")
 
         tmp_downloads_path = os.path.join(util.BASE_DIR, TMP_FOLDER)
         if not os.path.exists(tmp_downloads_path):
@@ -86,7 +87,7 @@ class DownloadUpdateThread(QThread):
                     break
                 f.write(chunk)
                 self.chunk_downloaded.emit()
-        print("Download complete")
+        logger.debug("Download complete")
         self.download_complete.emit()
 
 class UpdateDialog(ui_class, ui_base):

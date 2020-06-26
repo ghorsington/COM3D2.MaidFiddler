@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import NumberElement, TextElement, CheckboxElement, MIN_MAX_DICT, FLOAT_TYPES
 from maidfiddler.util.translation import tr, tr_str
-
+from maidfiddler.util.logger import logger
 
 class PlayerTab(UiTab):
     update_player_props_signal = pyqtSignal(dict)
@@ -84,7 +84,7 @@ class PlayerTab(UiTab):
         try:
             self.core.SetPlayerData(prop, el.value())
         except Exception as e:
-            print(str(e))
+            logger.error(f"Failed to set player data: {e}")
 
     def commit_lock(self):
         sender = self.sender()

@@ -1,7 +1,7 @@
 import struct
 import msgpack
 import threading
-
+from maidfiddler.util.logger import logger
 
 class RemoteError(Exception):
 
@@ -30,7 +30,7 @@ class PipeRpcCaller:
         return self.handler is not None
 
     def _flush(self):
-        print("Flushing stream")
+        logger.debug("Flushing stream")
         try:
             # Send a dummy ping call, but read all of the steam until EOF
             # This forces the stream to be reset
@@ -42,7 +42,7 @@ class PipeRpcCaller:
             self.handler.read(2**32)
             self.handler.read(2**32)
         except:
-            print(f"Flushed!")
+            logger.debug(f"Flushed!")
 
     def close(self):
         if self.handler is None:
@@ -52,10 +52,9 @@ class PipeRpcCaller:
             self.handler = None
             h.close()
             self.call_id = 0
-            print("Handler closed!")
+            logger.info("Handler closed!")
         except Exception as e:
-            print("Error while closing the handler!")
-            print(e)
+            logger.error(f"Error while closing the handler!: {e}")
 
     def __call__(self, method, *args, **kargs):
         result, err = self.try_invoke(method, *args)
@@ -69,7 +68,7 @@ class PipeRpcCaller:
     def _try_invoke_internal(self, method, try_count, *args):
         if isinstance(method, bytes):
             method = method.decode('utf-8')
-        print(f"Calling {method}")
+        logger.debug(f"Calling {method}")
 
         self.call_id += 1
 
@@ -103,9 +102,9 @@ class PipeRpcCaller:
             response = msgpack.unpackb(response_packed, raw=False)
         except msgpack.ExtraData as e:
             if try_count >= self.max_retries:
-                print(f"Forcing to fail after {try_count} tries.")
+                logger.error(f"Forcing to fail after {try_count} tries.")
                 return (None, True)
-            print(f"Received extra data! Flushing and retrying. Extra: {e.extra}")
+            logger.warning(f"Received extra data! Flushing and retrying. Extra: {e.extra}")
             self._flush()
             return self._try_invoke_internal(method, try_count + 1, *args)
 
@@ -154,13 +153,13 @@ class PipedEventHandler:
             self.event_handlers[event].append(handler)
 
     def _loop(self):
-        print(f"Connecting to {self.name}")
+        logger.info(f"Connecting to {self.name}")
 
         try:
             f = None
             f = open(f"\\\\.\\pipe\\{self.name}", "r+b", 0)
 
-            print("Connected event handler!")
+            logger.info("Connected event handler!")
 
             while self.running:
                 n = struct.unpack("I", f.read(4))[0]
@@ -170,7 +169,7 @@ class PipedEventHandler:
                     args = obj["data"][1]["args"][0]
 
                     for evt_args in args:
-                        print(
+                        loggign.debug(
                             f"Event {evt_args['event_name']}")
                         if evt_args["event_name"] in self.event_handlers:
                             for handler in self.event_handlers[evt_args["event_name"]]:

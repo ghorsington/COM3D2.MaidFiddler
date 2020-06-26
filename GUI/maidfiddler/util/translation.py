@@ -2,7 +2,9 @@ import json
 import os
 from maidfiddler.util.util import BASE_DIR
 from maidfiddler.util.config import CONFIG
+from maidfiddler.util.logger import logger
 import random
+
 
 current_translation = {}
 
@@ -24,7 +26,7 @@ MINIFY = None
 def get_original(s, parts):
     global MINIFY
     if MINIFY is None:
-        print("Fetching MINIFY")
+        logger.debug("Fetching MINIFY")
         MINIFY = CONFIG.getboolean("Developer", "minify-untranslated-tags", fallback=True)
     return s if not MINIFY else parts[-1]
 
@@ -32,7 +34,7 @@ def load_translation(name):
     global current_translation
     path = os.path.join(BASE_DIR, "translations", name)
 
-    print(f"TL path: {path}")
+    logger.debug(f"TL path: {path}")
 
     if not os.path.isfile(path):
         return
@@ -41,7 +43,7 @@ def load_translation(name):
         current_translation = json.load(tl_file)
 
     if "translation" not in current_translation:
-        print("translation invalid")
+        logger.warning("translation invalid")
         current_translation = {}
         return
 

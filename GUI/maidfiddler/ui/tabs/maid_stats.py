@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from .ui_tab import UiTab
 from maidfiddler.ui.qt_elements import NumberElement, TextElement, CheckboxElement, MIN_MAX_DICT, FLOAT_TYPES
 from maidfiddler.util.translation import tr
+from maidfiddler.util.logger import logger
 
 
 class MaidStatsTab(UiTab):
@@ -135,7 +136,7 @@ class MaidStatsTab(UiTab):
     def commit_bonus(self):
         element = self.sender()
         prop = element.property("prop_name")
-        print(f"Setting bonus {prop} to {element.text()}")
+        logger.debug(f"Setting bonus {prop} to {element.text()}")
 
     def commit_lock(self, state):
         element = self.sender()
@@ -153,7 +154,7 @@ class MaidStatsTab(UiTab):
         maid = self.maid_mgr.selected_maid
 
         for name, widgets in self.properties.items():
-            print(f"Setting {name}")
+            logger.debug(f"Setting {name}")
             widgets[0].set_value(maid["properties"][name])
             widgets[1].setCheckState(
                 Qt.Checked if maid["prop_locks"][name] else Qt.Unchecked)
