@@ -7,6 +7,10 @@ Maid Fiddler is a real-time game manipulation tool for COM3D2.
 
 Changelog:
 
+* 1.0.8.0
+  - Updated internals for potential better stability
+  - Fixed crashes when scout maids are selected in some cases
+  - Added better logging: now GUI logs are generated to `<MG GUI folder>/mf_log.txt`
 * 1.0.7.3
   - Add support for 1.48
   - IMPORTANT: You need 1.48 for this version!
