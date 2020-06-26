@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Pipes;
-using System.Security.AccessControl;
 using System.Threading;
 using COM3D2.MaidFiddler.Core.IPC.Util;
 using COM3D2.MaidFiddler.Core.Utils;
+using GhettoPipes;
 
 namespace COM3D2.MaidFiddler.Core.IPC
 {
     public class PipeEventEmitter : IDisposable
     {
-        private BinaryReader br;
-
         private readonly BinaryWriter bw;
         private int currentCache;
         private readonly List<Dictionary<string, object>>[] eventCaches;
         private ulong id;
-        private readonly NamedPipeServerStream pipeStream;
+        private readonly NamedPipeStream pipeStream;
         private bool waiterRunning;
         private readonly AutoResetEvent waitForConnectionEvent;
         private readonly Thread waitForConnectionThread;
@@ -26,9 +23,8 @@ namespace COM3D2.MaidFiddler.Core.IPC
 
         public PipeEventEmitter(string name)
         {
-            pipeStream = PipeFactory.CreatePipe(name);
+            pipeStream = NamedPipeStream.Create(name, NamedPipeStream.PipeDirection.InOut, securityDescriptor: "D:(A;OICI;GA;;;WD)");
             bw = new BinaryWriter(pipeStream);
-            br = new BinaryReader(pipeStream);
             eventCaches = new List<Dictionary<string, object>>[2];
             eventCaches[0] = new List<Dictionary<string, object>>();
             eventCaches[1] = new List<Dictionary<string, object>>();

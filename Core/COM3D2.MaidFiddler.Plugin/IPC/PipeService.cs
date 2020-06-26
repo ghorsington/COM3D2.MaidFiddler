@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
-using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
-using System.Security.AccessControl;
 using System.Threading;
 using COM3D2.MaidFiddler.Core.IPC.Util;
 using COM3D2.MaidFiddler.Core.Utils;
+using GhettoPipes;
 
 namespace COM3D2.MaidFiddler.Core.IPC
 {
@@ -16,14 +16,14 @@ namespace COM3D2.MaidFiddler.Core.IPC
         private ulong currentID;
         private uint loopThreadId;
         private readonly Thread messageThread;
-        private readonly NamedPipeServerStream pipeStream;
+        private readonly NamedPipeStream pipeStream;
         private bool running;
         private readonly T service;
 
         public PipeService(T service, string name)
         {
             this.service = service;
-            pipeStream = PipeFactory.CreatePipe(name);
+            pipeStream = NamedPipeStream.Create(name, NamedPipeStream.PipeDirection.InOut, securityDescriptor: "D:(A;OICI;GA;;;WD)");
             messageThread = new Thread(RunInternal);
             Methods = new Dictionary<string, MethodData>();
             InitService();
@@ -226,6 +226,10 @@ namespace COM3D2.MaidFiddler.Core.IPC
                         IsConnected = false;
                         ConnectionLost?.Invoke(null, EventArgs.Empty);
                         break;
+                    }
+                    catch (Exception e)
+                    {
+                        Debugger.Debug(LogLevel.Info, $"Got error in pipeservice: {e}");
                     }
             }
         }

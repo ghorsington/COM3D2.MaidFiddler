@@ -31,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
@@ -62,7 +63,7 @@
     <Compile Include="Hooks\MiscHooks.cs" />
     <Compile Include="Hooks\PlayerStatusHooks.cs" />
     <Compile Include="Hooks\YotogiSkillHooks.cs" />
-    <Compile Include="IPC\PipeFactory.cs" />
+    <Compile Include="IPC\NamedPipeStream.cs" />
     <Compile Include="MaidFiddlerPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IPC\Util\ArgumentUnpacker.cs" />

@@ -30,6 +30,7 @@ class PipeRpcCaller:
         return self.handler is not None
 
     def _flush(self):
+        print("Flushing stream")
         try:
             # Send a dummy ping call, but read all of the steam until EOF
             # This forces the stream to be reset
@@ -38,6 +39,7 @@ class PipeRpcCaller:
                 {"msg_id": 0, "data": ["ping", {"pong": False}]})
             self.handler.write(struct.pack("I", len(packed)))
             self.handler.write(packed)
+            self.handler.read(2**32)
             self.handler.read(2**32)
         except:
             print(f"Flushed!")
@@ -89,7 +91,7 @@ class PipeRpcCaller:
             self.handler.write(packed)
             # Advance the cursor by reading the packed bytes
             # Has to be done because it's not advanced automatically for some reason
-            self.handler.read(len(packed))
+            # self.handler.read(len(packed) + 4)
 
             response_len = struct.unpack("I", self.handler.read(4))[0]
             response_packed = self.handler.read(response_len)
@@ -103,7 +105,7 @@ class PipeRpcCaller:
             if try_count >= self.max_retries:
                 print(f"Forcing to fail after {try_count} tries.")
                 return (None, True)
-            print(f"Received extra data! Flushing and retrying. More info: {e}")
+            print(f"Received extra data! Flushing and retrying. Extra: {e.extra}")
             self._flush()
             return self._try_invoke_internal(method, try_count + 1, *args)
 

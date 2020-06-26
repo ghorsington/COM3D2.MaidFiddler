@@ -44,8 +44,9 @@ namespace COM3D2.MaidFiddler.Core
             {
                 pipeServer.Dispose();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Debugger.Debug(LogLevel.Warning, $"Error while disposing: {e}");
                 // Snibbeti snib :--D
             }
 
@@ -54,6 +55,7 @@ namespace COM3D2.MaidFiddler.Core
 
         private void OnConnectionLost(object sender, EventArgs e)
         {
+            Debugger.Debug(LogLevel.Info, "Connection lost, resetting connection");
             if (service.eventServer.IsConnected)
                 service.eventServer.Disconnect();
             service.eventServer.WaitForConnection();
