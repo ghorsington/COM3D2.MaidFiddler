@@ -21,7 +21,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             if (selectedMaid == null)
                 return false;
 
-            var locks = maidLockList[selectedMaidGuid];
+            var locks = GetLocks(selectedMaidGuid);
 
             foreach (string param in locks.Keys.ToArray())
                 locks[param] = toggle;

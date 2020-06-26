@@ -10,6 +10,13 @@ namespace COM3D2.MaidFiddler.Core.Service
         private string selectedMaidGuid;
         private bool GloballyUnlocked { get; set; }
 
+        private Dictionary<string, bool> GetLocks(string guid)
+        {
+            return maidLockList.TryGetValue(guid, out var result)
+                ? result
+                : maidLockList[guid] = new Dictionary<string, bool>();
+        }
+
         public Dictionary<string, object> SelectActiveMaid(string guid)
         {
             selectedMaidGuid = guid;

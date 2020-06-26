@@ -326,7 +326,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             {
                 if (setter != null)
                 {
-                    var locks = maidLockList[maid.status.guid];
+                    var locks = GetLocks(maid.status.guid);
                     bool prev = locks[propertyName];
                     locks[propertyName] = false;
                     setter.Invoke(maid.status, new[] { val });
@@ -440,7 +440,7 @@ namespace COM3D2.MaidFiddler.Core.Service
             var propLocks = new Dict();
             result["prop_locks"] = propLocks;
 
-            foreach (var propLock in maidLockList[maid.status.guid])
+            foreach (var propLock in GetLocks(maid.status.guid))
                 propLocks[propLock.Key] = propLock.Value;
 
             var bonusProps = new Dict();
