@@ -1,5 +1,5 @@
 import logging
-from util import BASE_DIR
+from maidfiddler.util.util import BASE_DIR
 import os.path
 
 logger = logging.getLogger("MaidFiddler")
