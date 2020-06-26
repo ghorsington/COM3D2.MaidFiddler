@@ -42,7 +42,7 @@ class PipeRpcCaller:
             self.handler.read(2**32)
             self.handler.read(2**32)
         except:
-            logger.debug(f"Flushed!")
+            logger.debug("Flushed!")
 
     def close(self):
         if self.handler is None:
