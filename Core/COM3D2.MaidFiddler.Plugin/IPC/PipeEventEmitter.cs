@@ -50,10 +50,6 @@ namespace COM3D2.MaidFiddler.Core.IPC
                     IsConnected = false;
                 }
 
-                Debugger.Debug(LogLevel.Info, "Closing Event Emitter...");
-                pipeStream.Close();
-                Debugger.Debug(LogLevel.Info, "Closed Event Emitter!");
-
                 if (waitThreadId != 0)
                 {
                     waiterRunning = false;
@@ -61,6 +57,10 @@ namespace COM3D2.MaidFiddler.Core.IPC
                     waitForConnectionThread.Join();
                     waitThreadId = 0;
                 }
+                
+                Debugger.Debug(LogLevel.Info, "Closing Event Emitter...");
+                pipeStream.Close();
+                Debugger.Debug(LogLevel.Info, "Closed Event Emitter!");
             }
             catch (Exception) { }
         }

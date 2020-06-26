@@ -38,10 +38,10 @@ namespace COM3D2.MaidFiddler.Core.IPC
             service.Dispose();
             if (IsConnected)
                 pipeStream.Disconnect();
+            Stop();
             Debugger.Debug(LogLevel.Info, "PipeService: Closing server...");
             pipeStream.Close();
             Debugger.Debug(LogLevel.Info, "PipeService: Closed!");
-            Stop();
         }
 
         public event EventHandler ConnectionLost;
