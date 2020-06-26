@@ -169,7 +169,7 @@ class PipedEventHandler:
                     args = obj["data"][1]["args"][0]
 
                     for evt_args in args:
-                        loggign.debug(
+                        logger.debug(
                             f"Event {evt_args['event_name']}")
                         if evt_args["event_name"] in self.event_handlers:
                             for handler in self.event_handlers[evt_args["event_name"]]:
