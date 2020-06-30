@@ -181,6 +181,10 @@ class MaidsList(QObject):
         self.clear_list()
         maids = self.core.GetAllStockMaidsBasic()
 
+        # No maids => likely we're shutting down
+        if not maids:
+            return
+
         for maid in maids:
             self.add_maid(maid)
 
