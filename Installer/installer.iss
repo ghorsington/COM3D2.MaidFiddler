@@ -3,7 +3,7 @@
 
 #define MyAppName "Maid Fiddler"
 #define MyAppPub "NeighTools"
-#define MyAppVersion "1.0.8.0"
+#define MyAppVersion "1.0.8.2"
 #define MyAppURL "https://github.com/denikson/COM3D2.MaidFiddler"
 #define MyAppExeName "maid_fiddler_qt.exe"
 
