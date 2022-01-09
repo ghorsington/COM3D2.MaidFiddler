@@ -327,10 +327,15 @@ namespace COM3D2.MaidFiddler.Core.Service
                 if (setter != null)
                 {
                     var locks = GetLocks(maid.status.guid);
-                    bool prev = locks[propertyName];
-                    locks[propertyName] = false;
-                    setter.Invoke(maid.status, new[] { val });
-                    locks[propertyName] = prev;
+                    if (locks.ContainsKey(propertyName))
+                    {
+                        bool prev = locks[propertyName];
+                        locks[propertyName] = false;
+                        setter.Invoke(maid.status, new[] { val });
+                        locks[propertyName] = prev;
+                    }
+                    else
+                        setter.Invoke(maid.status, new[] { val });
                 }
                 else
                     field.SetValue(maid.status, val);
