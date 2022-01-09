@@ -157,7 +157,7 @@ class MaidStatsTab(UiTab):
             logger.debug(f"Setting {name}")
             widgets[0].set_value(maid["properties"][name])
             widgets[1].setCheckState(
-                Qt.Checked if maid["prop_locks"][name] else Qt.Unchecked)
+                Qt.Checked if name in maid["prop_locks"] and maid["prop_locks"][name] else Qt.Unchecked)
 
         for name, widget in self.bonus_properties.items():
             widget.setValue(maid["bonus_properties"][name])
